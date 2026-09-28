@@ -127,11 +127,33 @@ objects.
    (For Cowork, per ADR 0007.)
 2. **Full-catalog goal:** is full-catalog scale a target on this 8 GB laptop, or only on a
    deployed instance? If it's the laptop, time-chunking comes next.
-3. **Schema-version rule:** should purely additive diagnostics keys bump `schema_version`? v3
-   follows the current rule; bumping only for removals, renames and type changes is the more
-   common convention.
-4. **Demo scope and the `high` tier:** add a dense active constellation to the demo so `high`
-   shows up in the default run, or keep the small demo and cite the Step B run?
+3. ~~Schema-version rule~~: resolved in the follow-ups below (bump only on breaking changes).
+4. ~~Demo scope and the `high` tier~~: resolved. The small demo stays the documented example, and
+   the README cites the scale test as the live `high` example, with its caveats.
+
+## Documentation follow-ups (after review, same branch, docs only)
+
+- **README Results.** Two rows added: the default demo as the primary example (1,995 objects, 509
+  conjunctions, ~5 s), and the scale test as an extra data point. A "Scale test" subsection has
+  the per-phase timing, peak memory and candidate pairs per timestep for both scopes.
+- **The 2,299 `high` results are explained, not left bare.** In a "What the 2,299 high results
+  are, and aren't" subsection:
+  - The breakdown: 1,806 Starlink vs. Starlink (78.6%), 401 Starlink vs. another payload, and 12
+    Starlink vs. debris or another constellation (9 debris, 2 Guowang, 1 Kuiper). That's 2,219
+    (96.5%) involving a Starlink, and 80 without.
+  - Why that's expected: TLE snapshots can't see station-keeping or collision-avoidance maneuvers;
+    the median predicted miss (0.68 km) is inside roughly 1 km of TLE error; and dense shells
+    produce many geometric crossings.
+  - It's explicit that these are not 2,299 near-misses. The Known failures entry now points to it
+    rather than repeating it.
+- **Schema-version rule changed**, in the working notes and in `report_builder.py`'s docstring:
+  bump only on a breaking change (a field renamed, removed, or its meaning changed), not for
+  additive fields. The version stays at 3.
+- **Frozen snapshot documentation.** `cache/scaling-spike/` is confirmed gitignored with nothing
+  tracked. The new `scripts/README.md` documents re-freezing as a deliberate, separate step,
+  mirroring `tests/regression/README.md`: a re-freeze is a new measurement, not a correction. It
+  also records the identity of the snapshot behind ADR 0007 (window start, record counts, file
+  sizes, SHA-256 prefixes), so a re-frozen snapshot is recognizable as different.
 
 ## Next command
 
