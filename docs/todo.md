@@ -23,8 +23,6 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 - [ ] Replace the template's placeholder eval harness (`evals/`, `app.pipeline`) with screening
       regression cases, e.g. a frozen GP snapshot plus the expected encounters.
-- [ ] CI: add the screening tests' real-data counterpart (frozen snapshot), not live CelesTrak
-      calls.
 - [ ] Dashboard view over the JSON report.
 - [ ] README: project boundary section (heuristic risk, not Pc, per ADR 0004), results, quickstart.
 - [ ] Containerization and a scheduled run (ADR 0005). Pick Fly.io/VPS cron vs. Lambda using
@@ -41,6 +39,8 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Completed (most recent first)
 
+- [x] 2026-09-27 - Frozen-snapshot parity regression test (`tests/regression/`), running in CI via
+      `make test` with no live CelesTrak calls. Re-run: `uv run pytest tests/regression -v`.
 - [x] 2026-09-27 - Session 2 Step A: KD-tree fine filter (`cKDTree.query_pairs` per timestep).
       Exact parity with the naive version on the frozen default-scope snapshot (509 conjunctions,
       0/31/478, closest active 1.29 km). Screening went from 26.4 s to 2.9 s (median of 3) and the

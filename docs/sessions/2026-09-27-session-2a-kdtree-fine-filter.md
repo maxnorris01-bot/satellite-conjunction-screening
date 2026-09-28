@@ -6,7 +6,7 @@ This session did Step A only. Step B (scaling spike) and Step C (coarse filter) 
 not started; whether they're needed depends on the numbers below. The plan,
 `docs/session-2-plan-screening-at-scale.md`, wasn't in the repo when the session started, so the
 work followed the kickoff prompt's Step A description. The plan appeared mid-session, and its Step
-A matches what was built. It was left untracked, since it's Max's file to commit.
+A matches what was built. It was committed as-is in the cleanup pass (below).
 
 ## What changed
 
@@ -24,8 +24,8 @@ SGP4 refinement, co-location split, risk model and report records are untouched.
 - **Report diagnostics changed** (in `summary.screening` only; no conjunction record changed shape):
   `pairs_per_timestep` and `pair_checks` were removed, because no all-pairs check happens anymore.
   `all_pairs_per_timestep` (the naive problem size, for comparison) and `neighbor_search` were
-  added. `schema_version` stays at 1, since these are diagnostics, not the record contract. Flagging
-  it in case you'd rather treat any key change as a version bump.
+  added. `schema_version` was bumped from 1 to 2 in the cleanup pass (below): any report shape
+  change bumps the version, not only record changes.
 - No O(n^2) arrays remain in memory. The old code's pair-index arrays would have been about 7 GB
   at 30k objects.
 - **New test:** `test_many_objects_match_an_exact_closest_approach_oracle`. 120 straight-line
@@ -107,28 +107,47 @@ third of the pipeline.
 
 ## Status
 
-- `make lint`: clean. `make typecheck`: clean. `make test`: **25 passed** (24 existing + 1 new).
-  The existing screening tests pass unchanged.
+- `make lint`: clean. `make typecheck`: clean. `make test`: **26 passed**: 24 existing, plus the
+  oracle test, plus the regression parity test from the cleanup pass. The existing screening
+  tests pass unchanged.
 - `make eval-fast` (mock): pass rate 1.0, 2 cases, p95 0.0016 s, $0.00. It's the placeholder
   harness and doesn't exercise screening. `make eval-fast-live` was not run: no LLM calls exist.
 - Docs: ADR 0003 has a status update (fine filter implemented, coarse filter pending Step B).
   `docs/working-notes-and-decisions.md` records the parity-gated swap. `docs/todo.md` is
   re-ordered: Step B next, Step C conditional on it.
-- The parity harness lives in session scratch space, not the repo. If you want parity checks to be
-  repeatable for Steps B and C, committing a frozen snapshot plus that harness as a regression
-  fixture is a small follow-up (it's already listed under "Later" in `docs/todo.md` as a
-  screening regression eval).
+
+## Cleanup pass (after review, same branch)
+
+- **`schema_version` 1 -> 2** (`src/app/reporting/report_builder.py`), for the diagnostics key
+  change above. Reasoning is logged in `docs/working-notes-and-decisions.md`.
+- **`docs/session-2-plan-screening-at-scale.md` committed as-is.**
+- **The parity check is now a committed regression test**, in `tests/regression/`:
+  - The frozen snapshot: the four CelesTrak cache entries, gzipped byte for byte to stay under the
+    500 KB pre-commit file limit.
+  - `expected_default_scope.json`: the all-pairs baseline's output (509 / 0-31-478 / 1,995 objects
+    / 4,716,128 pairs within radius).
+  - `test_default_scope_parity.py`: runs the full pipeline on the snapshot with any network request
+    failing the test, and asserts exact counts and pairs, with tight numeric tolerances only for
+    cross-platform float noise.
+  - A README covering provenance, how to read a failure, and the deliberate-only regeneration
+    rule.
+
+  Re-run it with `uv run pytest tests/regression -v` (about 7 s). It also runs in `make test`, and
+  the Makefile is unchanged. I verified it both ways: the old all-pairs code passes it (25.9 s) and
+  a 300 km search-radius mutant fails it.
+- One fix while wiring it up: `fetch_tle_data` constructs an HTTP client even when every response
+  is cached, so the test's network guard fails requests rather than client construction. No
+  pipeline code changed.
+- The Step A parity result and timing numbers above are unchanged by any of this.
 
 ## Open questions
 
-1. Do the report diagnostic key changes (`pair_checks` / `pairs_per_timestep` replaced by
-   `all_pairs_per_timestep` / `neighbor_search`) warrant a `schema_version` bump? I left it at 1.
-2. Should the frozen snapshot and parity harness be committed now, before Steps B and C change
-   screening again?
+None open from Step A. The earlier questions about bumping `schema_version` and committing the
+parity harness were resolved in the cleanup pass. Step B's scaling numbers are the next input.
 
 ## Next command
 
 ```bash
-git log --oneline main..feat/session-2-kdtree-fine-filter && git diff main -- src/app/screening/
-make test && make screen
+git log --oneline main..feat/session-2-kdtree-fine-filter && git diff main --stat
+uv run pytest tests/regression -v && make test
 ```
