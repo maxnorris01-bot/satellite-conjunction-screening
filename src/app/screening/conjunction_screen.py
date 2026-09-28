@@ -1,7 +1,10 @@
-"""`screen_conjunctions`: naive all-pairs screening (session 1).
+"""`screen_conjunctions`: per-timestep KD-tree neighbor search (ADR 0003's fine filter).
 
-ADR 0003's coarse filter + per-timestep KD-tree replaces the all-pairs distance matrix once scope
-grows; the function signature and output types are meant to stay the same when it does.
+At each sample, a `cKDTree` over all positions returns the pairs within the search radius directly,
+instead of computing the full n x n distance matrix and filtering it (session 1's naive version).
+The results are identical; only the cost changes: roughly O(n log n + neighbors) per timestep
+instead of O(n^2), with no O(n^2) pair-index arrays in memory. ADR 0003's coarse orbital-regime
+filter is not implemented yet.
 
 Why not just check `distance < threshold` at each sample: LEO closing speeds reach ~15 km/s, so at
 a 60 s step two objects move ~900 km relative to each other between samples, and a 5 km pass
@@ -27,7 +30,7 @@ from typing import Any
 
 import numpy as np
 from scipy.optimize import minimize_scalar
-from scipy.spatial.distance import pdist
+from scipy.spatial import cKDTree
 
 from app.propagation.sgp4_propagator import PropagationResult
 from app.settings import ScreeningSettings
@@ -76,18 +79,22 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
     threshold = settings.threshold_km
     step = prop.step_s
     search_radius = threshold + settings.max_relative_speed_km_s * step / 2.0
-    iu, ju = np.triu_indices(n, k=1)
     half = step / 2.0
 
     hits: dict[tuple[int, int], list[_Hit]] = defaultdict(list)
     pairs_within_radius = 0
     for k in range(n_steps):
         pos = prop.positions[:, k, :]
-        near = np.flatnonzero(pdist(pos) < search_radius)
-        if near.size == 0:
+        # (m, 2) array of index pairs with i < j - the same orientation the all-pairs version used,
+        # so dr/dv below carry the same signs. query_pairs uses `<= r` where the old filter used
+        # `< r`. The only pair that could differ sits exactly on the radius, and it can close by at
+        # most `max_relative_speed * step / 2` - to exactly `threshold`, which `miss < threshold`
+        # below rejects - so it can never produce a hit either way.
+        near = cKDTree(pos).query_pairs(search_radius, output_type="ndarray")
+        if near.shape[0] == 0:
             continue
-        pairs_within_radius += int(near.size)
-        i, j = iu[near], ju[near]
+        pairs_within_radius += int(near.shape[0])
+        i, j = near[:, 0], near[:, 1]
         dr = pos[i] - pos[j]
         dv = prop.velocities[i, k, :] - prop.velocities[j, k, :]
         vv = np.einsum("ij,ij->i", dv, dv)
@@ -125,8 +132,9 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
     stats = {
         "objects": n,
         "timesteps": n_steps,
-        "pairs_per_timestep": int(iu.size),
-        "pair_checks": int(iu.size) * n_steps,
+        "neighbor_search": "cKDTree.query_pairs",
+        # The naive problem size, kept for comparison: pairs an all-pairs check would examine.
+        "all_pairs_per_timestep": n * (n - 1) // 2,
         "search_radius_km": round(search_radius, 3),
         "pairs_within_search_radius": pairs_within_radius,
         "candidate_pairs": len(hits),
