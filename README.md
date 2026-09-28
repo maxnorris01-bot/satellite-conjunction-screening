@@ -90,7 +90,28 @@ it deliberately, not routinely - see Evaluation below.
 
 <!-- Real failures only. For each: the input, what went wrong, how you investigated, status. -->
 
-_None documented yet. Add the first real one as soon as you see it._
+### No high-risk conjunction has been observed in real data at this catalog scope
+
+- **Input:** the default scope, CelesTrak `iridium-NEXT` + `fengyun-1c-debris` (about 2,000
+  objects), over a 24 h window at a 60 s step with a 5 km screening threshold.
+- **What happens:** the pipeline flags real close approaches, but none meets the `high` tier (miss
+  under 1 km, closing speed at least 1 km/s, and at least one active payload involved). Run
+  `20260928T0101Z-c6e1f2` flagged 509 encounters: 0 high, 31 moderate, 478 low. 52 involved an
+  active Iridium satellite, and the closest of those was 1.29 km. Every sub-1 km pass (the closest
+  was 0.11 km) was debris vs. debris, which the table caps at `moderate` by design.
+- **What that means:** the `high`-tier logic in `src/app/risk/risk_model.py` is verified **only by
+  unit tests** (`tests/test_risk_and_report.py`), not by any live example. Until a real run
+  produces one, treat `high` as untested against real data.
+- **Status:** open. The fix is scope, not code. A larger or denser scope (more active constellations
+  in the debris shell, a longer window, or eventually the full catalog after the session-2 KD-tree
+  work) should produce a live example. Record it here when one appears.
+
+### Risk levels are a heuristic, not a probability of collision
+
+Public GP/TLE data carries no covariance, so risk tiers come from a documented threshold table
+([ADR 0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md)), not a computed Pc.
+Miss distances are screening estimates with roughly km-level error for fresh elements. This tool
+does not replace or match CSpOC's operational conjunction assessments.
 
 ## Security and cost notes
 
