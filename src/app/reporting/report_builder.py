@@ -1,11 +1,14 @@
 """Structured JSON report: the MVP's user-facing output.
 
-`REPORT_SCHEMA_VERSION` should be bumped on any breaking change to the report's shape - records or
-summary/diagnostic fields - since the later `generate_summary` upgrade will read it as a contract.
+Bump `REPORT_SCHEMA_VERSION` only on a breaking change to the report's shape - a field renamed,
+removed, or its meaning changed, in records or summary/diagnostic fields - since the later
+`generate_summary` upgrade will read it as a contract. Purely additive fields don't bump it (rule
+since 2026-09-28; see docs/working-notes-and-decisions.md).
 v2: `summary.screening` replaced `pair_checks`/`pairs_per_timestep` with
 `all_pairs_per_timestep`/`neighbor_search` (KD-tree fine filter); conjunction records unchanged.
 v3: `summary.screening` added `phase_timings_s`, `mean_pairs_within_radius_per_timestep`,
 `max_pairs_within_radius_in_a_timestep` and `refined_events` (additive; Step B instrumentation).
+Bumped under the earlier any-shape-change rule; under the current rule it wouldn't have been.
 """
 
 from __future__ import annotations
