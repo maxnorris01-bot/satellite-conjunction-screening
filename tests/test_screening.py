@@ -127,3 +127,16 @@ def test_many_objects_match_an_exact_closest_approach_oracle() -> None:
     for pair, (t, miss) in expected.items():
         assert abs(found[pair][0] - t) < 0.01
         assert abs(found[pair][1] - miss) < 1e-4
+
+
+def test_stats_report_phase_timings_and_pair_density() -> None:
+    r0, v = crossing_pair(tca=3617.0, miss_km=2.0)
+    stats = screen_conjunctions(LinearPropagation(r0, v, 7200, 60), SETTINGS).stats
+    phases = stats["phase_timings_s"]
+    assert set(phases) == {"neighbor_search", "survivor_closest_approach", "event_refinement"}
+    assert all(t >= 0 for t in phases.values())
+    assert stats["refined_events"] == 1
+    assert stats["max_pairs_within_radius_in_a_timestep"] == 1
+    assert stats["mean_pairs_within_radius_per_timestep"] == round(
+        stats["pairs_within_search_radius"] / stats["timesteps"], 1
+    )

@@ -10,6 +10,29 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-28 - Schema-version rule changed: bump only on breaking changes.** From now on,
+`REPORT_SCHEMA_VERSION` is bumped only when an existing report field is **renamed, removed, or has
+its meaning changed**. Purely additive new fields don't bump it: a consumer that ignores unknown
+keys keeps working, and bumping for every new diagnostic would make the version number noise. This
+replaces the stricter "any shape change bumps" rule from the v2 entry below. The current version
+stays at **3**; v3 was bumped under the old rule and isn't being rolled back. The rule is also
+stated in `src/app/reporting/report_builder.py`'s docstring.
+
+**2026-09-28 - Step B conclusion: coarse filter not required; memory is the next constraint.** At
+18,526 objects the KD-tree pipeline takes about 140 s per 24 h window. Extrapolated to about 30k
+objects it's roughly 5 minutes, which fits a 2-hourly batch job. Peak memory (2.2 GB, set by
+propagation arrays) is the actual limit on an 8 GB machine. ADR 0003's mean-element coarse filter
+turned out unsafe: it drops real conjunctions even at 30 km padding. A propagation-derived band is
+safe and would remove 61% of survivor pairs. Full reasoning and numbers:
+[ADR 0007](adr/adr-0007-coarse-filter-not-required-for-full-catalog.md). Step C is not
+implemented, pending Cowork review.
+
+**2026-09-28 - Report `schema_version` 2 -> 3 for additive diagnostics keys.** Step B added
+`phase_timings_s`, pairs-per-timestep density and `refined_events` to `summary.screening`. This
+follows the rule from the v2 entry below ("any report shape change bumps the version"), even
+though nothing was removed or renamed. (Superseded going forward by the rule change above;
+additive keys no longer bump.)
+
 **2026-09-27 - Parity regression test committed as a re-runnable gate for Steps B and C.** The
 frozen CelesTrak snapshot and baseline comparison from the Step A parity check now live in
 `tests/regression/`. Re-run it with:

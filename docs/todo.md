@@ -11,13 +11,14 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 - [ ] **Max:** start the Space-Track.org account registration. Approval timing is unknown. It's no
       longer needed for SATCAT metadata (CelesTrak covers that), but it's still wanted for a
       supplemental feed and for CDM cross-validation.
-- [ ] Session 2 Step B: scaling spike. Measure the KD-tree pipeline at larger scope (CelesTrak
-      `active` + major debris groups, or GP `GROUP=all` if fair use allows). That measurement
-      decides whether Step C is needed, and it's also ADR 0005's deployment input.
-- [ ] Session 2 Step C (only if Step B shows it's needed): ADR 0003's coarse perigee/apogee filter.
-      Validate that it never drops a pair the unfiltered screen flags.
-- [ ] Time-chunked propagation, so full-catalog position/velocity arrays don't need about 2 GB at
-      once.
+- [ ] **Cowork decision:** review ADR 0007. Is Step C wanted as an optional optimization, and is
+      full-catalog scale a goal on this machine at all?
+- [ ] Time-chunked propagation and screening. Per ADR 0007 this is the binding constraint at full
+      catalog, not Step C: about 3.5 GB peak is projected at ~30k objects, against 2.2 GB measured
+      at 18.5k. The report needs streaming or a cap too (76 MB at 64k conjunctions).
+- [ ] Step C, only if Cowork wants it: a coarse filter using ADR 0007's propagation-derived band,
+      not ADR 0003's mean-element band, which drops real conjunctions. Validate zero wrongly
+      dropped conjunctions against the Step B snapshot and the regression test.
 
 ## Later
 
@@ -39,6 +40,10 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Completed (most recent first)
 
+- [x] 2026-09-28 - Session 2 Step B: scaling spike at 18,526 objects (`active` + Fengyun-1C,
+      frozen snapshot). Pipeline 139.8 s against 4.9 s at 1,995 objects; survivor math is the
+      largest phase (58 s); peak 2.2 GB. The coarse filter isn't required for full catalog on time
+      (ADR 0007). See `docs/sessions/2026-09-28-session-2b-scaling-spike.md`.
 - [x] 2026-09-27 - Frozen-snapshot parity regression test (`tests/regression/`), running in CI via
       `make test` with no live CelesTrak calls. Re-run: `uv run pytest tests/regression -v`.
 - [x] 2026-09-27 - Session 2 Step A: KD-tree fine filter (`cKDTree.query_pairs` per timestep).

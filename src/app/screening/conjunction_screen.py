@@ -24,6 +24,7 @@ co-located rather than reported as crossing encounters.
 
 from __future__ import annotations
 
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any
@@ -83,7 +84,12 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
 
     hits: dict[tuple[int, int], list[_Hit]] = defaultdict(list)
     pairs_within_radius = 0
+    max_pairs_in_step = 0
+    # Phase timers (instrumentation only): tree build + radius query; then the per-timestep
+    # closest-approach math on the tree's survivors; then per-pair event splitting + refinement.
+    search_s = survivor_s = 0.0
     for k in range(n_steps):
+        t0 = time.perf_counter()
         pos = prop.positions[:, k, :]
         # (m, 2) array of index pairs with i < j - the same orientation the all-pairs version used,
         # so dr/dv below carry the same signs. query_pairs uses `<= r` where the old filter used
@@ -91,9 +97,12 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
         # most `max_relative_speed * step / 2` - to exactly `threshold`, which `miss < threshold`
         # below rejects - so it can never produce a hit either way.
         near = cKDTree(pos).query_pairs(search_radius, output_type="ndarray")
+        t1 = time.perf_counter()
+        search_s += t1 - t0
         if near.shape[0] == 0:
             continue
         pairs_within_radius += int(near.shape[0])
+        max_pairs_in_step = max(max_pairs_in_step, int(near.shape[0]))
         i, j = near[:, 0], near[:, 1]
         dr = pos[i] - pos[j]
         dv = prop.velocities[i, k, :] - prop.velocities[j, k, :]
@@ -109,7 +118,10 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
             hits[(int(i[idx]), int(j[idx]))].append(
                 _Hit(k, float(t[idx]), float(miss[idx]), float(np.sqrt(vv[idx])))
             )
+        survivor_s += time.perf_counter() - t1
 
+    t_refine = time.perf_counter()
+    refined_events = 0
     conjunctions: list[Conjunction] = []
     co_located: list[CoLocatedPair] = []
     rejected_after_refinement = 0
@@ -123,11 +135,13 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
         for event in _split_events(pair_hits):
             best = min(event, key=lambda h: h.miss)
             linear_tca = float(prop.offsets_s[best.k]) + best.t_offset
+            refined_events += 1
             tca, miss, speed = _refine(prop, a, b, linear_tca, step)
             if miss >= threshold:
                 rejected_after_refinement += 1
                 continue
             conjunctions.append(Conjunction(a, b, tca, miss, speed, best.miss, linear_tca))
+    refine_s = time.perf_counter() - t_refine
 
     stats = {
         "objects": n,
@@ -137,10 +151,18 @@ def screen_conjunctions(prop: PropagationResult, settings: ScreeningSettings) ->
         "all_pairs_per_timestep": n * (n - 1) // 2,
         "search_radius_km": round(search_radius, 3),
         "pairs_within_search_radius": pairs_within_radius,
+        "mean_pairs_within_radius_per_timestep": round(pairs_within_radius / max(n_steps, 1), 1),
+        "max_pairs_within_radius_in_a_timestep": max_pairs_in_step,
         "candidate_pairs": len(hits),
+        "refined_events": refined_events,
         "conjunctions": len(conjunctions),
         "co_located_pairs": len(co_located),
         "rejected_after_refinement": rejected_after_refinement,
+        "phase_timings_s": {
+            "neighbor_search": round(search_s, 4),
+            "survivor_closest_approach": round(survivor_s, 4),
+            "event_refinement": round(refine_s, 4),
+        },
     }
     return ScreeningResult(conjunctions, co_located, stats)
 

@@ -25,6 +25,69 @@ Every claim below is backed by a reproducible run. Reports live in [`evals/repor
 | Improvement over baseline | Baseline vs. current on same cases | _TBD_ |
 | Handles failures gracefully | Reproducible timeout/error cases | _TBD_ |
 | Cost and latency | Measured per run, p50/p95 | _TBD_ |
+| **Screens a real scope end to end (default demo)** | `make screen` on the default scope, CelesTrak `iridium-NEXT` + `fengyun-1c-debris`. Pinned by the frozen-snapshot regression test (`tests/regression/`) | 1,995 objects, 509 conjunctions (0 high / 31 moderate / 478 low), ~5 s per 24 h window, 362 MB peak |
+| Scales to an active-catalog scope (scale test, not the demo) | One-off `scripts/scaling_spike.py`, CelesTrak `active` + `fengyun-1c-debris`, frozen snapshot, median of 3 runs | 18,526 objects, ~140 s per 24 h window, 2.2 GB peak. See [Scale test](#scale-test-active-catalog-18526-objects) below |
+
+The default demo scope is the documented example; the scale test is an extra data point about
+performance at about 9x the object count. Screening evidence lives in `docs/sessions/` and
+`docs/adr/`, not `evals/reports/`: the pipeline makes no LLM calls, so the template's eval harness
+doesn't exercise it.
+
+### Scale test: active catalog (18,526 objects)
+
+A one-off measurement (session 2 Step B,
+[ADR 0007](docs/adr/adr-0007-coarse-filter-not-required-for-full-catalog.md)). It used CelesTrak
+`active` (16,620) + `fengyun-1c-debris` (1,968), fetched once on 2026-09-28 at 01:35Z and frozen.
+18,526 objects were screened after dropping 61 stale element sets and 1 decayed object. The
+window was 24 h at a 60 s step with a 5 km threshold. Times are medians of 3 fresh-process runs,
+on an Intel i5-6267U with 8 GB RAM.
+
+| | Default demo (1,995 objects) | Scale test (18,526 objects) |
+|---|---|---|
+| Propagation (SGP4) | 1.60 s | 17.98 s |
+| Neighbor search (KD-tree build + query) | 1.94 s | 34.70 s |
+| Post-search closest-approach math + SGP4 refinement | 1.24 s | 72.03 s |
+| Pipeline total | 4.92 s | 139.75 s |
+| Peak memory (`ru_maxrss`) | 362 MB | 2,214 MB |
+| Candidate pairs per timestep (within the 485 km search radius) | 3,273 | 162,656 |
+| Conjunctions flagged (high / moderate / low) | 509 (0 / 31 / 478) | 63,896 (2,299 / 8,605 / 52,992) |
+
+Extrapolated (not measured) to the ~30k-object public catalog, screening time stays around 5
+minutes per window. Memory, not time, becomes the constraint. Details are in ADR 0007.
+
+#### What the 2,299 "high" results are, and aren't
+
+**They are not 2,299 near-misses.** They're 2,299 predicted passes that meet the `high` row of a
+threshold table (miss under 1 km, closing speed at least 1 km/s, an active payload involved). The
+breakdown:
+
+| Pair | High-tier results |
+|---|---|
+| Starlink vs. Starlink | 1,806 (78.6%) |
+| Starlink vs. another payload | 401 |
+| Starlink vs. debris or another constellation | 12 |
+| **Involving at least one Starlink** | **2,219 (96.5%)** |
+| No Starlink (other payloads, Kuiper, debris) | 80 |
+
+This is expected, and it very likely reflects the risk logic correctly firing on real geometry,
+not real collision risk:
+
+- **A TLE snapshot can't see station-keeping or maneuvers.** Active constellations like Starlink
+  continually adjust their orbits, including routine collision-avoidance maneuvers. SGP4
+  extrapolates each element set as if the satellite will never thrust again, so two satellites
+  whose operator is actively keeping them apart can look, in a raw snapshot, exactly like two
+  satellites on a collision course.
+- **The prediction error is as large as the threshold.** TLE/SGP4 position error for fresh LEO
+  elements is roughly 1 km, and it grows with element age. The median predicted miss among these
+  results is 0.68 km, inside that error. The tool can't tell a 0.3 km pass from a 1.3 km pass at
+  this accuracy.
+- **Dense shells produce many geometric crossings.** About 11,000 Starlink satellites share a
+  handful of orbital shells, so many of them cross at similar altitudes each day. Operators screen
+  these with their own precise ephemerides and planned maneuvers, not public TLEs.
+
+This is the limitation [ADR 0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md)
+describes, a heuristic over public data rather than a probability of collision, made visible at
+scale. Read `high` as "worth a closer look with better data", not "collision risk".
 
 ## Architecture
 
@@ -90,7 +153,7 @@ it deliberately, not routinely - see Evaluation below.
 
 <!-- Real failures only. For each: the input, what went wrong, how you investigated, status. -->
 
-### No high-risk conjunction has been observed in real data at this catalog scope
+### No high-risk conjunction at the default demo scope
 
 - **Input:** the default scope, CelesTrak `iridium-NEXT` + `fengyun-1c-debris` (about 2,000
   objects), over a 24 h window at a 60 s step with a 5 km screening threshold.
@@ -99,12 +162,16 @@ it deliberately, not routinely - see Evaluation below.
   `20260928T0101Z-c6e1f2` flagged 509 encounters: 0 high, 31 moderate, 478 low. 52 involved an
   active Iridium satellite, and the closest of those was 1.29 km. Every sub-1 km pass (the closest
   was 0.11 km) was debris vs. debris, which the table caps at `moderate` by design.
-- **What that means:** the `high`-tier logic in `src/app/risk/risk_model.py` is verified **only by
-  unit tests** (`tests/test_risk_and_report.py`), not by any live example. Until a real run
-  produces one, treat `high` as untested against real data.
-- **Status:** open. The fix is scope, not code. A larger or denser scope (more active constellations
-  in the debris shell, a longer window, or eventually the full catalog after the session-2 KD-tree
-  work) should produce a live example. Record it here when one appears.
+- **What that means:** the default demo never shows a `high` result, so a reviewer running
+  `make screen` won't see that tier.
+- **Update 2026-09-28 (session 2 Step B):** the `high` tier does fire on real data at a larger
+  scope. The one-off active-catalog scale test flagged 2,299 `high` results; 2,219 (96.5%)
+  involve a Starlink satellite. That confirms the logic triggers on live inputs. It is **not**
+  evidence of real collision risk: see
+  [What the 2,299 "high" results are, and aren't](#what-the-2299-high-results-are-and-arent).
+- **Status:** open for the default scope. It's a scope choice, not a code defect. Options: add a
+  dense active constellation to the demo scope (at the cost of runtime), or keep the demo small
+  and point to the Step B run as the live `high` example.
 
 ### Risk levels are a heuristic, not a probability of collision
 
