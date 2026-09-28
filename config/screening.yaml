@@ -1,0 +1,47 @@
+# Conjunction screening parameters. Every value is a starting point, not a validated number - the
+# reasoning for each one is logged in docs/working-notes-and-decisions.md so it can be defended (or
+# changed) deliberately rather than looking arbitrary. CLI flags override the scope/window/threshold
+# values here for one-off runs; see `python -m app.cli --help`.
+
+scope:
+  # CelesTrak named groups (https://celestrak.org/NORAD/elements/). Objects appearing in more than
+  # one group are merged by NORAD catalog number.
+  groups: [stations, fengyun-1c-debris]
+
+source:
+  celestrak_base_url: https://celestrak.org
+  cache_dir: cache/celestrak
+  # CelesTrak regenerates GP data roughly every 2 hours; its fair-use policy asks clients not to
+  # poll faster than that. A cached response younger than this is reused instead of re-fetched.
+  cache_ttl_hours: 2.0
+  # Elements older than this (relative to the window start) are dropped before propagation. SGP4
+  # error grows quickly with propagation span; weeks-old elements produce position errors far larger
+  # than the screening threshold, so any "conjunction" they report is noise.
+  max_epoch_age_days: 14.0
+  http_timeout_s: 30.0
+
+propagation:
+  window_hours: 24.0
+  step_seconds: 60.0
+
+screening:
+  # Pairs whose refined closest approach falls under this distance are flagged.
+  threshold_km: 5.0
+  # Upper bound on the closing speed of any two Earth-orbiting objects (roughly two LEO orbital
+  # velocities head-on). Used only to size the per-sample search radius so an encounter that
+  # happens *between* two samples can't be missed: radius = threshold + max_speed * step / 2.
+  max_relative_speed_km_s: 16.0
+  # Pairs moving slower than this relative to each other at closest approach are co-located
+  # (docked vehicles, station modules, fresh formation debris) rather than crossing encounters.
+  # They are reported separately and not risk-rated.
+  co_located_max_relative_speed_km_s: 0.1
+
+risk:
+  # See docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md for why this is a
+  # threshold table rather than a probability of collision.
+  high_miss_km: 1.0
+  moderate_miss_km_active: 2.5
+  hypervelocity_km_s: 1.0
+
+report:
+  output_dir: runs/reports
