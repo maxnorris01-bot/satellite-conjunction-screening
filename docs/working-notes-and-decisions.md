@@ -10,6 +10,12 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-27 - Report `schema_version` 1 -> 2 for a diagnostics-only change.** The KD-tree swap
+replaced `summary.screening`'s `pair_checks`/`pairs_per_timestep` with
+`all_pairs_per_timestep`/`neighbor_search`. No conjunction record changed, but any consumer
+reading those keys would break silently, so any shape change to the report bumps the version, not
+just record changes.
+
 **2026-09-27 - KD-tree fine filter landed as a pure algorithmic swap, gated on exact parity.**
 Session 2 Step A replaced the per-timestep all-pairs distance matrix with `cKDTree.query_pairs` at
 the same 485 km radius. The closest-approach math, refinement, co-location and risk code are
