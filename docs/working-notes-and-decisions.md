@@ -10,6 +10,21 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-28 - Step B conclusion: coarse filter not required; memory is the next constraint.** At
+18,526 objects the KD-tree pipeline takes about 140 s per 24 h window. Extrapolated to about 30k
+objects it's roughly 5 minutes, which fits a 2-hourly batch job. Peak memory (2.2 GB, set by
+propagation arrays) is the actual limit on an 8 GB machine. ADR 0003's mean-element coarse filter
+turned out unsafe: it drops real conjunctions even at 30 km padding. A propagation-derived band is
+safe and would remove 61% of survivor pairs. Full reasoning and numbers:
+[ADR 0007](adr/adr-0007-coarse-filter-not-required-for-full-catalog.md). Step C is not
+implemented, pending Cowork review.
+
+**2026-09-28 - Report `schema_version` 2 -> 3 for additive diagnostics keys.** Step B added
+`phase_timings_s`, pairs-per-timestep density and `refined_events` to `summary.screening`. This
+follows the rule from the v2 entry below ("any report shape change bumps the version"), even
+though nothing was removed or renamed. It's worth deciding whether purely additive keys should
+bump at all; a common convention is to bump only for removals, renames and type changes.
+
 **2026-09-27 - Parity regression test committed as a re-runnable gate for Steps B and C.** The
 frozen CelesTrak snapshot and baseline comparison from the Step A parity check now live in
 `tests/regression/`. Re-run it with:
