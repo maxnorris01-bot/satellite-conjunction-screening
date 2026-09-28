@@ -90,7 +90,7 @@ it deliberately, not routinely - see Evaluation below.
 
 <!-- Real failures only. For each: the input, what went wrong, how you investigated, status. -->
 
-### No high-risk conjunction has been observed in real data at this catalog scope
+### No high-risk conjunction at the default demo scope
 
 - **Input:** the default scope, CelesTrak `iridium-NEXT` + `fengyun-1c-debris` (about 2,000
   objects), over a 24 h window at a 60 s step with a 5 km screening threshold.
@@ -99,12 +99,19 @@ it deliberately, not routinely - see Evaluation below.
   `20260928T0101Z-c6e1f2` flagged 509 encounters: 0 high, 31 moderate, 478 low. 52 involved an
   active Iridium satellite, and the closest of those was 1.29 km. Every sub-1 km pass (the closest
   was 0.11 km) was debris vs. debris, which the table caps at `moderate` by design.
-- **What that means:** the `high`-tier logic in `src/app/risk/risk_model.py` is verified **only by
-  unit tests** (`tests/test_risk_and_report.py`), not by any live example. Until a real run
-  produces one, treat `high` as untested against real data.
-- **Status:** open. The fix is scope, not code. A larger or denser scope (more active constellations
-  in the debris shell, a longer window, or eventually the full catalog after the session-2 KD-tree
-  work) should produce a live example. Record it here when one appears.
+- **What that means:** the default demo never shows a `high` result, so a reviewer running
+  `make screen` won't see that tier.
+- **Update 2026-09-28 (session 2 Step B):** the `high` tier now fires on real data at a larger
+  scope. The one-off `active` + `fengyun-1c-debris` measurement (18,526 objects, run
+  `20260928T0135Z-2fee8c`) flagged 2,299 `high` conjunctions. The closest was STARLINK-31121 vs.
+  STARLINK-35643 at 0.026 km and 10.0 km/s. 78.6% were Starlink vs. Starlink. This shows the
+  logic triggers correctly on live inputs. It does **not** show those passes are real threats:
+  Starlink maneuvers often and TLE error is about 1 km, so many sub-1 km predictions sit within
+  prediction noise (see the next entry and
+  [ADR 0007](docs/adr/adr-0007-coarse-filter-not-required-for-full-catalog.md)).
+- **Status:** open for the default scope. It's a scope choice, not a code defect. Options: add a
+  dense active constellation to the demo scope (at the cost of runtime), or keep the demo small
+  and point to the Step B run as the live `high` example.
 
 ### Risk levels are a heuristic, not a probability of collision
 
