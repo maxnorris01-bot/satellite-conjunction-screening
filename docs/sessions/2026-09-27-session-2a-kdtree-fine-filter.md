@@ -3,9 +3,10 @@
 **Date:** 2026-09-27 · **Branch:** `feat/session-2-kdtree-fine-filter` · **LLM calls:** zero
 
 This session did Step A only. Step B (scaling spike) and Step C (coarse filter) were deliberately
-not started; whether they're needed depends on the numbers below. The plan file
-`docs/session-2-plan-screening-at-scale.md` isn't in the repo, so this session worked from the
-Step A description in the kickoff prompt.
+not started; whether they're needed depends on the numbers below. The plan,
+`docs/session-2-plan-screening-at-scale.md`, wasn't in the repo when the session started, so the
+work followed the kickoff prompt's Step A description. The plan appeared mid-session, and its Step
+A matches what was built. It was left untracked, since it's Max's file to commit.
 
 ## What changed
 
