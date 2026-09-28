@@ -11,3 +11,4 @@ runs/
 .DS_Store
 evals/reports/*.json
 *-output.txt
+cache/
