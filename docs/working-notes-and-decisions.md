@@ -10,6 +10,36 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-27 - Parity regression test committed as a re-runnable gate for Steps B and C.** The
+frozen CelesTrak snapshot and baseline comparison from the Step A parity check now live in
+`tests/regression/`. Re-run it with:
+
+```bash
+uv run pytest tests/regression -v
+```
+
+It also runs as part of `make test`, which picks up everything under `tests/`, so no Makefile
+change was needed. It's served entirely from the snapshot; any network request fails the test.
+It asserts exact counts and pairs, and tight numeric tolerances only to absorb cross-platform float
+noise. The baseline is regenerated only deliberately, in its own commit. Details:
+`tests/regression/README.md`.
+
+**2026-09-27 - Report `schema_version` 1 -> 2 for a diagnostics-only change.** The KD-tree swap
+replaced `summary.screening`'s `pair_checks`/`pairs_per_timestep` with
+`all_pairs_per_timestep`/`neighbor_search`. No conjunction record changed, but any consumer
+reading those keys would break silently, so any shape change to the report bumps the version, not
+just record changes.
+
+**2026-09-27 - KD-tree fine filter landed as a pure algorithmic swap, gated on exact parity.**
+Session 2 Step A replaced the per-timestep all-pairs distance matrix with `cKDTree.query_pairs` at
+the same 485 km radius. The closest-approach math, refinement, co-location and risk code are
+unchanged. The acceptance bar was bit-identical output on a frozen input snapshot (the baseline's
+cached CelesTrak responses plus its fixed 01:01Z window start), not "tests pass": a live re-run
+uses a new window, so its counts legitimately differ. It passed: all 509 records are identical,
+including the per-step pairs-within-radius total (4,716,128). Scope and timing numbers are in
+`docs/sessions/2026-09-27-session-2a-kdtree-fine-filter.md`. Steps B (scaling spike) and C (coarse
+filter) were deliberately deferred until these numbers were in.
+
 **2026-09-27 - Default demo scope is `iridium-NEXT` + `fengyun-1c-debris`; `stations` and
 Cosmos-1408 dropped.** Session 1's `stations` + `fengyun-1c-debris` scope never demonstrated
 station-vs-debris screening. The stations (385-426 km) and Fengyun-1C debris (~800 km) are in
@@ -85,7 +115,8 @@ this template, and two different files with the same name invite confusion.
   pass` separately from the pipeline to split environment setup from the run itself.
 - **Memory, not just time, blocks full-catalog scale.** All-pairs index arrays at 30k objects would
   be about 7 GB. 24 h x 60 s position + velocity arrays would be about 2 GB. ADR 0003's KD-tree
-  fixes the first. The second needs time-chunked propagation. Numbers are in the session-1 summary.
+  fixed the first in session 2 Step A: no O(n^2) arrays remain. The second still needs
+  time-chunked propagation. Numbers are in the session-1 summary.
 - **Co-located detection uses relative speed only.** A slow drift toward collision would be
   classified co-located and never rated. See ADR 0006's consequences.
 - **ADR 0001 still says SATCAT metadata comes from Space-Track.** Worth a one-line status note on

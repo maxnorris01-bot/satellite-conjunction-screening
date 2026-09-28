@@ -4,6 +4,13 @@
 (see spec's first-session plan); this ADR documents the design decision now so it isn't
 rediscovered mid-implementation.
 
+**Update (session 2, Step A, 2026-09-27):** the fine filter is implemented.
+`screen_conjunctions` now uses a per-timestep `cKDTree.query_pairs` at ADR 0006's search radius. It
+matched the naive version exactly on the frozen default-scope snapshot, and screening dropped from
+26.4 s to 2.9 s at about 2,000 objects. The coarse filter is still not implemented; whether it's
+needed depends on the scaling spike (session-2 Step B). See
+`docs/sessions/2026-09-27-session-2a-kdtree-fine-filter.md`.
+
 ## Context
 
 `screen_conjunctions` needs to find, across a time window, every pair of tracked objects that comes

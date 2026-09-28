@@ -1,7 +1,9 @@
 """Structured JSON report: the MVP's user-facing output.
 
-`REPORT_SCHEMA_VERSION` should be bumped on any breaking change to a record's shape - the later
-`generate_summary` upgrade will read these records, so their shape is a contract.
+`REPORT_SCHEMA_VERSION` should be bumped on any breaking change to the report's shape - records or
+summary/diagnostic fields - since the later `generate_summary` upgrade will read it as a contract.
+v2: `summary.screening` replaced `pair_checks`/`pairs_per_timestep` with
+`all_pairs_per_timestep`/`neighbor_search` (KD-tree fine filter); conjunction records unchanged.
 """
 
 from __future__ import annotations
@@ -17,7 +19,7 @@ from app.propagation.sgp4_propagator import PropagationResult
 from app.risk.risk_model import RISK_ORDER, RiskAssessment
 from app.screening.conjunction_screen import CoLocatedPair, Conjunction
 
-REPORT_SCHEMA_VERSION = 1
+REPORT_SCHEMA_VERSION = 2
 LIMITATIONS = (
     "Risk levels are a documented heuristic over miss distance, closing speed and object status "
     "(ADR 0004), not a probability of collision: public GP/TLE data carries no covariance. Typical "
