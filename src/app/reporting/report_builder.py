@@ -4,6 +4,8 @@
 summary/diagnostic fields - since the later `generate_summary` upgrade will read it as a contract.
 v2: `summary.screening` replaced `pair_checks`/`pairs_per_timestep` with
 `all_pairs_per_timestep`/`neighbor_search` (KD-tree fine filter); conjunction records unchanged.
+v3: `summary.screening` added `phase_timings_s`, `mean_pairs_within_radius_per_timestep`,
+`max_pairs_within_radius_in_a_timestep` and `refined_events` (additive; Step B instrumentation).
 """
 
 from __future__ import annotations
@@ -19,7 +21,7 @@ from app.propagation.sgp4_propagator import PropagationResult
 from app.risk.risk_model import RISK_ORDER, RiskAssessment
 from app.screening.conjunction_screen import CoLocatedPair, Conjunction
 
-REPORT_SCHEMA_VERSION = 2
+REPORT_SCHEMA_VERSION = 3
 LIMITATIONS = (
     "Risk levels are a documented heuristic over miss distance, closing speed and object status "
     "(ADR 0004), not a probability of collision: public GP/TLE data carries no covariance. Typical "
