@@ -5,8 +5,11 @@
 
 scope:
   # CelesTrak named groups (https://celestrak.org/NORAD/elements/). Objects appearing in more than
-  # one group are merged by NORAD catalog number.
-  groups: [stations, fengyun-1c-debris]
+  # one group are merged by NORAD catalog number. Iridium NEXT (~780 km, all operational payloads)
+  # shares an altitude shell with the Fengyun-1C debris cloud (~800 km), so this scope produces real
+  # active-payload-vs-debris encounters. See docs/working-notes-and-decisions.md for why it
+  # replaced `stations` as the default.
+  groups: [iridium-NEXT, fengyun-1c-debris]
 
 source:
   celestrak_base_url: https://celestrak.org
