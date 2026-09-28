@@ -11,6 +11,12 @@ matched the naive version exactly on the frozen default-scope snapshot, and scre
 needed depends on the scaling spike (session-2 Step B). See
 `docs/sessions/2026-09-27-session-2a-kdtree-fine-filter.md`.
 
+**Update (session 2, Step B, 2026-09-28):** see
+[ADR 0007](adr-0007-coarse-filter-not-required-for-full-catalog.md). Measured at 18,526 objects,
+the coarse filter isn't required to reach full-catalog scale on time, and this ADR's mean-element
+band design wrongly drops real conjunctions at every padding tested. If a coarse filter is built,
+use ADR 0007's propagation-derived band.
+
 ## Context
 
 `screen_conjunctions` needs to find, across a time window, every pair of tracked objects that comes
