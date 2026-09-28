@@ -10,6 +10,17 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-27 - Default demo scope is `iridium-NEXT` + `fengyun-1c-debris`; `stations` and
+Cosmos-1408 dropped.** Session 1's `stations` + `fengyun-1c-debris` scope never demonstrated
+station-vs-debris screening. The stations (385-426 km) and Fengyun-1C debris (~800 km) are in
+different altitude bands, so the stations group contributed only docked-vehicle pairs (0 km,
+co-located, not risk-rated). Iridium NEXT (~780 km, all operational) shares the debris shell. Run
+`20260928T0101Z-c6e1f2` found 52 debris-vs-Iridium passes under 5 km, 13 of them rated moderate,
+which exercises the active-payload path on real data. Cosmos-1408 was never used as a source. It's
+dropped from the spec as a suggestion because CelesTrak's `cosmos-1408-debris` group has decayed to
+about 2 tracked objects, which no longer works as a debris-cloud example. Even with this scope, no
+`high` conjunction has been observed yet; see the README's Known failures section.
+
 **2026-09-27 - Risk-table thresholds (ADR 0004's heuristic, first numbers).** Values are in
 `config/screening.yaml`; the rules are in `src/app/risk/risk_model.py`'s docstring.
 - `high_miss_km: 1.0`. Fresh LEO TLE/SGP4 position error is roughly 1 km and grows with element
@@ -62,13 +73,16 @@ this template, and two different files with the same name invite confusion.
 
 ## Open items / parking lot
 
-- **Session-1 scope has no stations-vs-debris overlap.** The stations fly at 385-426 km and
-  Fengyun-1C debris sits around 800 km, so every flagged pair was debris-debris and the "high" rule
-  never fired. The stations group contributes only co-located docked vehicles. A supplementary run
-  of `iridium-NEXT` + `fengyun-1c-debris` found 50 debris-vs-Iridium passes under 5 km (13 rated
-  moderate). That's a better demo scope, pending a decision (see `docs/todo.md`).
-- **Cosmos-1408 debris has mostly decayed.** CelesTrak's `cosmos-1408-debris` group returned only
-  about 2 objects on 2026-09-27, so it's no longer useful as a debris-cloud demo.
+- **No live `high`-tier example yet.** High-tier risk logic is verified only by unit tests. It's
+  documented in the README's Known failures section; record the first real example there when one
+  appears.
+- **One-off 560 s first run, unreproduced.** The very first `python -m app.cli` run (2026-09-27)
+  took 560 s wall-clock. The pipeline's own spans totaled 28 s and user CPU was about 25 s, so the
+  process sat idle for the rest. Every run since has taken about 24-26 s, which is pipeline time
+  plus about 2.5 s of imports. Unconfirmed suspects: the first `uv run` after a `pyproject.toml`
+  change (environment re-sync/rebuild), or macOS scanning freshly built native libraries on first
+  load. Watch for it on the next cold start or fresh clone. If it recurs, time `uv run python -c
+  pass` separately from the pipeline to split environment setup from the run itself.
 - **Memory, not just time, blocks full-catalog scale.** All-pairs index arrays at 30k objects would
   be about 7 GB. 24 h x 60 s position + velocity arrays would be about 2 GB. ADR 0003's KD-tree
   fixes the first. The second needs time-chunked propagation. Numbers are in the session-1 summary.

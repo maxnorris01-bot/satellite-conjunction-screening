@@ -11,9 +11,6 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 - [ ] **Max:** start the Space-Track.org account registration. Approval timing is unknown. It's no
       longer needed for SATCAT metadata (CelesTrak covers that), but it's still wanted for a
       supplemental feed and for CDM cross-validation.
-- [ ] Decide the demo scope. `stations` + `fengyun-1c-debris` never produces a stations-vs-debris
-      encounter (different altitudes). `iridium-NEXT` + `fengyun-1c-debris` exercises the
-      active-payload risk path on real data. Update `config/screening.yaml` accordingly.
 - [ ] Session 2: implement ADR 0003's KD-tree fine filter (same `screen_conjunctions` signature).
       Validate it flags the exact same encounters as the naive version on the session-1 scope
       before trusting it.
@@ -42,10 +39,13 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 - [ ] Cross-check a few flagged encounters against CelesTrak SOCRATES for the same window, as a
       correctness spot-check.
 - [ ] Investigate the one-off 560 s wall-clock on the first-ever run (the pipeline itself took
-      28 s). Not reproduced since.
+      28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
 
+- [x] 2026-09-27 - Switched the default demo scope to `iridium-NEXT` + `fengyun-1c-debris`, dropped
+      Cosmos-1408 from the spec, and added README Known failures (no live `high` example yet).
+      The new default flagged 509 encounters (0 high, 31 moderate, 478 low) in 26 s.
 - [x] 2026-09-27 - Session 1 spike: fetch -> propagate -> screen (naive all-pairs) -> assess ->
       JSON report, end-to-end on real CelesTrak data with per-step JSON timing traces. 460
       encounters flagged under 5 km in 24 h (18 moderate, 442 low), plus 39 co-located pairs.
