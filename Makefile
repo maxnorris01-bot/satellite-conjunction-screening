@@ -1,4 +1,4 @@
-.PHONY: install lint format typecheck test eval-fast eval-fast-live eval-standard eval-nightly
+.PHONY: install lint format typecheck test screen eval-fast eval-fast-live eval-standard eval-nightly
  
 install:
 	uv sync
@@ -16,6 +16,12 @@ typecheck:
  
 test:
 	uv run pytest
+
+# Run the conjunction screening pipeline (zero LLM calls). Scope/window/threshold come from
+# config/screening.yaml; pass overrides with ARGS, e.g. make screen ARGS="--window-hours 48".
+# CelesTrak responses are cached for 2h in cache/, so re-running within that window is free.
+screen:
+	uv run python -m app.cli $(ARGS)
  
 # Free, no API key needed: exercises routing/shape/tracing/budget against a mock client.
 # Not a quality signal - see evals/run.py's docstring. This is the default; APP_LLM_MODE is
