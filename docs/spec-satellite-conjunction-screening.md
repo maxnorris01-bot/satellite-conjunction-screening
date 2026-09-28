@@ -139,10 +139,16 @@ reasonable, before committing to full-catalog scope.** Session 1 should spike th
 real, deliberately-chosen scope, not a simplified stand-in.
 
 **Scope for session 1:** two small CelesTrak groups known to have genuine close-approach signal —
-`GROUP=stations` (ISS, Tiangong, etc., ~10-20 objects) and one debris-cloud group (e.g. the
-Fengyun-1C or Cosmos-1408 fragmentation debris, both are named CelesTrak groups with hundreds of
-mutually close-orbiting fragments) — small enough that a naive all-pairs distance check is fine for
-now, real enough to produce actual flagged conjunctions rather than a synthetic fixture.
+`GROUP=stations` (ISS, Tiangong, etc., ~10-20 objects) and the Fengyun-1C fragmentation debris
+cloud (`GROUP=fengyun-1c-debris`, ~2,000 tracked fragments) — small enough that a naive all-pairs
+distance check is fine for now, real enough to produce actual flagged conjunctions rather than a
+synthetic fixture.
+
+> **Updated after session 1 (2026-09-27):** the default demo scope is now `iridium-NEXT` +
+> `fengyun-1c-debris`. The stations (385-426 km) never meet Fengyun-1C debris (~800 km), so
+> `stations` produced only docked-vehicle (co-located, not risk-rated) pairs. Iridium NEXT shares
+> the debris cloud's altitude shell and produces real active-payload-vs-debris encounters. See
+> `docs/working-notes-and-decisions.md`.
 
 1. Repo scaffold from `portfolio-project-template` (Max, terminal — commands below).
 2. `fetch_tle_data`: real CelesTrak GET for the two groups above, parsed into `TleSet`. Success
