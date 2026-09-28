@@ -10,6 +10,20 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-27 - Parity regression test committed as a re-runnable gate for Steps B and C.** The
+frozen CelesTrak snapshot and baseline comparison from the Step A parity check now live in
+`tests/regression/`. Re-run it with:
+
+```bash
+uv run pytest tests/regression -v
+```
+
+It also runs as part of `make test`, which picks up everything under `tests/`, so no Makefile
+change was needed. It's served entirely from the snapshot; any network request fails the test.
+It asserts exact counts and pairs, and tight numeric tolerances only to absorb cross-platform float
+noise. The baseline is regenerated only deliberately, in its own commit. Details:
+`tests/regression/README.md`.
+
 **2026-09-27 - Report `schema_version` 1 -> 2 for a diagnostics-only change.** The KD-tree swap
 replaced `summary.screening`'s `pair_checks`/`pairs_per_timestep` with
 `all_pairs_per_timestep`/`neighbor_search`. No conjunction record changed, but any consumer

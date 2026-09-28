@@ -1,0 +1,4608 @@
+{
+ "window_start_utc": "2026-09-28T01:01:00Z",
+ "window_hours": 24.0,
+ "step_seconds": 60.0,
+ "groups": [
+  "iridium-NEXT",
+  "fengyun-1c-debris"
+ ],
+ "threshold_km": 5.0,
+ "objects_screened": 1995,
+ "by_risk_level": {
+  "high": 0,
+  "moderate": 31,
+  "low": 478
+ },
+ "pairs_within_search_radius": 4716128,
+ "conjunctions": [
+  {
+   "norad_a": 25730,
+   "norad_b": 30550,
+   "tca_utc": "2026-09-28T08:41:42.042888Z",
+   "miss_distance_km": 3.346,
+   "relative_speed_km_s": 14.7629,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3448
+  },
+  {
+   "norad_a": 25730,
+   "norad_b": 30746,
+   "tca_utc": "2026-09-28T11:37:33.957765Z",
+   "miss_distance_km": 3.6965,
+   "relative_speed_km_s": 12.8222,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6963
+  },
+  {
+   "norad_a": 25730,
+   "norad_b": 30746,
+   "tca_utc": "2026-09-28T20:52:43.795793Z",
+   "miss_distance_km": 4.0944,
+   "relative_speed_km_s": 12.8389,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0934
+  },
+  {
+   "norad_a": 29733,
+   "norad_b": 30257,
+   "tca_utc": "2026-09-28T10:54:03.574459Z",
+   "miss_distance_km": 3.6276,
+   "relative_speed_km_s": 2.7305,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6277
+  },
+  {
+   "norad_a": 29737,
+   "norad_b": 29880,
+   "tca_utc": "2026-09-28T10:21:09.054747Z",
+   "miss_distance_km": 1.2072,
+   "relative_speed_km_s": 2.7752,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.207
+  },
+  {
+   "norad_a": 29751,
+   "norad_b": 29922,
+   "tca_utc": "2026-09-28T14:34:11.226686Z",
+   "miss_distance_km": 4.5458,
+   "relative_speed_km_s": 4.6127,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5461
+  },
+  {
+   "norad_a": 29758,
+   "norad_b": 32181,
+   "tca_utc": "2026-09-28T02:24:18.643419Z",
+   "miss_distance_km": 4.2581,
+   "relative_speed_km_s": 2.1089,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2589
+  },
+  {
+   "norad_a": 29758,
+   "norad_b": 32304,
+   "tca_utc": "2026-09-28T10:00:09.936277Z",
+   "miss_distance_km": 4.1732,
+   "relative_speed_km_s": 13.7419,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1735
+  },
+  {
+   "norad_a": 29760,
+   "norad_b": 43570,
+   "tca_utc": "2026-09-28T18:44:16.029799Z",
+   "miss_distance_km": 3.7029,
+   "relative_speed_km_s": 11.7198,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.702
+  },
+  {
+   "norad_a": 29765,
+   "norad_b": 30136,
+   "tca_utc": "2026-09-28T13:19:05.020281Z",
+   "miss_distance_km": 4.2602,
+   "relative_speed_km_s": 13.6221,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2603
+  },
+  {
+   "norad_a": 29765,
+   "norad_b": 31094,
+   "tca_utc": "2026-09-28T22:46:55.016694Z",
+   "miss_distance_km": 1.79,
+   "relative_speed_km_s": 14.1241,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7901
+  },
+  {
+   "norad_a": 29770,
+   "norad_b": 30609,
+   "tca_utc": "2026-09-28T02:16:34.393506Z",
+   "miss_distance_km": 1.3335,
+   "relative_speed_km_s": 14.5868,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.335
+  },
+  {
+   "norad_a": 29774,
+   "norad_b": 36699,
+   "tca_utc": "2026-09-28T07:32:33.126657Z",
+   "miss_distance_km": 4.3202,
+   "relative_speed_km_s": 4.7779,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3208
+  },
+  {
+   "norad_a": 29774,
+   "norad_b": 41918,
+   "tca_utc": "2026-09-28T17:19:01.292152Z",
+   "miss_distance_km": 3.2005,
+   "relative_speed_km_s": 14.9302,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2005
+  },
+  {
+   "norad_a": 29780,
+   "norad_b": 30289,
+   "tca_utc": "2026-09-28T14:24:01.529372Z",
+   "miss_distance_km": 3.6801,
+   "relative_speed_km_s": 14.6549,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6801
+  },
+  {
+   "norad_a": 29780,
+   "norad_b": 30540,
+   "tca_utc": "2026-09-28T02:24:52.071067Z",
+   "miss_distance_km": 4.5705,
+   "relative_speed_km_s": 14.7363,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5705
+  },
+  {
+   "norad_a": 29781,
+   "norad_b": 30133,
+   "tca_utc": "2026-09-28T05:10:16.413576Z",
+   "miss_distance_km": 3.1641,
+   "relative_speed_km_s": 14.2793,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1648
+  },
+  {
+   "norad_a": 29782,
+   "norad_b": 32422,
+   "tca_utc": "2026-09-28T23:00:04.509766Z",
+   "miss_distance_km": 3.9986,
+   "relative_speed_km_s": 4.1246,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9986
+  },
+  {
+   "norad_a": 29788,
+   "norad_b": 30646,
+   "tca_utc": "2026-09-28T21:51:05.454033Z",
+   "miss_distance_km": 3.3748,
+   "relative_speed_km_s": 7.699,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3748
+  },
+  {
+   "norad_a": 29789,
+   "norad_b": 35245,
+   "tca_utc": "2026-09-28T09:50:40.120069Z",
+   "miss_distance_km": 4.7306,
+   "relative_speed_km_s": 9.5609,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7284
+  },
+  {
+   "norad_a": 29791,
+   "norad_b": 29912,
+   "tca_utc": "2026-09-28T12:46:16.985371Z",
+   "miss_distance_km": 2.7261,
+   "relative_speed_km_s": 9.441,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.726
+  },
+  {
+   "norad_a": 29793,
+   "norad_b": 30886,
+   "tca_utc": "2026-09-28T02:55:26.559489Z",
+   "miss_distance_km": 4.3458,
+   "relative_speed_km_s": 12.2024,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3464
+  },
+  {
+   "norad_a": 29794,
+   "norad_b": 42810,
+   "tca_utc": "2026-09-28T23:00:34.477679Z",
+   "miss_distance_km": 1.9179,
+   "relative_speed_km_s": 14.8208,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.9182
+  },
+  {
+   "norad_a": 29798,
+   "norad_b": 31685,
+   "tca_utc": "2026-09-28T23:43:17.725990Z",
+   "miss_distance_km": 1.4377,
+   "relative_speed_km_s": 6.5649,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.4377
+  },
+  {
+   "norad_a": 29800,
+   "norad_b": 30469,
+   "tca_utc": "2026-09-28T06:34:15.024047Z",
+   "miss_distance_km": 4.0269,
+   "relative_speed_km_s": 14.3429,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0263
+  },
+  {
+   "norad_a": 29800,
+   "norad_b": 31320,
+   "tca_utc": "2026-09-28T18:59:46.857970Z",
+   "miss_distance_km": 3.6802,
+   "relative_speed_km_s": 14.4756,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6803
+  },
+  {
+   "norad_a": 29801,
+   "norad_b": 31815,
+   "tca_utc": "2026-09-28T14:54:22.397991Z",
+   "miss_distance_km": 4.8751,
+   "relative_speed_km_s": 8.7246,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8739
+  },
+  {
+   "norad_a": 29801,
+   "norad_b": 46449,
+   "tca_utc": "2026-09-28T10:41:46.878565Z",
+   "miss_distance_km": 2.4118,
+   "relative_speed_km_s": 12.9158,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4117
+  },
+  {
+   "norad_a": 29809,
+   "norad_b": 30984,
+   "tca_utc": "2026-09-28T02:20:30.256739Z",
+   "miss_distance_km": 1.2787,
+   "relative_speed_km_s": 6.6761,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.2784
+  },
+  {
+   "norad_a": 29809,
+   "norad_b": 41925,
+   "tca_utc": "2026-09-28T03:09:30.434664Z",
+   "miss_distance_km": 1.6476,
+   "relative_speed_km_s": 14.4439,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.6481
+  },
+  {
+   "norad_a": 29810,
+   "norad_b": 35111,
+   "tca_utc": "2026-09-28T21:09:50.915902Z",
+   "miss_distance_km": 3.3291,
+   "relative_speed_km_s": 5.1891,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3291
+  },
+  {
+   "norad_a": 29813,
+   "norad_b": 31646,
+   "tca_utc": "2026-09-28T06:29:11.999155Z",
+   "miss_distance_km": 2.0199,
+   "relative_speed_km_s": 0.5317,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0198
+  },
+  {
+   "norad_a": 29813,
+   "norad_b": 32153,
+   "tca_utc": "2026-09-28T18:35:00.127136Z",
+   "miss_distance_km": 2.4426,
+   "relative_speed_km_s": 14.2574,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4426
+  },
+  {
+   "norad_a": 29815,
+   "norad_b": 32320,
+   "tca_utc": "2026-09-28T05:21:30.946791Z",
+   "miss_distance_km": 0.2006,
+   "relative_speed_km_s": 10.0979,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.1989
+  },
+  {
+   "norad_a": 29820,
+   "norad_b": 29932,
+   "tca_utc": "2026-09-28T20:12:31.193371Z",
+   "miss_distance_km": 3.9616,
+   "relative_speed_km_s": 0.4847,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9621
+  },
+  {
+   "norad_a": 29827,
+   "norad_b": 29964,
+   "tca_utc": "2026-09-28T05:32:16.790993Z",
+   "miss_distance_km": 4.0677,
+   "relative_speed_km_s": 14.5975,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0656
+  },
+  {
+   "norad_a": 29827,
+   "norad_b": 31464,
+   "tca_utc": "2026-09-28T02:45:31.139235Z",
+   "miss_distance_km": 2.0452,
+   "relative_speed_km_s": 6.9651,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0448
+  },
+  {
+   "norad_a": 29828,
+   "norad_b": 30417,
+   "tca_utc": "2026-09-29T00:01:19.171301Z",
+   "miss_distance_km": 1.6611,
+   "relative_speed_km_s": 6.7104,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.6607
+  },
+  {
+   "norad_a": 29832,
+   "norad_b": 31043,
+   "tca_utc": "2026-09-28T03:09:37.185096Z",
+   "miss_distance_km": 3.5425,
+   "relative_speed_km_s": 12.6142,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5442
+  },
+  {
+   "norad_a": 29835,
+   "norad_b": 31510,
+   "tca_utc": "2026-09-28T14:14:02.535505Z",
+   "miss_distance_km": 3.7964,
+   "relative_speed_km_s": 14.2874,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7963
+  },
+  {
+   "norad_a": 29836,
+   "norad_b": 46986,
+   "tca_utc": "2026-09-28T15:16:18.036453Z",
+   "miss_distance_km": 1.7985,
+   "relative_speed_km_s": 9.0014,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7979
+  },
+  {
+   "norad_a": 29841,
+   "norad_b": 30885,
+   "tca_utc": "2026-09-28T17:02:18.616047Z",
+   "miss_distance_km": 2.738,
+   "relative_speed_km_s": 11.125,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7386
+  },
+  {
+   "norad_a": 29842,
+   "norad_b": 30249,
+   "tca_utc": "2026-09-28T10:36:59.480300Z",
+   "miss_distance_km": 2.6003,
+   "relative_speed_km_s": 10.5913,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6003
+  },
+  {
+   "norad_a": 29855,
+   "norad_b": 36701,
+   "tca_utc": "2026-09-28T23:16:54.102233Z",
+   "miss_distance_km": 2.9511,
+   "relative_speed_km_s": 13.6973,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9515
+  },
+  {
+   "norad_a": 29859,
+   "norad_b": 32089,
+   "tca_utc": "2026-09-28T18:04:54.142979Z",
+   "miss_distance_km": 2.1842,
+   "relative_speed_km_s": 14.7267,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.183
+  },
+  {
+   "norad_a": 29859,
+   "norad_b": 38510,
+   "tca_utc": "2026-09-28T18:04:17.092339Z",
+   "miss_distance_km": 3.158,
+   "relative_speed_km_s": 14.6967,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1592
+  },
+  {
+   "norad_a": 29866,
+   "norad_b": 31952,
+   "tca_utc": "2026-09-28T13:02:24.704023Z",
+   "miss_distance_km": 2.0684,
+   "relative_speed_km_s": 14.3596,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0681
+  },
+  {
+   "norad_a": 29868,
+   "norad_b": 43923,
+   "tca_utc": "2026-09-28T16:20:37.751448Z",
+   "miss_distance_km": 2.8525,
+   "relative_speed_km_s": 1.8861,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8512
+  },
+  {
+   "norad_a": 29869,
+   "norad_b": 31429,
+   "tca_utc": "2026-09-28T11:26:09.688943Z",
+   "miss_distance_km": 1.529,
+   "relative_speed_km_s": 11.6393,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.5287
+  },
+  {
+   "norad_a": 29873,
+   "norad_b": 30739,
+   "tca_utc": "2026-09-28T23:15:28.762350Z",
+   "miss_distance_km": 4.7262,
+   "relative_speed_km_s": 12.1828,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7285
+  },
+  {
+   "norad_a": 29873,
+   "norad_b": 31009,
+   "tca_utc": "2026-09-28T18:05:43.207542Z",
+   "miss_distance_km": 4.4605,
+   "relative_speed_km_s": 12.7489,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4605
+  },
+  {
+   "norad_a": 29873,
+   "norad_b": 35220,
+   "tca_utc": "2026-09-28T08:00:43.656656Z",
+   "miss_distance_km": 4.7766,
+   "relative_speed_km_s": 14.2276,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7765
+  },
+  {
+   "norad_a": 29875,
+   "norad_b": 30849,
+   "tca_utc": "2026-09-28T16:08:11.226114Z",
+   "miss_distance_km": 2.99,
+   "relative_speed_km_s": 3.4692,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9896
+  },
+  {
+   "norad_a": 29877,
+   "norad_b": 43571,
+   "tca_utc": "2026-09-28T14:37:37.883271Z",
+   "miss_distance_km": 3.4855,
+   "relative_speed_km_s": 11.4343,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4844
+  },
+  {
+   "norad_a": 29880,
+   "norad_b": 30750,
+   "tca_utc": "2026-09-28T10:36:28.730835Z",
+   "miss_distance_km": 4.5522,
+   "relative_speed_km_s": 14.6436,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5468
+  },
+  {
+   "norad_a": 29881,
+   "norad_b": 36644,
+   "tca_utc": "2026-09-28T16:22:55.527748Z",
+   "miss_distance_km": 4.9193,
+   "relative_speed_km_s": 14.6305,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9198
+  },
+  {
+   "norad_a": 29881,
+   "norad_b": 36644,
+   "tca_utc": "2026-09-28T18:08:50.709050Z",
+   "miss_distance_km": 2.0425,
+   "relative_speed_km_s": 14.6302,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0442
+  },
+  {
+   "norad_a": 29884,
+   "norad_b": 31742,
+   "tca_utc": "2026-09-28T15:02:51.467378Z",
+   "miss_distance_km": 3.1964,
+   "relative_speed_km_s": 14.6652,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1958
+  },
+  {
+   "norad_a": 29884,
+   "norad_b": 31742,
+   "tca_utc": "2026-09-28T16:42:50.551905Z",
+   "miss_distance_km": 3.843,
+   "relative_speed_km_s": 14.6651,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8424
+  },
+  {
+   "norad_a": 29887,
+   "norad_b": 30805,
+   "tca_utc": "2026-09-28T10:36:30.511269Z",
+   "miss_distance_km": 4.5427,
+   "relative_speed_km_s": 6.27,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5412
+  },
+  {
+   "norad_a": 29890,
+   "norad_b": 37017,
+   "tca_utc": "2026-09-28T19:45:04.372003Z",
+   "miss_distance_km": 3.9359,
+   "relative_speed_km_s": 14.5936,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9361
+  },
+  {
+   "norad_a": 29892,
+   "norad_b": 42955,
+   "tca_utc": "2026-09-28T19:52:15.000278Z",
+   "miss_distance_km": 3.6399,
+   "relative_speed_km_s": 11.5439,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6393
+  },
+  {
+   "norad_a": 29907,
+   "norad_b": 30669,
+   "tca_utc": "2026-09-28T17:48:41.153677Z",
+   "miss_distance_km": 4.3752,
+   "relative_speed_km_s": 14.2536,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3764
+  },
+  {
+   "norad_a": 29907,
+   "norad_b": 33741,
+   "tca_utc": "2026-09-28T16:16:10.705169Z",
+   "miss_distance_km": 3.2836,
+   "relative_speed_km_s": 14.7643,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2826
+  },
+  {
+   "norad_a": 29913,
+   "norad_b": 36729,
+   "tca_utc": "2026-09-28T02:32:00.230155Z",
+   "miss_distance_km": 4.1627,
+   "relative_speed_km_s": 2.2794,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1627
+  },
+  {
+   "norad_a": 29918,
+   "norad_b": 43249,
+   "tca_utc": "2026-09-28T18:47:24.666894Z",
+   "miss_distance_km": 4.6372,
+   "relative_speed_km_s": 12.8891,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.637
+  },
+  {
+   "norad_a": 29919,
+   "norad_b": 38149,
+   "tca_utc": "2026-09-28T17:30:01.081658Z",
+   "miss_distance_km": 4.2856,
+   "relative_speed_km_s": 14.1213,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2856
+  },
+  {
+   "norad_a": 29932,
+   "norad_b": 30148,
+   "tca_utc": "2026-09-28T09:51:33.270896Z",
+   "miss_distance_km": 2.5146,
+   "relative_speed_km_s": 14.3636,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5169
+  },
+  {
+   "norad_a": 29933,
+   "norad_b": 37925,
+   "tca_utc": "2026-09-28T11:15:07.552321Z",
+   "miss_distance_km": 4.7134,
+   "relative_speed_km_s": 14.113,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7131
+  },
+  {
+   "norad_a": 29934,
+   "norad_b": 31779,
+   "tca_utc": "2026-09-28T21:14:05.426595Z",
+   "miss_distance_km": 3.5467,
+   "relative_speed_km_s": 13.2531,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5464
+  },
+  {
+   "norad_a": 29944,
+   "norad_b": 31083,
+   "tca_utc": "2026-09-28T02:23:09.974092Z",
+   "miss_distance_km": 3.3915,
+   "relative_speed_km_s": 14.4886,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3915
+  },
+  {
+   "norad_a": 29945,
+   "norad_b": 30079,
+   "tca_utc": "2026-09-28T08:37:04.662734Z",
+   "miss_distance_km": 2.83,
+   "relative_speed_km_s": 4.6437,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.83
+  },
+  {
+   "norad_a": 29948,
+   "norad_b": 30417,
+   "tca_utc": "2026-09-28T22:21:25.856718Z",
+   "miss_distance_km": 4.7834,
+   "relative_speed_km_s": 0.4614,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7826
+  },
+  {
+   "norad_a": 29949,
+   "norad_b": 36160,
+   "tca_utc": "2026-09-28T10:51:36.881550Z",
+   "miss_distance_km": 2.2486,
+   "relative_speed_km_s": 14.5662,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.2496
+  },
+  {
+   "norad_a": 29954,
+   "norad_b": 30886,
+   "tca_utc": "2026-09-28T12:32:12.533221Z",
+   "miss_distance_km": 3.7717,
+   "relative_speed_km_s": 14.6357,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.771
+  },
+  {
+   "norad_a": 29954,
+   "norad_b": 35125,
+   "tca_utc": "2026-09-28T21:20:12.922694Z",
+   "miss_distance_km": 2.7571,
+   "relative_speed_km_s": 10.5801,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7569
+  },
+  {
+   "norad_a": 29954,
+   "norad_b": 35247,
+   "tca_utc": "2026-09-28T06:09:10.570384Z",
+   "miss_distance_km": 1.9774,
+   "relative_speed_km_s": 0.5739,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.9773
+  },
+  {
+   "norad_a": 29956,
+   "norad_b": 30331,
+   "tca_utc": "2026-09-28T04:40:46.058582Z",
+   "miss_distance_km": 3.1345,
+   "relative_speed_km_s": 0.9063,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1348
+  },
+  {
+   "norad_a": 29957,
+   "norad_b": 30859,
+   "tca_utc": "2026-09-28T15:22:31.801057Z",
+   "miss_distance_km": 4.5675,
+   "relative_speed_km_s": 9.415,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.567
+  },
+  {
+   "norad_a": 29958,
+   "norad_b": 33661,
+   "tca_utc": "2026-09-28T03:40:36.795587Z",
+   "miss_distance_km": 2.3939,
+   "relative_speed_km_s": 14.3734,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3935
+  },
+  {
+   "norad_a": 29959,
+   "norad_b": 30062,
+   "tca_utc": "2026-09-28T16:35:47.816556Z",
+   "miss_distance_km": 2.8295,
+   "relative_speed_km_s": 2.7036,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8293
+  },
+  {
+   "norad_a": 29959,
+   "norad_b": 30689,
+   "tca_utc": "2026-09-28T22:34:45.780131Z",
+   "miss_distance_km": 4.5676,
+   "relative_speed_km_s": 5.4751,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.567
+  },
+  {
+   "norad_a": 29959,
+   "norad_b": 31658,
+   "tca_utc": "2026-09-28T07:53:12.690730Z",
+   "miss_distance_km": 4.493,
+   "relative_speed_km_s": 14.2857,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4925
+  },
+  {
+   "norad_a": 29959,
+   "norad_b": 41832,
+   "tca_utc": "2026-09-28T03:45:48.960465Z",
+   "miss_distance_km": 4.1539,
+   "relative_speed_km_s": 4.9971,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1537
+  },
+  {
+   "norad_a": 29960,
+   "norad_b": 37064,
+   "tca_utc": "2026-09-28T16:37:43.020930Z",
+   "miss_distance_km": 4.8784,
+   "relative_speed_km_s": 14.5571,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8789
+  },
+  {
+   "norad_a": 29961,
+   "norad_b": 39541,
+   "tca_utc": "2026-09-28T03:20:40.637309Z",
+   "miss_distance_km": 1.237,
+   "relative_speed_km_s": 14.0152,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.2366
+  },
+  {
+   "norad_a": 29962,
+   "norad_b": 36716,
+   "tca_utc": "2026-09-28T14:55:32.210862Z",
+   "miss_distance_km": 1.6412,
+   "relative_speed_km_s": 9.6617,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.6419
+  },
+  {
+   "norad_a": 29964,
+   "norad_b": 29974,
+   "tca_utc": "2026-09-28T06:40:53.296384Z",
+   "miss_distance_km": 2.3981,
+   "relative_speed_km_s": 10.9458,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3981
+  },
+  {
+   "norad_a": 29964,
+   "norad_b": 37693,
+   "tca_utc": "2026-09-28T20:52:49.089326Z",
+   "miss_distance_km": 0.2986,
+   "relative_speed_km_s": 14.7261,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.2995
+  },
+  {
+   "norad_a": 29965,
+   "norad_b": 30200,
+   "tca_utc": "2026-09-28T07:11:34.298408Z",
+   "miss_distance_km": 4.6119,
+   "relative_speed_km_s": 13.8949,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6108
+  },
+  {
+   "norad_a": 29965,
+   "norad_b": 30893,
+   "tca_utc": "2026-09-28T20:51:11.881879Z",
+   "miss_distance_km": 2.8389,
+   "relative_speed_km_s": 1.2406,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8391
+  },
+  {
+   "norad_a": 29966,
+   "norad_b": 31287,
+   "tca_utc": "2026-09-28T15:59:30.501314Z",
+   "miss_distance_km": 4.8827,
+   "relative_speed_km_s": 14.2693,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8784
+  },
+  {
+   "norad_a": 29966,
+   "norad_b": 31544,
+   "tca_utc": "2026-09-29T00:43:05.273971Z",
+   "miss_distance_km": 3.7552,
+   "relative_speed_km_s": 14.6951,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.755
+  },
+  {
+   "norad_a": 29966,
+   "norad_b": 36206,
+   "tca_utc": "2026-09-28T21:37:10.811921Z",
+   "miss_distance_km": 3.7309,
+   "relative_speed_km_s": 13.8367,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7311
+  },
+  {
+   "norad_a": 29966,
+   "norad_b": 41922,
+   "tca_utc": "2026-09-28T05:43:31.287451Z",
+   "miss_distance_km": 2.2314,
+   "relative_speed_km_s": 11.5631,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 2.2324
+  },
+  {
+   "norad_a": 29969,
+   "norad_b": 36167,
+   "tca_utc": "2026-09-28T20:50:00.880333Z",
+   "miss_distance_km": 4.4956,
+   "relative_speed_km_s": 14.6769,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4956
+  },
+  {
+   "norad_a": 29970,
+   "norad_b": 31254,
+   "tca_utc": "2026-09-28T09:13:15.209591Z",
+   "miss_distance_km": 1.5261,
+   "relative_speed_km_s": 11.8518,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.5263
+  },
+  {
+   "norad_a": 29970,
+   "norad_b": 36263,
+   "tca_utc": "2026-09-29T00:14:39.571318Z",
+   "miss_distance_km": 4.9601,
+   "relative_speed_km_s": 5.0816,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9589
+  },
+  {
+   "norad_a": 29971,
+   "norad_b": 30244,
+   "tca_utc": "2026-09-28T14:58:36.792631Z",
+   "miss_distance_km": 2.2642,
+   "relative_speed_km_s": 13.6269,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.2635
+  },
+  {
+   "norad_a": 29971,
+   "norad_b": 31509,
+   "tca_utc": "2026-09-28T02:08:47.817011Z",
+   "miss_distance_km": 4.4376,
+   "relative_speed_km_s": 9.5403,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4375
+  },
+  {
+   "norad_a": 29973,
+   "norad_b": 37436,
+   "tca_utc": "2026-09-28T23:45:00.697841Z",
+   "miss_distance_km": 2.6713,
+   "relative_speed_km_s": 6.8474,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6713
+  },
+  {
+   "norad_a": 29974,
+   "norad_b": 31424,
+   "tca_utc": "2026-09-28T20:18:44.794090Z",
+   "miss_distance_km": 4.4205,
+   "relative_speed_km_s": 7.0066,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4197
+  },
+  {
+   "norad_a": 29979,
+   "norad_b": 31279,
+   "tca_utc": "2026-09-28T13:49:47.436984Z",
+   "miss_distance_km": 3.1331,
+   "relative_speed_km_s": 1.2459,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1325
+  },
+  {
+   "norad_a": 29982,
+   "norad_b": 35128,
+   "tca_utc": "2026-09-28T10:25:19.140603Z",
+   "miss_distance_km": 4.6164,
+   "relative_speed_km_s": 0.7354,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6159
+  },
+  {
+   "norad_a": 29987,
+   "norad_b": 31416,
+   "tca_utc": "2026-09-28T19:32:01.943068Z",
+   "miss_distance_km": 3.5909,
+   "relative_speed_km_s": 14.6671,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.591
+  },
+  {
+   "norad_a": 29989,
+   "norad_b": 36269,
+   "tca_utc": "2026-09-28T06:28:36.521770Z",
+   "miss_distance_km": 4.6348,
+   "relative_speed_km_s": 2.1601,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6364
+  },
+  {
+   "norad_a": 29994,
+   "norad_b": 30906,
+   "tca_utc": "2026-09-28T21:35:31.326701Z",
+   "miss_distance_km": 2.8861,
+   "relative_speed_km_s": 3.5586,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.884
+  },
+  {
+   "norad_a": 29998,
+   "norad_b": 31241,
+   "tca_utc": "2026-09-28T07:25:31.486212Z",
+   "miss_distance_km": 2.7691,
+   "relative_speed_km_s": 10.386,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7674
+  },
+  {
+   "norad_a": 29999,
+   "norad_b": 30915,
+   "tca_utc": "2026-09-28T23:28:43.659533Z",
+   "miss_distance_km": 2.8841,
+   "relative_speed_km_s": 11.783,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8846
+  },
+  {
+   "norad_a": 30001,
+   "norad_b": 31260,
+   "tca_utc": "2026-09-28T23:03:18.273152Z",
+   "miss_distance_km": 3.7293,
+   "relative_speed_km_s": 14.8142,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7292
+  },
+  {
+   "norad_a": 30003,
+   "norad_b": 37589,
+   "tca_utc": "2026-09-28T23:48:22.669526Z",
+   "miss_distance_km": 3.2997,
+   "relative_speed_km_s": 9.1405,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2967
+  },
+  {
+   "norad_a": 30004,
+   "norad_b": 30160,
+   "tca_utc": "2026-09-28T04:15:52.742110Z",
+   "miss_distance_km": 3.3264,
+   "relative_speed_km_s": 9.8006,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3258
+  },
+  {
+   "norad_a": 30004,
+   "norad_b": 30439,
+   "tca_utc": "2026-09-28T22:37:54.219161Z",
+   "miss_distance_km": 3.6199,
+   "relative_speed_km_s": 14.6163,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6197
+  },
+  {
+   "norad_a": 30004,
+   "norad_b": 31196,
+   "tca_utc": "2026-09-28T03:07:50.682856Z",
+   "miss_distance_km": 3.7948,
+   "relative_speed_km_s": 14.6798,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7946
+  },
+  {
+   "norad_a": 30004,
+   "norad_b": 35089,
+   "tca_utc": "2026-09-28T18:26:03.487100Z",
+   "miss_distance_km": 4.2935,
+   "relative_speed_km_s": 14.6464,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2935
+  },
+  {
+   "norad_a": 30005,
+   "norad_b": 30298,
+   "tca_utc": "2026-09-28T09:26:47.231297Z",
+   "miss_distance_km": 3.965,
+   "relative_speed_km_s": 14.3434,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9662
+  },
+  {
+   "norad_a": 30009,
+   "norad_b": 30112,
+   "tca_utc": "2026-09-28T05:37:19.735156Z",
+   "miss_distance_km": 2.1905,
+   "relative_speed_km_s": 7.6379,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.1899
+  },
+  {
+   "norad_a": 30009,
+   "norad_b": 30661,
+   "tca_utc": "2026-09-28T06:19:25.709308Z",
+   "miss_distance_km": 4.4715,
+   "relative_speed_km_s": 13.8247,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4737
+  },
+  {
+   "norad_a": 30015,
+   "norad_b": 30941,
+   "tca_utc": "2026-09-28T20:08:22.810710Z",
+   "miss_distance_km": 3.4964,
+   "relative_speed_km_s": 14.6911,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4943
+  },
+  {
+   "norad_a": 30018,
+   "norad_b": 35229,
+   "tca_utc": "2026-09-28T17:04:00.989870Z",
+   "miss_distance_km": 4.1005,
+   "relative_speed_km_s": 2.26,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1005
+  },
+  {
+   "norad_a": 30021,
+   "norad_b": 30201,
+   "tca_utc": "2026-09-28T08:51:50.962558Z",
+   "miss_distance_km": 1.9565,
+   "relative_speed_km_s": 14.6433,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.9561
+  },
+  {
+   "norad_a": 30022,
+   "norad_b": 31815,
+   "tca_utc": "2026-09-28T21:45:43.304192Z",
+   "miss_distance_km": 4.1617,
+   "relative_speed_km_s": 12.9239,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1602
+  },
+  {
+   "norad_a": 30023,
+   "norad_b": 30606,
+   "tca_utc": "2026-09-28T07:46:11.483212Z",
+   "miss_distance_km": 4.5538,
+   "relative_speed_km_s": 14.3837,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5517
+  },
+  {
+   "norad_a": 30023,
+   "norad_b": 30760,
+   "tca_utc": "2026-09-28T18:53:11.406243Z",
+   "miss_distance_km": 3.6024,
+   "relative_speed_km_s": 13.987,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6024
+  },
+  {
+   "norad_a": 30028,
+   "norad_b": 30362,
+   "tca_utc": "2026-09-28T20:03:21.800478Z",
+   "miss_distance_km": 0.3948,
+   "relative_speed_km_s": 7.3495,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.3932
+  },
+  {
+   "norad_a": 30036,
+   "norad_b": 30569,
+   "tca_utc": "2026-09-28T16:42:51.442628Z",
+   "miss_distance_km": 2.1956,
+   "relative_speed_km_s": 14.3435,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.1949
+  },
+  {
+   "norad_a": 30036,
+   "norad_b": 31314,
+   "tca_utc": "2026-09-28T07:43:59.724025Z",
+   "miss_distance_km": 3.5282,
+   "relative_speed_km_s": 4.1713,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5282
+  },
+  {
+   "norad_a": 30036,
+   "norad_b": 35139,
+   "tca_utc": "2026-09-28T06:04:08.330298Z",
+   "miss_distance_km": 4.1583,
+   "relative_speed_km_s": 2.8192,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1584
+  },
+  {
+   "norad_a": 30040,
+   "norad_b": 38722,
+   "tca_utc": "2026-09-28T15:51:48.364627Z",
+   "miss_distance_km": 4.3144,
+   "relative_speed_km_s": 13.4779,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3132
+  },
+  {
+   "norad_a": 30043,
+   "norad_b": 35175,
+   "tca_utc": "2026-09-28T19:41:22.777401Z",
+   "miss_distance_km": 4.6304,
+   "relative_speed_km_s": 10.6876,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6322
+  },
+  {
+   "norad_a": 30047,
+   "norad_b": 30134,
+   "tca_utc": "2026-09-28T03:08:36.311049Z",
+   "miss_distance_km": 1.71,
+   "relative_speed_km_s": 14.5828,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.711
+  },
+  {
+   "norad_a": 30047,
+   "norad_b": 30480,
+   "tca_utc": "2026-09-28T13:36:04.278575Z",
+   "miss_distance_km": 4.9419,
+   "relative_speed_km_s": 14.5629,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9423
+  },
+  {
+   "norad_a": 30047,
+   "norad_b": 32089,
+   "tca_utc": "2026-09-28T08:29:37.947472Z",
+   "miss_distance_km": 4.7082,
+   "relative_speed_km_s": 14.5494,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7077
+  },
+  {
+   "norad_a": 30047,
+   "norad_b": 36733,
+   "tca_utc": "2026-09-28T15:23:12.179271Z",
+   "miss_distance_km": 1.7308,
+   "relative_speed_km_s": 14.5384,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7304
+  },
+  {
+   "norad_a": 30060,
+   "norad_b": 30356,
+   "tca_utc": "2026-09-28T01:45:33.984236Z",
+   "miss_distance_km": 2.6738,
+   "relative_speed_km_s": 13.9872,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6675
+  },
+  {
+   "norad_a": 30060,
+   "norad_b": 30693,
+   "tca_utc": "2026-09-28T07:08:23.854050Z",
+   "miss_distance_km": 4.579,
+   "relative_speed_km_s": 13.522,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5802
+  },
+  {
+   "norad_a": 30062,
+   "norad_b": 46447,
+   "tca_utc": "2026-09-28T09:46:41.152464Z",
+   "miss_distance_km": 1.4811,
+   "relative_speed_km_s": 1.6841,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.4814
+  },
+  {
+   "norad_a": 30064,
+   "norad_b": 30505,
+   "tca_utc": "2026-09-29T00:29:20.529459Z",
+   "miss_distance_km": 3.3441,
+   "relative_speed_km_s": 9.507,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3447
+  },
+  {
+   "norad_a": 30067,
+   "norad_b": 35091,
+   "tca_utc": "2026-09-28T03:52:05.648289Z",
+   "miss_distance_km": 3.8484,
+   "relative_speed_km_s": 13.7976,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8485
+  },
+  {
+   "norad_a": 30068,
+   "norad_b": 36148,
+   "tca_utc": "2026-09-28T11:53:33.615554Z",
+   "miss_distance_km": 4.4196,
+   "relative_speed_km_s": 14.5855,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4205
+  },
+  {
+   "norad_a": 30069,
+   "norad_b": 33601,
+   "tca_utc": "2026-09-28T01:10:16.554804Z",
+   "miss_distance_km": 4.9933,
+   "relative_speed_km_s": 14.4506,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9937
+  },
+  {
+   "norad_a": 30072,
+   "norad_b": 31088,
+   "tca_utc": "2026-09-28T01:17:49.339219Z",
+   "miss_distance_km": 2.8559,
+   "relative_speed_km_s": 9.7352,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8555
+  },
+  {
+   "norad_a": 30072,
+   "norad_b": 43929,
+   "tca_utc": "2026-09-28T11:15:46.721679Z",
+   "miss_distance_km": 1.7583,
+   "relative_speed_km_s": 13.5833,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.7582
+  },
+  {
+   "norad_a": 30073,
+   "norad_b": 32155,
+   "tca_utc": "2026-09-28T17:52:54.448057Z",
+   "miss_distance_km": 3.2763,
+   "relative_speed_km_s": 6.3804,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2763
+  },
+  {
+   "norad_a": 30074,
+   "norad_b": 30921,
+   "tca_utc": "2026-09-28T06:49:33.444043Z",
+   "miss_distance_km": 3.6574,
+   "relative_speed_km_s": 2.8135,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6589
+  },
+  {
+   "norad_a": 30077,
+   "norad_b": 36644,
+   "tca_utc": "2026-09-28T16:15:08.138418Z",
+   "miss_distance_km": 4.4466,
+   "relative_speed_km_s": 10.6446,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4464
+  },
+  {
+   "norad_a": 30078,
+   "norad_b": 31945,
+   "tca_utc": "2026-09-28T10:19:04.280047Z",
+   "miss_distance_km": 2.0246,
+   "relative_speed_km_s": 0.5876,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0246
+  },
+  {
+   "norad_a": 30080,
+   "norad_b": 31613,
+   "tca_utc": "2026-09-28T09:30:19.614152Z",
+   "miss_distance_km": 4.842,
+   "relative_speed_km_s": 14.6299,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8447
+  },
+  {
+   "norad_a": 30089,
+   "norad_b": 30448,
+   "tca_utc": "2026-09-28T02:31:52.786178Z",
+   "miss_distance_km": 4.2372,
+   "relative_speed_km_s": 14.7333,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.237
+  },
+  {
+   "norad_a": 30090,
+   "norad_b": 30153,
+   "tca_utc": "2026-09-28T03:31:25.940455Z",
+   "miss_distance_km": 2.9767,
+   "relative_speed_km_s": 14.6863,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9742
+  },
+  {
+   "norad_a": 30090,
+   "norad_b": 30276,
+   "tca_utc": "2026-09-28T23:23:29.450176Z",
+   "miss_distance_km": 1.8133,
+   "relative_speed_km_s": 12.7928,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8141
+  },
+  {
+   "norad_a": 30092,
+   "norad_b": 30266,
+   "tca_utc": "2026-09-28T13:15:59.429059Z",
+   "miss_distance_km": 2.3043,
+   "relative_speed_km_s": 12.8895,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3043
+  },
+  {
+   "norad_a": 30102,
+   "norad_b": 31734,
+   "tca_utc": "2026-09-28T04:43:32.040957Z",
+   "miss_distance_km": 3.2794,
+   "relative_speed_km_s": 1.0825,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2777
+  },
+  {
+   "norad_a": 30104,
+   "norad_b": 35105,
+   "tca_utc": "2026-09-28T22:48:47.428474Z",
+   "miss_distance_km": 2.0423,
+   "relative_speed_km_s": 14.7542,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0417
+  },
+  {
+   "norad_a": 30108,
+   "norad_b": 31726,
+   "tca_utc": "2026-09-28T01:02:16.488363Z",
+   "miss_distance_km": 1.5058,
+   "relative_speed_km_s": 4.5529,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.5054
+  },
+  {
+   "norad_a": 30109,
+   "norad_b": 30153,
+   "tca_utc": "2026-09-28T22:11:35.242084Z",
+   "miss_distance_km": 3.7406,
+   "relative_speed_km_s": 4.8296,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7367
+  },
+  {
+   "norad_a": 30110,
+   "norad_b": 31514,
+   "tca_utc": "2026-09-28T15:53:06.829521Z",
+   "miss_distance_km": 3.7226,
+   "relative_speed_km_s": 14.6351,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7236
+  },
+  {
+   "norad_a": 30116,
+   "norad_b": 43077,
+   "tca_utc": "2026-09-28T20:37:02.562473Z",
+   "miss_distance_km": 3.32,
+   "relative_speed_km_s": 10.7766,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.32
+  },
+  {
+   "norad_a": 30118,
+   "norad_b": 30526,
+   "tca_utc": "2026-09-28T17:02:21.447896Z",
+   "miss_distance_km": 3.9935,
+   "relative_speed_km_s": 8.9922,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.993
+  },
+  {
+   "norad_a": 30119,
+   "norad_b": 30443,
+   "tca_utc": "2026-09-28T19:49:52.169079Z",
+   "miss_distance_km": 2.9952,
+   "relative_speed_km_s": 1.1975,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9952
+  },
+  {
+   "norad_a": 30125,
+   "norad_b": 31741,
+   "tca_utc": "2026-09-28T21:25:50.013121Z",
+   "miss_distance_km": 4.2721,
+   "relative_speed_km_s": 14.4457,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2722
+  },
+  {
+   "norad_a": 30127,
+   "norad_b": 38147,
+   "tca_utc": "2026-09-28T18:32:00.868338Z",
+   "miss_distance_km": 4.2826,
+   "relative_speed_km_s": 14.581,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2825
+  },
+  {
+   "norad_a": 30128,
+   "norad_b": 30688,
+   "tca_utc": "2026-09-28T22:36:27.468921Z",
+   "miss_distance_km": 1.2616,
+   "relative_speed_km_s": 13.1261,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.2611
+  },
+  {
+   "norad_a": 30128,
+   "norad_b": 35195,
+   "tca_utc": "2026-09-28T15:49:23.223062Z",
+   "miss_distance_km": 2.7473,
+   "relative_speed_km_s": 14.7098,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7461
+  },
+  {
+   "norad_a": 30129,
+   "norad_b": 41007,
+   "tca_utc": "2026-09-28T09:45:08.151885Z",
+   "miss_distance_km": 3.3629,
+   "relative_speed_km_s": 13.5971,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3631
+  },
+  {
+   "norad_a": 30131,
+   "norad_b": 30352,
+   "tca_utc": "2026-09-28T12:37:07.297721Z",
+   "miss_distance_km": 4.8424,
+   "relative_speed_km_s": 10.1821,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8425
+  },
+  {
+   "norad_a": 30136,
+   "norad_b": 31030,
+   "tca_utc": "2026-09-28T04:15:47.571825Z",
+   "miss_distance_km": 0.6855,
+   "relative_speed_km_s": 14.7047,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.6845
+  },
+  {
+   "norad_a": 30141,
+   "norad_b": 30316,
+   "tca_utc": "2026-09-28T04:15:21.510579Z",
+   "miss_distance_km": 4.0701,
+   "relative_speed_km_s": 14.772,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0705
+  },
+  {
+   "norad_a": 30142,
+   "norad_b": 31186,
+   "tca_utc": "2026-09-28T06:03:27.436464Z",
+   "miss_distance_km": 4.5527,
+   "relative_speed_km_s": 14.3988,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5492
+  },
+  {
+   "norad_a": 30143,
+   "norad_b": 30765,
+   "tca_utc": "2026-09-28T17:15:47.968779Z",
+   "miss_distance_km": 3.5505,
+   "relative_speed_km_s": 13.2704,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5508
+  },
+  {
+   "norad_a": 30144,
+   "norad_b": 33650,
+   "tca_utc": "2026-09-28T10:46:32.490340Z",
+   "miss_distance_km": 3.2536,
+   "relative_speed_km_s": 14.3769,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2471
+  },
+  {
+   "norad_a": 30146,
+   "norad_b": 37694,
+   "tca_utc": "2026-09-28T09:15:32.590088Z",
+   "miss_distance_km": 3.6824,
+   "relative_speed_km_s": 8.846,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6794
+  },
+  {
+   "norad_a": 30148,
+   "norad_b": 31150,
+   "tca_utc": "2026-09-28T18:30:57.351133Z",
+   "miss_distance_km": 0.504,
+   "relative_speed_km_s": 14.4323,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.504
+  },
+  {
+   "norad_a": 30152,
+   "norad_b": 30464,
+   "tca_utc": "2026-09-28T08:11:25.774815Z",
+   "miss_distance_km": 1.1657,
+   "relative_speed_km_s": 14.7216,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.1634
+  },
+  {
+   "norad_a": 30155,
+   "norad_b": 31628,
+   "tca_utc": "2026-09-28T18:10:02.617043Z",
+   "miss_distance_km": 4.622,
+   "relative_speed_km_s": 13.6173,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6215
+  },
+  {
+   "norad_a": 30157,
+   "norad_b": 30625,
+   "tca_utc": "2026-09-28T04:28:56.522428Z",
+   "miss_distance_km": 4.1236,
+   "relative_speed_km_s": 13.6327,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1235
+  },
+  {
+   "norad_a": 30160,
+   "norad_b": 31767,
+   "tca_utc": "2026-09-28T13:06:39.069916Z",
+   "miss_distance_km": 4.549,
+   "relative_speed_km_s": 11.7666,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5502
+  },
+  {
+   "norad_a": 30161,
+   "norad_b": 30272,
+   "tca_utc": "2026-09-28T08:19:29.205724Z",
+   "miss_distance_km": 2.6461,
+   "relative_speed_km_s": 7.7002,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6426
+  },
+  {
+   "norad_a": 30163,
+   "norad_b": 31861,
+   "tca_utc": "2026-09-28T23:53:38.622026Z",
+   "miss_distance_km": 2.5752,
+   "relative_speed_km_s": 13.9107,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5743
+  },
+  {
+   "norad_a": 30169,
+   "norad_b": 36263,
+   "tca_utc": "2026-09-28T14:00:25.333990Z",
+   "miss_distance_km": 1.1764,
+   "relative_speed_km_s": 14.7538,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.1727
+  },
+  {
+   "norad_a": 30171,
+   "norad_b": 30279,
+   "tca_utc": "2026-09-28T04:09:52.910872Z",
+   "miss_distance_km": 1.8437,
+   "relative_speed_km_s": 12.2215,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8434
+  },
+  {
+   "norad_a": 30181,
+   "norad_b": 30665,
+   "tca_utc": "2026-09-28T18:07:26.540586Z",
+   "miss_distance_km": 4.0357,
+   "relative_speed_km_s": 11.885,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0363
+  },
+  {
+   "norad_a": 30193,
+   "norad_b": 43570,
+   "tca_utc": "2026-09-28T06:27:21.119127Z",
+   "miss_distance_km": 4.3986,
+   "relative_speed_km_s": 14.8724,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4002
+  },
+  {
+   "norad_a": 30200,
+   "norad_b": 31667,
+   "tca_utc": "2026-09-28T14:53:11.303709Z",
+   "miss_distance_km": 2.7991,
+   "relative_speed_km_s": 2.1193,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7988
+  },
+  {
+   "norad_a": 30201,
+   "norad_b": 31359,
+   "tca_utc": "2026-09-28T03:31:58.666798Z",
+   "miss_distance_km": 1.3005,
+   "relative_speed_km_s": 5.8512,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.3005
+  },
+  {
+   "norad_a": 30202,
+   "norad_b": 31168,
+   "tca_utc": "2026-09-28T02:46:31.648358Z",
+   "miss_distance_km": 3.7102,
+   "relative_speed_km_s": 6.2435,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7118
+  },
+  {
+   "norad_a": 30205,
+   "norad_b": 30306,
+   "tca_utc": "2026-09-28T11:59:16.618991Z",
+   "miss_distance_km": 4.7051,
+   "relative_speed_km_s": 7.882,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7037
+  },
+  {
+   "norad_a": 30208,
+   "norad_b": 30566,
+   "tca_utc": "2026-09-28T12:40:55.927315Z",
+   "miss_distance_km": 4.5271,
+   "relative_speed_km_s": 7.6879,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5271
+  },
+  {
+   "norad_a": 30208,
+   "norad_b": 31351,
+   "tca_utc": "2026-09-28T10:11:13.593514Z",
+   "miss_distance_km": 4.0992,
+   "relative_speed_km_s": 1.8065,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0989
+  },
+  {
+   "norad_a": 30213,
+   "norad_b": 31065,
+   "tca_utc": "2026-09-28T15:00:32.127922Z",
+   "miss_distance_km": 3.3402,
+   "relative_speed_km_s": 8.5452,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3411
+  },
+  {
+   "norad_a": 30217,
+   "norad_b": 38516,
+   "tca_utc": "2026-09-28T06:20:12.376301Z",
+   "miss_distance_km": 4.7543,
+   "relative_speed_km_s": 0.5954,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7537
+  },
+  {
+   "norad_a": 30218,
+   "norad_b": 31001,
+   "tca_utc": "2026-09-28T02:58:09.712620Z",
+   "miss_distance_km": 1.7582,
+   "relative_speed_km_s": 14.4809,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7576
+  },
+  {
+   "norad_a": 30231,
+   "norad_b": 31562,
+   "tca_utc": "2026-09-28T23:32:43.944756Z",
+   "miss_distance_km": 3.8798,
+   "relative_speed_km_s": 13.7527,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.88
+  },
+  {
+   "norad_a": 30237,
+   "norad_b": 30408,
+   "tca_utc": "2026-09-28T11:46:57.887188Z",
+   "miss_distance_km": 3.1324,
+   "relative_speed_km_s": 13.8985,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1324
+  },
+  {
+   "norad_a": 30237,
+   "norad_b": 31741,
+   "tca_utc": "2026-09-28T06:11:23.846716Z",
+   "miss_distance_km": 4.2866,
+   "relative_speed_km_s": 14.8063,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2876
+  },
+  {
+   "norad_a": 30242,
+   "norad_b": 30548,
+   "tca_utc": "2026-09-28T10:40:09.802771Z",
+   "miss_distance_km": 1.9857,
+   "relative_speed_km_s": 11.1151,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.9857
+  },
+  {
+   "norad_a": 30243,
+   "norad_b": 31452,
+   "tca_utc": "2026-09-28T19:03:57.675636Z",
+   "miss_distance_km": 2.3713,
+   "relative_speed_km_s": 3.052,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3713
+  },
+  {
+   "norad_a": 30244,
+   "norad_b": 31210,
+   "tca_utc": "2026-09-28T12:29:12.686906Z",
+   "miss_distance_km": 4.1589,
+   "relative_speed_km_s": 10.9844,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1588
+  },
+  {
+   "norad_a": 30244,
+   "norad_b": 43359,
+   "tca_utc": "2026-09-28T14:29:30.940318Z",
+   "miss_distance_km": 4.3619,
+   "relative_speed_km_s": 14.58,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3584
+  },
+  {
+   "norad_a": 30245,
+   "norad_b": 30564,
+   "tca_utc": "2026-09-28T18:57:15.871474Z",
+   "miss_distance_km": 3.1227,
+   "relative_speed_km_s": 4.174,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1232
+  },
+  {
+   "norad_a": 30249,
+   "norad_b": 47018,
+   "tca_utc": "2026-09-28T23:43:00.785963Z",
+   "miss_distance_km": 3.4194,
+   "relative_speed_km_s": 9.8861,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4194
+  },
+  {
+   "norad_a": 30250,
+   "norad_b": 33619,
+   "tca_utc": "2026-09-28T13:29:13.816940Z",
+   "miss_distance_km": 4.4731,
+   "relative_speed_km_s": 10.1914,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4723
+  },
+  {
+   "norad_a": 30251,
+   "norad_b": 30283,
+   "tca_utc": "2026-09-28T16:09:04.599060Z",
+   "miss_distance_km": 2.2604,
+   "relative_speed_km_s": 13.7795,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.2603
+  },
+  {
+   "norad_a": 30251,
+   "norad_b": 31776,
+   "tca_utc": "2026-09-28T21:24:23.691056Z",
+   "miss_distance_km": 3.2982,
+   "relative_speed_km_s": 13.9589,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2988
+  },
+  {
+   "norad_a": 30259,
+   "norad_b": 32366,
+   "tca_utc": "2026-09-28T12:12:25.871611Z",
+   "miss_distance_km": 2.6415,
+   "relative_speed_km_s": 14.5998,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6443
+  },
+  {
+   "norad_a": 30263,
+   "norad_b": 30385,
+   "tca_utc": "2026-09-28T04:06:56.496099Z",
+   "miss_distance_km": 3.2674,
+   "relative_speed_km_s": 8.7193,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2673
+  },
+  {
+   "norad_a": 30267,
+   "norad_b": 30594,
+   "tca_utc": "2026-09-28T08:20:16.742024Z",
+   "miss_distance_km": 2.0024,
+   "relative_speed_km_s": 14.2196,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0025
+  },
+  {
+   "norad_a": 30270,
+   "norad_b": 31766,
+   "tca_utc": "2026-09-28T10:28:54.451950Z",
+   "miss_distance_km": 2.3214,
+   "relative_speed_km_s": 1.8681,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3213
+  },
+  {
+   "norad_a": 30275,
+   "norad_b": 31620,
+   "tca_utc": "2026-09-28T11:48:30.280437Z",
+   "miss_distance_km": 2.0219,
+   "relative_speed_km_s": 0.6013,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0206
+  },
+  {
+   "norad_a": 30277,
+   "norad_b": 31740,
+   "tca_utc": "2026-09-28T22:33:39.257136Z",
+   "miss_distance_km": 4.4587,
+   "relative_speed_km_s": 14.0556,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4576
+  },
+  {
+   "norad_a": 30279,
+   "norad_b": 30649,
+   "tca_utc": "2026-09-28T23:21:50.154601Z",
+   "miss_distance_km": 0.7148,
+   "relative_speed_km_s": 14.2745,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.715
+  },
+  {
+   "norad_a": 30279,
+   "norad_b": 30816,
+   "tca_utc": "2026-09-28T04:01:20.846545Z",
+   "miss_distance_km": 3.3269,
+   "relative_speed_km_s": 12.9538,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3251
+  },
+  {
+   "norad_a": 30288,
+   "norad_b": 33639,
+   "tca_utc": "2026-09-28T16:22:44.321211Z",
+   "miss_distance_km": 4.0407,
+   "relative_speed_km_s": 1.2048,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0407
+  },
+  {
+   "norad_a": 30289,
+   "norad_b": 42807,
+   "tca_utc": "2026-09-28T03:11:08.684270Z",
+   "miss_distance_km": 1.8533,
+   "relative_speed_km_s": 8.4307,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.8533
+  },
+  {
+   "norad_a": 30294,
+   "norad_b": 31087,
+   "tca_utc": "2026-09-28T21:33:22.826859Z",
+   "miss_distance_km": 3.1622,
+   "relative_speed_km_s": 4.3558,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1621
+  },
+  {
+   "norad_a": 30294,
+   "norad_b": 36244,
+   "tca_utc": "2026-09-28T02:15:08.087531Z",
+   "miss_distance_km": 1.8577,
+   "relative_speed_km_s": 13.7023,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8576
+  },
+  {
+   "norad_a": 30298,
+   "norad_b": 30435,
+   "tca_utc": "2026-09-28T07:41:01.162273Z",
+   "miss_distance_km": 4.0891,
+   "relative_speed_km_s": 12.9858,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.089
+  },
+  {
+   "norad_a": 30301,
+   "norad_b": 31237,
+   "tca_utc": "2026-09-28T01:57:03.570757Z",
+   "miss_distance_km": 4.4119,
+   "relative_speed_km_s": 14.7769,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.412
+  },
+  {
+   "norad_a": 30301,
+   "norad_b": 31910,
+   "tca_utc": "2026-09-28T14:13:08.291025Z",
+   "miss_distance_km": 4.242,
+   "relative_speed_km_s": 14.8884,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2426
+  },
+  {
+   "norad_a": 30302,
+   "norad_b": 32088,
+   "tca_utc": "2026-09-28T02:33:19.895571Z",
+   "miss_distance_km": 1.8005,
+   "relative_speed_km_s": 3.4921,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7999
+  },
+  {
+   "norad_a": 30302,
+   "norad_b": 37423,
+   "tca_utc": "2026-09-28T18:36:36.603368Z",
+   "miss_distance_km": 3.0702,
+   "relative_speed_km_s": 13.9792,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.0686
+  },
+  {
+   "norad_a": 30304,
+   "norad_b": 35090,
+   "tca_utc": "2026-09-28T16:51:37.660119Z",
+   "miss_distance_km": 4.6671,
+   "relative_speed_km_s": 6.6039,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6681
+  },
+  {
+   "norad_a": 30305,
+   "norad_b": 30340,
+   "tca_utc": "2026-09-28T01:08:28.399302Z",
+   "miss_distance_km": 4.4065,
+   "relative_speed_km_s": 14.2515,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4082
+  },
+  {
+   "norad_a": 30313,
+   "norad_b": 37028,
+   "tca_utc": "2026-09-28T10:27:01.748611Z",
+   "miss_distance_km": 3.9176,
+   "relative_speed_km_s": 14.6667,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9176
+  },
+  {
+   "norad_a": 30314,
+   "norad_b": 31452,
+   "tca_utc": "2026-09-28T05:47:47.777157Z",
+   "miss_distance_km": 1.6575,
+   "relative_speed_km_s": 14.7041,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.6574
+  },
+  {
+   "norad_a": 30317,
+   "norad_b": 32460,
+   "tca_utc": "2026-09-28T09:10:33.569038Z",
+   "miss_distance_km": 4.5341,
+   "relative_speed_km_s": 12.2912,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5356
+  },
+  {
+   "norad_a": 30322,
+   "norad_b": 31158,
+   "tca_utc": "2026-09-28T08:53:05.921594Z",
+   "miss_distance_km": 4.4994,
+   "relative_speed_km_s": 12.3529,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4995
+  },
+  {
+   "norad_a": 30325,
+   "norad_b": 30481,
+   "tca_utc": "2026-09-28T10:32:11.943492Z",
+   "miss_distance_km": 2.4929,
+   "relative_speed_km_s": 0.1633,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4928
+  },
+  {
+   "norad_a": 30326,
+   "norad_b": 31726,
+   "tca_utc": "2026-09-28T05:25:24.377518Z",
+   "miss_distance_km": 2.8393,
+   "relative_speed_km_s": 14.0142,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.839
+  },
+  {
+   "norad_a": 30335,
+   "norad_b": 36647,
+   "tca_utc": "2026-09-28T12:29:31.643398Z",
+   "miss_distance_km": 0.4928,
+   "relative_speed_km_s": 7.0064,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.4916
+  },
+  {
+   "norad_a": 30336,
+   "norad_b": 37404,
+   "tca_utc": "2026-09-28T17:48:10.515159Z",
+   "miss_distance_km": 0.4783,
+   "relative_speed_km_s": 2.1388,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.4783
+  },
+  {
+   "norad_a": 30340,
+   "norad_b": 38797,
+   "tca_utc": "2026-09-28T14:07:32.605050Z",
+   "miss_distance_km": 4.0557,
+   "relative_speed_km_s": 14.6818,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0593
+  },
+  {
+   "norad_a": 30344,
+   "norad_b": 31001,
+   "tca_utc": "2026-09-28T23:47:03.565159Z",
+   "miss_distance_km": 4.6299,
+   "relative_speed_km_s": 14.6063,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6299
+  },
+  {
+   "norad_a": 30347,
+   "norad_b": 30434,
+   "tca_utc": "2026-09-28T06:33:04.623895Z",
+   "miss_distance_km": 2.4678,
+   "relative_speed_km_s": 14.7644,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4678
+  },
+  {
+   "norad_a": 30348,
+   "norad_b": 31282,
+   "tca_utc": "2026-09-28T03:19:53.463855Z",
+   "miss_distance_km": 4.0957,
+   "relative_speed_km_s": 14.5532,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0958
+  },
+  {
+   "norad_a": 30366,
+   "norad_b": 31021,
+   "tca_utc": "2026-09-28T21:02:59.122408Z",
+   "miss_distance_km": 4.803,
+   "relative_speed_km_s": 14.4797,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8031
+  },
+  {
+   "norad_a": 30366,
+   "norad_b": 33684,
+   "tca_utc": "2026-09-28T20:35:26.649180Z",
+   "miss_distance_km": 4.7667,
+   "relative_speed_km_s": 14.4429,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7678
+  },
+  {
+   "norad_a": 30371,
+   "norad_b": 31368,
+   "tca_utc": "2026-09-28T18:52:23.631702Z",
+   "miss_distance_km": 4.4644,
+   "relative_speed_km_s": 14.4592,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4632
+  },
+  {
+   "norad_a": 30379,
+   "norad_b": 31558,
+   "tca_utc": "2026-09-28T06:02:17.324771Z",
+   "miss_distance_km": 2.5992,
+   "relative_speed_km_s": 11.4601,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5992
+  },
+  {
+   "norad_a": 30380,
+   "norad_b": 30501,
+   "tca_utc": "2026-09-28T01:02:33.876466Z",
+   "miss_distance_km": 4.3216,
+   "relative_speed_km_s": 7.5678,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3217
+  },
+  {
+   "norad_a": 30381,
+   "norad_b": 31002,
+   "tca_utc": "2026-09-28T20:38:34.499274Z",
+   "miss_distance_km": 3.5911,
+   "relative_speed_km_s": 3.4378,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5923
+  },
+  {
+   "norad_a": 30381,
+   "norad_b": 37064,
+   "tca_utc": "2026-09-28T23:05:59.686872Z",
+   "miss_distance_km": 1.1895,
+   "relative_speed_km_s": 12.8633,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.1895
+  },
+  {
+   "norad_a": 30390,
+   "norad_b": 31387,
+   "tca_utc": "2026-09-28T02:21:41.015299Z",
+   "miss_distance_km": 3.8685,
+   "relative_speed_km_s": 14.5995,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8664
+  },
+  {
+   "norad_a": 30391,
+   "norad_b": 32150,
+   "tca_utc": "2026-09-28T12:35:43.962143Z",
+   "miss_distance_km": 4.4826,
+   "relative_speed_km_s": 1.5785,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4816
+  },
+  {
+   "norad_a": 30391,
+   "norad_b": 33724,
+   "tca_utc": "2026-09-28T04:09:02.398347Z",
+   "miss_distance_km": 3.8621,
+   "relative_speed_km_s": 5.0039,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8621
+  },
+  {
+   "norad_a": 30393,
+   "norad_b": 30661,
+   "tca_utc": "2026-09-28T21:31:02.032956Z",
+   "miss_distance_km": 2.7396,
+   "relative_speed_km_s": 13.6583,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7397
+  },
+  {
+   "norad_a": 30393,
+   "norad_b": 31022,
+   "tca_utc": "2026-09-28T11:35:39.104813Z",
+   "miss_distance_km": 0.5289,
+   "relative_speed_km_s": 14.6162,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.5291
+  },
+  {
+   "norad_a": 30397,
+   "norad_b": 31536,
+   "tca_utc": "2026-09-28T12:47:38.374144Z",
+   "miss_distance_km": 3.6432,
+   "relative_speed_km_s": 13.7158,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6441
+  },
+  {
+   "norad_a": 30403,
+   "norad_b": 30529,
+   "tca_utc": "2026-09-28T08:07:29.451339Z",
+   "miss_distance_km": 4.8363,
+   "relative_speed_km_s": 14.567,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8381
+  },
+  {
+   "norad_a": 30405,
+   "norad_b": 31031,
+   "tca_utc": "2026-09-28T12:56:58.122415Z",
+   "miss_distance_km": 3.2432,
+   "relative_speed_km_s": 14.6769,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2432
+  },
+  {
+   "norad_a": 30416,
+   "norad_b": 46995,
+   "tca_utc": "2026-09-28T01:09:08.852246Z",
+   "miss_distance_km": 2.5446,
+   "relative_speed_km_s": 5.4575,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5446
+  },
+  {
+   "norad_a": 30417,
+   "norad_b": 30833,
+   "tca_utc": "2026-09-28T04:44:09.839731Z",
+   "miss_distance_km": 4.0523,
+   "relative_speed_km_s": 14.4572,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0523
+  },
+  {
+   "norad_a": 30419,
+   "norad_b": 33698,
+   "tca_utc": "2026-09-29T00:31:47.772619Z",
+   "miss_distance_km": 1.8626,
+   "relative_speed_km_s": 5.6936,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8622
+  },
+  {
+   "norad_a": 30436,
+   "norad_b": 31514,
+   "tca_utc": "2026-09-28T14:27:30.890129Z",
+   "miss_distance_km": 2.9235,
+   "relative_speed_km_s": 4.1394,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9204
+  },
+  {
+   "norad_a": 30439,
+   "norad_b": 30469,
+   "tca_utc": "2026-09-28T09:02:54.793666Z",
+   "miss_distance_km": 1.9908,
+   "relative_speed_km_s": 14.7023,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.9909
+  },
+  {
+   "norad_a": 30466,
+   "norad_b": 31215,
+   "tca_utc": "2026-09-28T11:56:31.056240Z",
+   "miss_distance_km": 4.8942,
+   "relative_speed_km_s": 14.677,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8889
+  },
+  {
+   "norad_a": 30471,
+   "norad_b": 37046,
+   "tca_utc": "2026-09-28T04:13:47.844581Z",
+   "miss_distance_km": 4.9388,
+   "relative_speed_km_s": 9.9379,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9392
+  },
+  {
+   "norad_a": 30477,
+   "norad_b": 31328,
+   "tca_utc": "2026-09-28T18:47:15.277077Z",
+   "miss_distance_km": 4.9269,
+   "relative_speed_km_s": 10.3744,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9272
+  },
+  {
+   "norad_a": 30492,
+   "norad_b": 41009,
+   "tca_utc": "2026-09-28T15:27:02.924632Z",
+   "miss_distance_km": 4.971,
+   "relative_speed_km_s": 14.2495,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.971
+  },
+  {
+   "norad_a": 30503,
+   "norad_b": 30742,
+   "tca_utc": "2026-09-28T17:26:49.517397Z",
+   "miss_distance_km": 3.8821,
+   "relative_speed_km_s": 14.6412,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8818
+  },
+  {
+   "norad_a": 30503,
+   "norad_b": 31648,
+   "tca_utc": "2026-09-28T20:27:26.081791Z",
+   "miss_distance_km": 3.7941,
+   "relative_speed_km_s": 10.8108,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7954
+  },
+  {
+   "norad_a": 30505,
+   "norad_b": 30820,
+   "tca_utc": "2026-09-28T22:46:20.302676Z",
+   "miss_distance_km": 3.4403,
+   "relative_speed_km_s": 1.0775,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4406
+  },
+  {
+   "norad_a": 30505,
+   "norad_b": 31512,
+   "tca_utc": "2026-09-28T06:17:45.974818Z",
+   "miss_distance_km": 3.9798,
+   "relative_speed_km_s": 14.6064,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9794
+  },
+  {
+   "norad_a": 30505,
+   "norad_b": 31536,
+   "tca_utc": "2026-09-28T16:25:53.822371Z",
+   "miss_distance_km": 2.9489,
+   "relative_speed_km_s": 14.5932,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9491
+  },
+  {
+   "norad_a": 30509,
+   "norad_b": 33673,
+   "tca_utc": "2026-09-28T08:30:57.602456Z",
+   "miss_distance_km": 2.9029,
+   "relative_speed_km_s": 14.3927,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.903
+  },
+  {
+   "norad_a": 30521,
+   "norad_b": 43258,
+   "tca_utc": "2026-09-28T10:40:49.579597Z",
+   "miss_distance_km": 4.4256,
+   "relative_speed_km_s": 14.7957,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4258
+  },
+  {
+   "norad_a": 30530,
+   "norad_b": 31519,
+   "tca_utc": "2026-09-28T09:44:53.625450Z",
+   "miss_distance_km": 2.3204,
+   "relative_speed_km_s": 5.2074,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3203
+  },
+  {
+   "norad_a": 30539,
+   "norad_b": 31553,
+   "tca_utc": "2026-09-28T04:28:04.258408Z",
+   "miss_distance_km": 1.8415,
+   "relative_speed_km_s": 7.9514,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8415
+  },
+  {
+   "norad_a": 30548,
+   "norad_b": 31381,
+   "tca_utc": "2026-09-28T07:12:28.579108Z",
+   "miss_distance_km": 3.8346,
+   "relative_speed_km_s": 14.1529,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8331
+  },
+  {
+   "norad_a": 30557,
+   "norad_b": 31670,
+   "tca_utc": "2026-09-28T09:49:36.144657Z",
+   "miss_distance_km": 3.5281,
+   "relative_speed_km_s": 13.6701,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5258
+  },
+  {
+   "norad_a": 30560,
+   "norad_b": 35195,
+   "tca_utc": "2026-09-28T12:22:20.099730Z",
+   "miss_distance_km": 4.9366,
+   "relative_speed_km_s": 13.4038,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9347
+  },
+  {
+   "norad_a": 30561,
+   "norad_b": 32126,
+   "tca_utc": "2026-09-28T15:48:56.086150Z",
+   "miss_distance_km": 1.3391,
+   "relative_speed_km_s": 13.8453,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.3389
+  },
+  {
+   "norad_a": 30561,
+   "norad_b": 33601,
+   "tca_utc": "2026-09-29T00:06:28.317931Z",
+   "miss_distance_km": 4.4741,
+   "relative_speed_km_s": 13.7306,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4694
+  },
+  {
+   "norad_a": 30562,
+   "norad_b": 33660,
+   "tca_utc": "2026-09-28T02:39:20.195754Z",
+   "miss_distance_km": 4.9895,
+   "relative_speed_km_s": 14.6725,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9892
+  },
+  {
+   "norad_a": 30565,
+   "norad_b": 33723,
+   "tca_utc": "2026-09-28T05:04:52.503142Z",
+   "miss_distance_km": 1.5413,
+   "relative_speed_km_s": 13.1695,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.5413
+  },
+  {
+   "norad_a": 30566,
+   "norad_b": 31474,
+   "tca_utc": "2026-09-28T15:12:27.952525Z",
+   "miss_distance_km": 1.7238,
+   "relative_speed_km_s": 0.6839,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7244
+  },
+  {
+   "norad_a": 30568,
+   "norad_b": 32212,
+   "tca_utc": "2026-09-28T08:06:01.446133Z",
+   "miss_distance_km": 4.5488,
+   "relative_speed_km_s": 7.5266,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5488
+  },
+  {
+   "norad_a": 30570,
+   "norad_b": 31073,
+   "tca_utc": "2026-09-28T15:21:05.552130Z",
+   "miss_distance_km": 3.6394,
+   "relative_speed_km_s": 14.504,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6394
+  },
+  {
+   "norad_a": 30571,
+   "norad_b": 32111,
+   "tca_utc": "2026-09-28T20:49:31.979120Z",
+   "miss_distance_km": 4.6086,
+   "relative_speed_km_s": 3.223,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6085
+  },
+  {
+   "norad_a": 30600,
+   "norad_b": 41826,
+   "tca_utc": "2026-09-28T01:11:42.214595Z",
+   "miss_distance_km": 4.9055,
+   "relative_speed_km_s": 13.8495,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9053
+  },
+  {
+   "norad_a": 30603,
+   "norad_b": 31303,
+   "tca_utc": "2026-09-28T12:46:51.275816Z",
+   "miss_distance_km": 4.2506,
+   "relative_speed_km_s": 1.8407,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2507
+  },
+  {
+   "norad_a": 30639,
+   "norad_b": 41016,
+   "tca_utc": "2026-09-29T00:06:08.147251Z",
+   "miss_distance_km": 4.5508,
+   "relative_speed_km_s": 8.5932,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5508
+  },
+  {
+   "norad_a": 30657,
+   "norad_b": 31286,
+   "tca_utc": "2026-09-28T11:14:06.988748Z",
+   "miss_distance_km": 3.4167,
+   "relative_speed_km_s": 14.199,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4168
+  },
+  {
+   "norad_a": 30661,
+   "norad_b": 35104,
+   "tca_utc": "2026-09-28T02:36:30.991776Z",
+   "miss_distance_km": 1.583,
+   "relative_speed_km_s": 14.4937,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.581
+  },
+  {
+   "norad_a": 30661,
+   "norad_b": 35104,
+   "tca_utc": "2026-09-28T04:17:54.447596Z",
+   "miss_distance_km": 4.8406,
+   "relative_speed_km_s": 14.493,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8406
+  },
+  {
+   "norad_a": 30662,
+   "norad_b": 38116,
+   "tca_utc": "2026-09-28T23:27:42.519290Z",
+   "miss_distance_km": 1.0731,
+   "relative_speed_km_s": 4.0089,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.0732
+  },
+  {
+   "norad_a": 30670,
+   "norad_b": 36216,
+   "tca_utc": "2026-09-29T00:54:45.014705Z",
+   "miss_distance_km": 2.586,
+   "relative_speed_km_s": 3.2584,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5862
+  },
+  {
+   "norad_a": 30675,
+   "norad_b": 31503,
+   "tca_utc": "2026-09-28T15:14:17.538139Z",
+   "miss_distance_km": 4.1665,
+   "relative_speed_km_s": 14.6596,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1668
+  },
+  {
+   "norad_a": 30676,
+   "norad_b": 31223,
+   "tca_utc": "2026-09-28T01:14:36.486027Z",
+   "miss_distance_km": 4.2417,
+   "relative_speed_km_s": 9.6709,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2404
+  },
+  {
+   "norad_a": 30677,
+   "norad_b": 31038,
+   "tca_utc": "2026-09-28T19:18:50.512440Z",
+   "miss_distance_km": 3.8067,
+   "relative_speed_km_s": 8.2271,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8066
+  },
+  {
+   "norad_a": 30686,
+   "norad_b": 36153,
+   "tca_utc": "2026-09-28T15:18:57.639337Z",
+   "miss_distance_km": 0.2036,
+   "relative_speed_km_s": 13.3872,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.2037
+  },
+  {
+   "norad_a": 30688,
+   "norad_b": 43071,
+   "tca_utc": "2026-09-28T12:28:09.746820Z",
+   "miss_distance_km": 1.4694,
+   "relative_speed_km_s": 8.9437,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.4693
+  },
+  {
+   "norad_a": 30689,
+   "norad_b": 37008,
+   "tca_utc": "2026-09-28T12:16:13.468332Z",
+   "miss_distance_km": 4.0033,
+   "relative_speed_km_s": 13.8798,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0036
+  },
+  {
+   "norad_a": 30690,
+   "norad_b": 31062,
+   "tca_utc": "2026-09-28T17:02:01.140213Z",
+   "miss_distance_km": 4.4614,
+   "relative_speed_km_s": 13.0935,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4615
+  },
+  {
+   "norad_a": 30697,
+   "norad_b": 30718,
+   "tca_utc": "2026-09-28T23:46:31.404756Z",
+   "miss_distance_km": 0.9889,
+   "relative_speed_km_s": 3.6339,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.9887
+  },
+  {
+   "norad_a": 30697,
+   "norad_b": 36734,
+   "tca_utc": "2026-09-28T20:21:02.986630Z",
+   "miss_distance_km": 4.9181,
+   "relative_speed_km_s": 0.1362,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9181
+  },
+  {
+   "norad_a": 30704,
+   "norad_b": 36679,
+   "tca_utc": "2026-09-29T00:25:09.701648Z",
+   "miss_distance_km": 3.3388,
+   "relative_speed_km_s": 0.3124,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3389
+  },
+  {
+   "norad_a": 30718,
+   "norad_b": 31223,
+   "tca_utc": "2026-09-28T12:41:12.591212Z",
+   "miss_distance_km": 4.7093,
+   "relative_speed_km_s": 14.1442,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7089
+  },
+  {
+   "norad_a": 30720,
+   "norad_b": 43254,
+   "tca_utc": "2026-09-28T13:19:19.024100Z",
+   "miss_distance_km": 3.8341,
+   "relative_speed_km_s": 14.2496,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8348
+  },
+  {
+   "norad_a": 30730,
+   "norad_b": 31880,
+   "tca_utc": "2026-09-28T14:13:33.500071Z",
+   "miss_distance_km": 4.6107,
+   "relative_speed_km_s": 14.2409,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6097
+  },
+  {
+   "norad_a": 30732,
+   "norad_b": 32343,
+   "tca_utc": "2026-09-28T21:18:32.635328Z",
+   "miss_distance_km": 3.9255,
+   "relative_speed_km_s": 4.0028,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9223
+  },
+  {
+   "norad_a": 30732,
+   "norad_b": 37899,
+   "tca_utc": "2026-09-28T22:32:16.847948Z",
+   "miss_distance_km": 4.4751,
+   "relative_speed_km_s": 14.5687,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4761
+  },
+  {
+   "norad_a": 30735,
+   "norad_b": 30770,
+   "tca_utc": "2026-09-28T17:05:22.087815Z",
+   "miss_distance_km": 4.894,
+   "relative_speed_km_s": 8.6548,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8921
+  },
+  {
+   "norad_a": 30739,
+   "norad_b": 31535,
+   "tca_utc": "2026-09-28T19:05:26.804594Z",
+   "miss_distance_km": 3.7716,
+   "relative_speed_km_s": 14.2528,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.773
+  },
+  {
+   "norad_a": 30742,
+   "norad_b": 36262,
+   "tca_utc": "2026-09-28T13:40:12.025451Z",
+   "miss_distance_km": 1.0388,
+   "relative_speed_km_s": 14.3428,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.0391
+  },
+  {
+   "norad_a": 30746,
+   "norad_b": 31286,
+   "tca_utc": "2026-09-28T05:34:51.644719Z",
+   "miss_distance_km": 3.6803,
+   "relative_speed_km_s": 13.1078,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.68
+  },
+  {
+   "norad_a": 30749,
+   "norad_b": 32214,
+   "tca_utc": "2026-09-28T13:06:14.137438Z",
+   "miss_distance_km": 2.6259,
+   "relative_speed_km_s": 0.1765,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.626
+  },
+  {
+   "norad_a": 30749,
+   "norad_b": 33650,
+   "tca_utc": "2026-09-28T02:49:16.733035Z",
+   "miss_distance_km": 4.5247,
+   "relative_speed_km_s": 13.6109,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5227
+  },
+  {
+   "norad_a": 30753,
+   "norad_b": 32430,
+   "tca_utc": "2026-09-28T10:07:22.058520Z",
+   "miss_distance_km": 4.3293,
+   "relative_speed_km_s": 4.549,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3251
+  },
+  {
+   "norad_a": 30755,
+   "norad_b": 35229,
+   "tca_utc": "2026-09-28T08:58:44.978463Z",
+   "miss_distance_km": 4.1838,
+   "relative_speed_km_s": 11.5621,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1831
+  },
+  {
+   "norad_a": 30758,
+   "norad_b": 32223,
+   "tca_utc": "2026-09-28T08:58:31.229312Z",
+   "miss_distance_km": 3.3907,
+   "relative_speed_km_s": 5.5223,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3902
+  },
+  {
+   "norad_a": 30766,
+   "norad_b": 30931,
+   "tca_utc": "2026-09-28T01:11:29.580688Z",
+   "miss_distance_km": 1.8831,
+   "relative_speed_km_s": 8.2631,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.882
+  },
+  {
+   "norad_a": 30770,
+   "norad_b": 41830,
+   "tca_utc": "2026-09-28T08:36:32.821425Z",
+   "miss_distance_km": 3.9908,
+   "relative_speed_km_s": 8.8427,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9887
+  },
+  {
+   "norad_a": 30806,
+   "norad_b": 36699,
+   "tca_utc": "2026-09-28T17:37:30.766540Z",
+   "miss_distance_km": 2.3448,
+   "relative_speed_km_s": 2.8084,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3456
+  },
+  {
+   "norad_a": 30817,
+   "norad_b": 31374,
+   "tca_utc": "2026-09-28T14:39:37.216634Z",
+   "miss_distance_km": 2.3724,
+   "relative_speed_km_s": 14.623,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.371
+  },
+  {
+   "norad_a": 30821,
+   "norad_b": 31919,
+   "tca_utc": "2026-09-28T06:58:29.724281Z",
+   "miss_distance_km": 1.3238,
+   "relative_speed_km_s": 0.2954,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.3242
+  },
+  {
+   "norad_a": 30823,
+   "norad_b": 41007,
+   "tca_utc": "2026-09-28T05:15:48.570536Z",
+   "miss_distance_km": 4.5133,
+   "relative_speed_km_s": 9.9288,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5133
+  },
+  {
+   "norad_a": 30830,
+   "norad_b": 31464,
+   "tca_utc": "2026-09-28T17:12:20.369771Z",
+   "miss_distance_km": 1.3018,
+   "relative_speed_km_s": 7.2534,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.3016
+  },
+  {
+   "norad_a": 30837,
+   "norad_b": 31422,
+   "tca_utc": "2026-09-28T10:36:01.490271Z",
+   "miss_distance_km": 4.814,
+   "relative_speed_km_s": 1.3834,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.814
+  },
+  {
+   "norad_a": 30837,
+   "norad_b": 31535,
+   "tca_utc": "2026-09-28T05:39:20.756048Z",
+   "miss_distance_km": 2.2531,
+   "relative_speed_km_s": 14.2076,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.2522
+  },
+  {
+   "norad_a": 30840,
+   "norad_b": 30885,
+   "tca_utc": "2026-09-28T23:35:17.457906Z",
+   "miss_distance_km": 2.8976,
+   "relative_speed_km_s": 13.887,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8946
+  },
+  {
+   "norad_a": 30843,
+   "norad_b": 31068,
+   "tca_utc": "2026-09-28T05:08:13.866467Z",
+   "miss_distance_km": 4.284,
+   "relative_speed_km_s": 12.4926,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2837
+  },
+  {
+   "norad_a": 30847,
+   "norad_b": 36199,
+   "tca_utc": "2026-09-28T02:42:33.111081Z",
+   "miss_distance_km": 4.345,
+   "relative_speed_km_s": 14.1367,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3462
+  },
+  {
+   "norad_a": 30847,
+   "norad_b": 37715,
+   "tca_utc": "2026-09-28T04:26:26.530280Z",
+   "miss_distance_km": 3.0194,
+   "relative_speed_km_s": 14.4219,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.0174
+  },
+  {
+   "norad_a": 30847,
+   "norad_b": 38149,
+   "tca_utc": "2026-09-28T03:47:16.387634Z",
+   "miss_distance_km": 3.13,
+   "relative_speed_km_s": 14.6254,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1299
+  },
+  {
+   "norad_a": 30847,
+   "norad_b": 46447,
+   "tca_utc": "2026-09-28T01:08:42.611422Z",
+   "miss_distance_km": 3.1339,
+   "relative_speed_km_s": 14.6343,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1331
+  },
+  {
+   "norad_a": 30856,
+   "norad_b": 32343,
+   "tca_utc": "2026-09-28T17:18:35.985891Z",
+   "miss_distance_km": 4.5747,
+   "relative_speed_km_s": 14.5836,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5754
+  },
+  {
+   "norad_a": 30868,
+   "norad_b": 33722,
+   "tca_utc": "2026-09-28T20:43:15.700182Z",
+   "miss_distance_km": 3.8976,
+   "relative_speed_km_s": 14.0507,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8973
+  },
+  {
+   "norad_a": 30874,
+   "norad_b": 31510,
+   "tca_utc": "2026-09-28T03:25:47.911585Z",
+   "miss_distance_km": 1.1057,
+   "relative_speed_km_s": 3.369,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.1058
+  },
+  {
+   "norad_a": 30882,
+   "norad_b": 35169,
+   "tca_utc": "2026-09-28T03:39:43.714518Z",
+   "miss_distance_km": 4.8199,
+   "relative_speed_km_s": 14.1385,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.818
+  },
+  {
+   "norad_a": 30884,
+   "norad_b": 33621,
+   "tca_utc": "2026-09-28T04:04:27.636822Z",
+   "miss_distance_km": 4.5487,
+   "relative_speed_km_s": 14.8669,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5509
+  },
+  {
+   "norad_a": 30899,
+   "norad_b": 56726,
+   "tca_utc": "2026-09-28T08:12:12.640915Z",
+   "miss_distance_km": 4.5988,
+   "relative_speed_km_s": 14.9515,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.598
+  },
+  {
+   "norad_a": 30903,
+   "norad_b": 31905,
+   "tca_utc": "2026-09-28T01:48:21.008247Z",
+   "miss_distance_km": 3.9035,
+   "relative_speed_km_s": 11.4115,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9023
+  },
+  {
+   "norad_a": 30903,
+   "norad_b": 33710,
+   "tca_utc": "2026-09-28T06:19:03.798160Z",
+   "miss_distance_km": 4.8978,
+   "relative_speed_km_s": 14.1398,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8979
+  },
+  {
+   "norad_a": 30913,
+   "norad_b": 32453,
+   "tca_utc": "2026-09-28T10:25:14.327694Z",
+   "miss_distance_km": 1.6405,
+   "relative_speed_km_s": 11.1383,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.6403
+  },
+  {
+   "norad_a": 30918,
+   "norad_b": 35176,
+   "tca_utc": "2026-09-28T23:51:55.794181Z",
+   "miss_distance_km": 2.7438,
+   "relative_speed_km_s": 12.1588,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7438
+  },
+  {
+   "norad_a": 30922,
+   "norad_b": 31286,
+   "tca_utc": "2026-09-28T15:35:16.287197Z",
+   "miss_distance_km": 4.1746,
+   "relative_speed_km_s": 6.1176,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1749
+  },
+  {
+   "norad_a": 30940,
+   "norad_b": 31319,
+   "tca_utc": "2026-09-28T15:08:34.834418Z",
+   "miss_distance_km": 3.8484,
+   "relative_speed_km_s": 12.0567,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8486
+  },
+  {
+   "norad_a": 30941,
+   "norad_b": 33747,
+   "tca_utc": "2026-09-28T19:37:35.491468Z",
+   "miss_distance_km": 4.6862,
+   "relative_speed_km_s": 12.1452,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6866
+  },
+  {
+   "norad_a": 30945,
+   "norad_b": 36167,
+   "tca_utc": "2026-09-28T04:28:53.436693Z",
+   "miss_distance_km": 3.7196,
+   "relative_speed_km_s": 12.1241,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7196
+  },
+  {
+   "norad_a": 30949,
+   "norad_b": 31332,
+   "tca_utc": "2026-09-28T18:47:05.960100Z",
+   "miss_distance_km": 4.7848,
+   "relative_speed_km_s": 1.9189,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7846
+  },
+  {
+   "norad_a": 30960,
+   "norad_b": 43256,
+   "tca_utc": "2026-09-28T20:42:43.206321Z",
+   "miss_distance_km": 2.2032,
+   "relative_speed_km_s": 14.8435,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 2.2039
+  },
+  {
+   "norad_a": 30984,
+   "norad_b": 31656,
+   "tca_utc": "2026-09-28T01:31:33.942086Z",
+   "miss_distance_km": 4.7558,
+   "relative_speed_km_s": 2.1034,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7575
+  },
+  {
+   "norad_a": 30993,
+   "norad_b": 43250,
+   "tca_utc": "2026-09-28T12:14:33.159171Z",
+   "miss_distance_km": 3.1108,
+   "relative_speed_km_s": 13.5204,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1104
+  },
+  {
+   "norad_a": 31012,
+   "norad_b": 31459,
+   "tca_utc": "2026-09-28T11:04:03.825062Z",
+   "miss_distance_km": 4.146,
+   "relative_speed_km_s": 0.804,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1459
+  },
+  {
+   "norad_a": 31014,
+   "norad_b": 36729,
+   "tca_utc": "2026-09-28T06:48:37.701930Z",
+   "miss_distance_km": 3.1509,
+   "relative_speed_km_s": 0.8459,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1492
+  },
+  {
+   "norad_a": 31017,
+   "norad_b": 31302,
+   "tca_utc": "2026-09-28T06:45:10.209261Z",
+   "miss_distance_km": 4.7034,
+   "relative_speed_km_s": 10.2782,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7032
+  },
+  {
+   "norad_a": 31018,
+   "norad_b": 31476,
+   "tca_utc": "2026-09-28T04:49:36.515147Z",
+   "miss_distance_km": 2.5112,
+   "relative_speed_km_s": 1.9239,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5119
+  },
+  {
+   "norad_a": 31033,
+   "norad_b": 46987,
+   "tca_utc": "2026-09-28T20:08:13.001798Z",
+   "miss_distance_km": 4.3136,
+   "relative_speed_km_s": 14.8808,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3141
+  },
+  {
+   "norad_a": 31040,
+   "norad_b": 31325,
+   "tca_utc": "2026-09-28T13:26:42.756465Z",
+   "miss_distance_km": 2.3387,
+   "relative_speed_km_s": 12.271,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3382
+  },
+  {
+   "norad_a": 31040,
+   "norad_b": 33633,
+   "tca_utc": "2026-09-28T07:30:51.483210Z",
+   "miss_distance_km": 4.6423,
+   "relative_speed_km_s": 12.6843,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6422
+  },
+  {
+   "norad_a": 31041,
+   "norad_b": 31667,
+   "tca_utc": "2026-09-28T12:47:46.197822Z",
+   "miss_distance_km": 2.0864,
+   "relative_speed_km_s": 14.7758,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.0867
+  },
+  {
+   "norad_a": 31041,
+   "norad_b": 35128,
+   "tca_utc": "2026-09-28T07:36:17.671431Z",
+   "miss_distance_km": 4.214,
+   "relative_speed_km_s": 14.6582,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2151
+  },
+  {
+   "norad_a": 31041,
+   "norad_b": 37917,
+   "tca_utc": "2026-09-28T15:45:25.025388Z",
+   "miss_distance_km": 4.12,
+   "relative_speed_km_s": 7.1527,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.12
+  },
+  {
+   "norad_a": 31072,
+   "norad_b": 32130,
+   "tca_utc": "2026-09-28T11:13:28.153612Z",
+   "miss_distance_km": 3.8464,
+   "relative_speed_km_s": 14.4146,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8377
+  },
+  {
+   "norad_a": 31074,
+   "norad_b": 43577,
+   "tca_utc": "2026-09-28T03:34:36.090419Z",
+   "miss_distance_km": 2.2161,
+   "relative_speed_km_s": 14.9437,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 2.216
+  },
+  {
+   "norad_a": 31088,
+   "norad_b": 31194,
+   "tca_utc": "2026-09-28T22:45:59.055882Z",
+   "miss_distance_km": 1.0195,
+   "relative_speed_km_s": 14.6873,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.0195
+  },
+  {
+   "norad_a": 31151,
+   "norad_b": 33613,
+   "tca_utc": "2026-09-28T07:02:13.825980Z",
+   "miss_distance_km": 3.327,
+   "relative_speed_km_s": 6.8302,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3264
+  },
+  {
+   "norad_a": 31157,
+   "norad_b": 32207,
+   "tca_utc": "2026-09-28T06:00:19.817282Z",
+   "miss_distance_km": 4.209,
+   "relative_speed_km_s": 3.7511,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2065
+  },
+  {
+   "norad_a": 31158,
+   "norad_b": 33720,
+   "tca_utc": "2026-09-28T14:00:04.214314Z",
+   "miss_distance_km": 2.9452,
+   "relative_speed_km_s": 10.3903,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9451
+  },
+  {
+   "norad_a": 31158,
+   "norad_b": 33741,
+   "tca_utc": "2026-09-28T16:06:00.177432Z",
+   "miss_distance_km": 3.7326,
+   "relative_speed_km_s": 14.8187,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7326
+  },
+  {
+   "norad_a": 31160,
+   "norad_b": 32455,
+   "tca_utc": "2026-09-28T13:03:53.003674Z",
+   "miss_distance_km": 3.7946,
+   "relative_speed_km_s": 13.7965,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7946
+  },
+  {
+   "norad_a": 31160,
+   "norad_b": 37021,
+   "tca_utc": "2026-09-28T19:47:57.834815Z",
+   "miss_distance_km": 4.8979,
+   "relative_speed_km_s": 5.6819,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8979
+  },
+  {
+   "norad_a": 31161,
+   "norad_b": 31266,
+   "tca_utc": "2026-09-28T15:39:29.208160Z",
+   "miss_distance_km": 4.8257,
+   "relative_speed_km_s": 1.9228,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8275
+  },
+  {
+   "norad_a": 31163,
+   "norad_b": 31416,
+   "tca_utc": "2026-09-28T13:03:56.815909Z",
+   "miss_distance_km": 4.0359,
+   "relative_speed_km_s": 14.7514,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0359
+  },
+  {
+   "norad_a": 31175,
+   "norad_b": 31966,
+   "tca_utc": "2026-09-28T04:53:10.428793Z",
+   "miss_distance_km": 1.7842,
+   "relative_speed_km_s": 14.8102,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7839
+  },
+  {
+   "norad_a": 31181,
+   "norad_b": 31300,
+   "tca_utc": "2026-09-29T00:38:37.150793Z",
+   "miss_distance_km": 4.8868,
+   "relative_speed_km_s": 8.753,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8881
+  },
+  {
+   "norad_a": 31185,
+   "norad_b": 38163,
+   "tca_utc": "2026-09-28T14:55:41.384397Z",
+   "miss_distance_km": 2.6484,
+   "relative_speed_km_s": 6.1877,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6471
+  },
+  {
+   "norad_a": 31191,
+   "norad_b": 31776,
+   "tca_utc": "2026-09-28T21:42:12.030698Z",
+   "miss_distance_km": 3.3813,
+   "relative_speed_km_s": 14.379,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3811
+  },
+  {
+   "norad_a": 31201,
+   "norad_b": 31776,
+   "tca_utc": "2026-09-28T11:07:37.433802Z",
+   "miss_distance_km": 4.5396,
+   "relative_speed_km_s": 14.6299,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5389
+  },
+  {
+   "norad_a": 31210,
+   "norad_b": 38163,
+   "tca_utc": "2026-09-29T00:19:19.186544Z",
+   "miss_distance_km": 4.3792,
+   "relative_speed_km_s": 5.6502,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3776
+  },
+  {
+   "norad_a": 31211,
+   "norad_b": 32430,
+   "tca_utc": "2026-09-28T08:22:28.885353Z",
+   "miss_distance_km": 3.6571,
+   "relative_speed_km_s": 4.1136,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6608
+  },
+  {
+   "norad_a": 31215,
+   "norad_b": 42806,
+   "tca_utc": "2026-09-28T06:25:16.071637Z",
+   "miss_distance_km": 4.7204,
+   "relative_speed_km_s": 14.225,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7193
+  },
+  {
+   "norad_a": 31217,
+   "norad_b": 37907,
+   "tca_utc": "2026-09-28T20:13:04.773081Z",
+   "miss_distance_km": 4.6595,
+   "relative_speed_km_s": 13.0124,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6595
+  },
+  {
+   "norad_a": 31225,
+   "norad_b": 31312,
+   "tca_utc": "2026-09-28T11:33:01.518298Z",
+   "miss_distance_km": 3.6055,
+   "relative_speed_km_s": 11.1587,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6055
+  },
+  {
+   "norad_a": 31234,
+   "norad_b": 31633,
+   "tca_utc": "2026-09-28T07:43:18.609423Z",
+   "miss_distance_km": 3.1454,
+   "relative_speed_km_s": 2.166,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1445
+  },
+  {
+   "norad_a": 31241,
+   "norad_b": 31351,
+   "tca_utc": "2026-09-28T08:45:53.401855Z",
+   "miss_distance_km": 1.2522,
+   "relative_speed_km_s": 14.6596,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.2524
+  },
+  {
+   "norad_a": 31241,
+   "norad_b": 37908,
+   "tca_utc": "2026-09-28T04:56:47.485203Z",
+   "miss_distance_km": 1.5285,
+   "relative_speed_km_s": 12.8332,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.5287
+  },
+  {
+   "norad_a": 31241,
+   "norad_b": 43072,
+   "tca_utc": "2026-09-28T19:10:19.436774Z",
+   "miss_distance_km": 4.5869,
+   "relative_speed_km_s": 14.7824,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5851
+  },
+  {
+   "norad_a": 31256,
+   "norad_b": 31754,
+   "tca_utc": "2026-09-28T22:32:02.456085Z",
+   "miss_distance_km": 4.432,
+   "relative_speed_km_s": 14.3264,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4317
+  },
+  {
+   "norad_a": 31260,
+   "norad_b": 43256,
+   "tca_utc": "2026-09-28T18:30:11.224318Z",
+   "miss_distance_km": 4.5571,
+   "relative_speed_km_s": 7.7526,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5566
+  },
+  {
+   "norad_a": 31272,
+   "norad_b": 31915,
+   "tca_utc": "2026-09-28T09:14:43.559184Z",
+   "miss_distance_km": 3.2024,
+   "relative_speed_km_s": 13.2989,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.203
+  },
+  {
+   "norad_a": 31285,
+   "norad_b": 31944,
+   "tca_utc": "2026-09-28T08:28:14.097869Z",
+   "miss_distance_km": 4.2936,
+   "relative_speed_km_s": 14.6312,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2934
+  },
+  {
+   "norad_a": 31295,
+   "norad_b": 32357,
+   "tca_utc": "2026-09-28T13:50:07.901876Z",
+   "miss_distance_km": 4.4468,
+   "relative_speed_km_s": 13.8902,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4472
+  },
+  {
+   "norad_a": 31297,
+   "norad_b": 36274,
+   "tca_utc": "2026-09-28T21:03:49.726008Z",
+   "miss_distance_km": 2.5282,
+   "relative_speed_km_s": 8.7442,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.5284
+  },
+  {
+   "norad_a": 31303,
+   "norad_b": 41006,
+   "tca_utc": "2026-09-28T12:49:23.429594Z",
+   "miss_distance_km": 3.2326,
+   "relative_speed_km_s": 5.5481,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2333
+  },
+  {
+   "norad_a": 31320,
+   "norad_b": 36681,
+   "tca_utc": "2026-09-28T05:32:30.464193Z",
+   "miss_distance_km": 3.4876,
+   "relative_speed_km_s": 14.5216,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4899
+  },
+  {
+   "norad_a": 31320,
+   "norad_b": 43074,
+   "tca_utc": "2026-09-28T01:07:21.350827Z",
+   "miss_distance_km": 2.7033,
+   "relative_speed_km_s": 14.5162,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7037
+  },
+  {
+   "norad_a": 31338,
+   "norad_b": 31685,
+   "tca_utc": "2026-09-28T20:44:37.685695Z",
+   "miss_distance_km": 3.5181,
+   "relative_speed_km_s": 14.632,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5165
+  },
+  {
+   "norad_a": 31338,
+   "norad_b": 35240,
+   "tca_utc": "2026-09-28T01:36:54.585733Z",
+   "miss_distance_km": 2.3906,
+   "relative_speed_km_s": 14.0432,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.3906
+  },
+  {
+   "norad_a": 31350,
+   "norad_b": 43253,
+   "tca_utc": "2026-09-28T08:45:22.207948Z",
+   "miss_distance_km": 4.8016,
+   "relative_speed_km_s": 14.2955,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8024
+  },
+  {
+   "norad_a": 31351,
+   "norad_b": 38813,
+   "tca_utc": "2026-09-28T08:27:49.674492Z",
+   "miss_distance_km": 4.6848,
+   "relative_speed_km_s": 4.3096,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.685
+  },
+  {
+   "norad_a": 31353,
+   "norad_b": 38138,
+   "tca_utc": "2026-09-28T20:09:04.316341Z",
+   "miss_distance_km": 4.3709,
+   "relative_speed_km_s": 14.6311,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.371
+  },
+  {
+   "norad_a": 31361,
+   "norad_b": 31899,
+   "tca_utc": "2026-09-28T21:13:20.879994Z",
+   "miss_distance_km": 4.3035,
+   "relative_speed_km_s": 14.7283,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3011
+  },
+  {
+   "norad_a": 31361,
+   "norad_b": 40688,
+   "tca_utc": "2026-09-28T18:47:51.425138Z",
+   "miss_distance_km": 4.1211,
+   "relative_speed_km_s": 14.6827,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.121
+  },
+  {
+   "norad_a": 31362,
+   "norad_b": 32200,
+   "tca_utc": "2026-09-28T23:25:18.784115Z",
+   "miss_distance_km": 1.7682,
+   "relative_speed_km_s": 7.1011,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7679
+  },
+  {
+   "norad_a": 31362,
+   "norad_b": 35240,
+   "tca_utc": "2026-09-28T14:09:49.345026Z",
+   "miss_distance_km": 1.0259,
+   "relative_speed_km_s": 0.76,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.0257
+  },
+  {
+   "norad_a": 31368,
+   "norad_b": 31615,
+   "tca_utc": "2026-09-28T06:59:11.905510Z",
+   "miss_distance_km": 1.729,
+   "relative_speed_km_s": 13.075,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.7285
+  },
+  {
+   "norad_a": 31368,
+   "norad_b": 35102,
+   "tca_utc": "2026-09-28T18:27:13.937266Z",
+   "miss_distance_km": 3.6162,
+   "relative_speed_km_s": 14.5645,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6163
+  },
+  {
+   "norad_a": 31370,
+   "norad_b": 32101,
+   "tca_utc": "2026-09-28T06:12:16.660325Z",
+   "miss_distance_km": 4.3855,
+   "relative_speed_km_s": 10.891,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3853
+  },
+  {
+   "norad_a": 31372,
+   "norad_b": 31948,
+   "tca_utc": "2026-09-28T10:24:46.795735Z",
+   "miss_distance_km": 1.5244,
+   "relative_speed_km_s": 8.4632,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.5243
+  },
+  {
+   "norad_a": 31383,
+   "norad_b": 31821,
+   "tca_utc": "2026-09-28T19:49:57.630415Z",
+   "miss_distance_km": 4.5847,
+   "relative_speed_km_s": 14.6871,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5848
+  },
+  {
+   "norad_a": 31410,
+   "norad_b": 35102,
+   "tca_utc": "2026-09-28T10:21:15.533649Z",
+   "miss_distance_km": 3.2503,
+   "relative_speed_km_s": 14.625,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2505
+  },
+  {
+   "norad_a": 31426,
+   "norad_b": 33701,
+   "tca_utc": "2026-09-28T10:09:53.189128Z",
+   "miss_distance_km": 4.4117,
+   "relative_speed_km_s": 14.6773,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4109
+  },
+  {
+   "norad_a": 31455,
+   "norad_b": 32160,
+   "tca_utc": "2026-09-28T09:08:10.836589Z",
+   "miss_distance_km": 3.2722,
+   "relative_speed_km_s": 14.8445,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2716
+  },
+  {
+   "norad_a": 31459,
+   "norad_b": 35091,
+   "tca_utc": "2026-09-28T12:02:23.478352Z",
+   "miss_distance_km": 2.6268,
+   "relative_speed_km_s": 13.9498,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6272
+  },
+  {
+   "norad_a": 31466,
+   "norad_b": 31989,
+   "tca_utc": "2026-09-28T17:34:28.676024Z",
+   "miss_distance_km": 0.9525,
+   "relative_speed_km_s": 12.631,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.9545
+  },
+  {
+   "norad_a": 31471,
+   "norad_b": 42806,
+   "tca_utc": "2026-09-28T09:44:38.004788Z",
+   "miss_distance_km": 1.2889,
+   "relative_speed_km_s": 14.425,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.2894
+  },
+  {
+   "norad_a": 31476,
+   "norad_b": 43071,
+   "tca_utc": "2026-09-28T22:30:58.056736Z",
+   "miss_distance_km": 4.4729,
+   "relative_speed_km_s": 9.1565,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4729
+  },
+  {
+   "norad_a": 31484,
+   "norad_b": 33684,
+   "tca_utc": "2026-09-28T15:31:49.782140Z",
+   "miss_distance_km": 2.4222,
+   "relative_speed_km_s": 4.3284,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4217
+  },
+  {
+   "norad_a": 31487,
+   "norad_b": 37694,
+   "tca_utc": "2026-09-28T21:15:17.639861Z",
+   "miss_distance_km": 3.0125,
+   "relative_speed_km_s": 13.4291,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.0127
+  },
+  {
+   "norad_a": 31495,
+   "norad_b": 36224,
+   "tca_utc": "2026-09-28T09:34:27.308527Z",
+   "miss_distance_km": 4.9898,
+   "relative_speed_km_s": 14.3474,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9853
+  },
+  {
+   "norad_a": 31495,
+   "norad_b": 42957,
+   "tca_utc": "2026-09-28T05:09:08.368961Z",
+   "miss_distance_km": 2.3942,
+   "relative_speed_km_s": 14.9183,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 2.3942
+  },
+  {
+   "norad_a": 31502,
+   "norad_b": 38173,
+   "tca_utc": "2026-09-28T04:45:21.826129Z",
+   "miss_distance_km": 2.6402,
+   "relative_speed_km_s": 14.5739,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6398
+  },
+  {
+   "norad_a": 31503,
+   "norad_b": 41924,
+   "tca_utc": "2026-09-28T07:16:14.074560Z",
+   "miss_distance_km": 4.1531,
+   "relative_speed_km_s": 14.876,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1522
+  },
+  {
+   "norad_a": 31511,
+   "norad_b": 35102,
+   "tca_utc": "2026-09-28T20:20:31.605988Z",
+   "miss_distance_km": 4.036,
+   "relative_speed_km_s": 14.6714,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.035
+  },
+  {
+   "norad_a": 31511,
+   "norad_b": 35102,
+   "tca_utc": "2026-09-28T22:01:19.913309Z",
+   "miss_distance_km": 3.4044,
+   "relative_speed_km_s": 14.6718,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4025
+  },
+  {
+   "norad_a": 31511,
+   "norad_b": 35102,
+   "tca_utc": "2026-09-28T23:42:08.220030Z",
+   "miss_distance_km": 4.284,
+   "relative_speed_km_s": 14.6721,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2839
+  },
+  {
+   "norad_a": 31511,
+   "norad_b": 36678,
+   "tca_utc": "2026-09-28T07:12:04.007152Z",
+   "miss_distance_km": 4.739,
+   "relative_speed_km_s": 14.4142,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.739
+  },
+  {
+   "norad_a": 31523,
+   "norad_b": 31989,
+   "tca_utc": "2026-09-28T23:31:07.876361Z",
+   "miss_distance_km": 0.5871,
+   "relative_speed_km_s": 2.3841,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.5871
+  },
+  {
+   "norad_a": 31535,
+   "norad_b": 38514,
+   "tca_utc": "2026-09-28T07:06:37.926511Z",
+   "miss_distance_km": 1.9017,
+   "relative_speed_km_s": 14.6355,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8985
+  },
+  {
+   "norad_a": 31540,
+   "norad_b": 37925,
+   "tca_utc": "2026-09-28T08:45:02.964653Z",
+   "miss_distance_km": 4.9561,
+   "relative_speed_km_s": 9.4676,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.956
+  },
+  {
+   "norad_a": 31546,
+   "norad_b": 37589,
+   "tca_utc": "2026-09-28T09:14:59.320450Z",
+   "miss_distance_km": 3.355,
+   "relative_speed_km_s": 13.8912,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3549
+  },
+  {
+   "norad_a": 31553,
+   "norad_b": 43931,
+   "tca_utc": "2026-09-28T09:22:24.846706Z",
+   "miss_distance_km": 3.7541,
+   "relative_speed_km_s": 4.2638,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7513
+  },
+  {
+   "norad_a": 31558,
+   "norad_b": 31731,
+   "tca_utc": "2026-09-29T00:08:26.968328Z",
+   "miss_distance_km": 4.038,
+   "relative_speed_km_s": 14.739,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0407
+  },
+  {
+   "norad_a": 31562,
+   "norad_b": 31609,
+   "tca_utc": "2026-09-28T13:34:03.396120Z",
+   "miss_distance_km": 4.1893,
+   "relative_speed_km_s": 13.7604,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1892
+  },
+  {
+   "norad_a": 31565,
+   "norad_b": 41922,
+   "tca_utc": "2026-09-28T01:18:02.013085Z",
+   "miss_distance_km": 4.7431,
+   "relative_speed_km_s": 14.878,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7432
+  },
+  {
+   "norad_a": 31570,
+   "norad_b": 42805,
+   "tca_utc": "2026-09-28T19:36:45.743430Z",
+   "miss_distance_km": 2.8287,
+   "relative_speed_km_s": 14.7009,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8287
+  },
+  {
+   "norad_a": 31609,
+   "norad_b": 33723,
+   "tca_utc": "2026-09-28T10:16:02.067137Z",
+   "miss_distance_km": 2.4766,
+   "relative_speed_km_s": 6.1271,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4766
+  },
+  {
+   "norad_a": 31620,
+   "norad_b": 38155,
+   "tca_utc": "2026-09-29T00:58:17.745955Z",
+   "miss_distance_km": 4.737,
+   "relative_speed_km_s": 14.5729,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7341
+  },
+  {
+   "norad_a": 31620,
+   "norad_b": 46439,
+   "tca_utc": "2026-09-28T13:33:05.955682Z",
+   "miss_distance_km": 3.0408,
+   "relative_speed_km_s": 12.5781,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.0405
+  },
+  {
+   "norad_a": 31623,
+   "norad_b": 46992,
+   "tca_utc": "2026-09-28T21:57:29.448395Z",
+   "miss_distance_km": 4.9355,
+   "relative_speed_km_s": 14.6365,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9301
+  },
+  {
+   "norad_a": 31625,
+   "norad_b": 33722,
+   "tca_utc": "2026-09-28T23:04:32.235315Z",
+   "miss_distance_km": 4.1232,
+   "relative_speed_km_s": 10.974,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1238
+  },
+  {
+   "norad_a": 31633,
+   "norad_b": 31829,
+   "tca_utc": "2026-09-28T05:51:39.335966Z",
+   "miss_distance_km": 3.7799,
+   "relative_speed_km_s": 14.3477,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7772
+  },
+  {
+   "norad_a": 31655,
+   "norad_b": 32356,
+   "tca_utc": "2026-09-28T12:56:05.525514Z",
+   "miss_distance_km": 3.5223,
+   "relative_speed_km_s": 4.5985,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.5223
+  },
+  {
+   "norad_a": 31667,
+   "norad_b": 37445,
+   "tca_utc": "2026-09-28T08:13:24.274818Z",
+   "miss_distance_km": 2.9543,
+   "relative_speed_km_s": 13.318,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.9545
+  },
+  {
+   "norad_a": 31685,
+   "norad_b": 36160,
+   "tca_utc": "2026-09-28T10:46:52.304561Z",
+   "miss_distance_km": 0.1125,
+   "relative_speed_km_s": 14.4729,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.1124
+  },
+  {
+   "norad_a": 31738,
+   "norad_b": 31985,
+   "tca_utc": "2026-09-28T14:48:10.237648Z",
+   "miss_distance_km": 4.6272,
+   "relative_speed_km_s": 14.913,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6273
+  },
+  {
+   "norad_a": 31743,
+   "norad_b": 31838,
+   "tca_utc": "2026-09-28T12:40:24.343466Z",
+   "miss_distance_km": 4.2218,
+   "relative_speed_km_s": 11.4739,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2228
+  },
+  {
+   "norad_a": 31743,
+   "norad_b": 31906,
+   "tca_utc": "2026-09-28T22:15:07.434111Z",
+   "miss_distance_km": 2.1875,
+   "relative_speed_km_s": 14.7546,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.1876
+  },
+  {
+   "norad_a": 31774,
+   "norad_b": 43253,
+   "tca_utc": "2026-09-28T14:31:01.501428Z",
+   "miss_distance_km": 3.7803,
+   "relative_speed_km_s": 8.7837,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7803
+  },
+  {
+   "norad_a": 31779,
+   "norad_b": 41918,
+   "tca_utc": "2026-09-28T06:36:45.330964Z",
+   "miss_distance_km": 3.6662,
+   "relative_speed_km_s": 14.8989,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6663
+  },
+  {
+   "norad_a": 31779,
+   "norad_b": 41918,
+   "tca_utc": "2026-09-28T08:16:56.207934Z",
+   "miss_distance_km": 2.0,
+   "relative_speed_km_s": 14.8958,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 2.0
+  },
+  {
+   "norad_a": 31815,
+   "norad_b": 37054,
+   "tca_utc": "2026-09-28T14:52:09.452797Z",
+   "miss_distance_km": 4.2854,
+   "relative_speed_km_s": 0.8356,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2851
+  },
+  {
+   "norad_a": 31836,
+   "norad_b": 33731,
+   "tca_utc": "2026-09-28T18:53:44.800969Z",
+   "miss_distance_km": 4.876,
+   "relative_speed_km_s": 8.9622,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8762
+  },
+  {
+   "norad_a": 31836,
+   "norad_b": 43479,
+   "tca_utc": "2026-09-28T04:14:23.949608Z",
+   "miss_distance_km": 3.9029,
+   "relative_speed_km_s": 14.9428,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.9035
+  },
+  {
+   "norad_a": 31861,
+   "norad_b": 35122,
+   "tca_utc": "2026-09-28T18:54:02.214950Z",
+   "miss_distance_km": 4.9128,
+   "relative_speed_km_s": 12.6698,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.913
+  },
+  {
+   "norad_a": 31890,
+   "norad_b": 31980,
+   "tca_utc": "2026-09-28T22:41:31.351018Z",
+   "miss_distance_km": 1.8362,
+   "relative_speed_km_s": 1.082,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.8348
+  },
+  {
+   "norad_a": 31890,
+   "norad_b": 40688,
+   "tca_utc": "2026-09-28T02:58:22.549904Z",
+   "miss_distance_km": 3.2979,
+   "relative_speed_km_s": 13.5117,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2988
+  },
+  {
+   "norad_a": 31898,
+   "norad_b": 41828,
+   "tca_utc": "2026-09-28T09:08:52.635507Z",
+   "miss_distance_km": 4.6934,
+   "relative_speed_km_s": 10.9324,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.6933
+  },
+  {
+   "norad_a": 31906,
+   "norad_b": 35090,
+   "tca_utc": "2026-09-28T01:35:40.743680Z",
+   "miss_distance_km": 1.0144,
+   "relative_speed_km_s": 11.9171,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.0147
+  },
+  {
+   "norad_a": 31913,
+   "norad_b": 42963,
+   "tca_utc": "2026-09-28T10:22:17.580414Z",
+   "miss_distance_km": 4.8268,
+   "relative_speed_km_s": 14.2102,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8269
+  },
+  {
+   "norad_a": 31917,
+   "norad_b": 56727,
+   "tca_utc": "2026-09-28T16:53:18.238808Z",
+   "miss_distance_km": 2.3325,
+   "relative_speed_km_s": 2.7857,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 2.3342
+  },
+  {
+   "norad_a": 31926,
+   "norad_b": 47104,
+   "tca_utc": "2026-09-28T20:46:55.944517Z",
+   "miss_distance_km": 4.8428,
+   "relative_speed_km_s": 8.8372,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8429
+  },
+  {
+   "norad_a": 31978,
+   "norad_b": 36267,
+   "tca_utc": "2026-09-28T17:31:12.294157Z",
+   "miss_distance_km": 4.408,
+   "relative_speed_km_s": 14.8264,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.4078
+  },
+  {
+   "norad_a": 32086,
+   "norad_b": 41918,
+   "tca_utc": "2026-09-28T03:36:14.827357Z",
+   "miss_distance_km": 4.8211,
+   "relative_speed_km_s": 10.2101,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8198
+  },
+  {
+   "norad_a": 32101,
+   "norad_b": 45526,
+   "tca_utc": "2026-09-28T08:26:30.974018Z",
+   "miss_distance_km": 3.416,
+   "relative_speed_km_s": 14.7206,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4124
+  },
+  {
+   "norad_a": 32123,
+   "norad_b": 33748,
+   "tca_utc": "2026-09-28T16:14:41.838043Z",
+   "miss_distance_km": 2.8922,
+   "relative_speed_km_s": 13.9101,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8932
+  },
+  {
+   "norad_a": 32125,
+   "norad_b": 36153,
+   "tca_utc": "2026-09-28T06:20:57.340785Z",
+   "miss_distance_km": 4.9189,
+   "relative_speed_km_s": 9.7014,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9188
+  },
+  {
+   "norad_a": 32143,
+   "norad_b": 37081,
+   "tca_utc": "2026-09-28T21:04:56.756496Z",
+   "miss_distance_km": 3.6576,
+   "relative_speed_km_s": 14.5402,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6576
+  },
+  {
+   "norad_a": 32155,
+   "norad_b": 37422,
+   "tca_utc": "2026-09-28T07:18:35.887037Z",
+   "miss_distance_km": 4.9629,
+   "relative_speed_km_s": 14.7547,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9628
+  },
+  {
+   "norad_a": 32163,
+   "norad_b": 41925,
+   "tca_utc": "2026-09-29T00:54:57.370239Z",
+   "miss_distance_km": 4.7962,
+   "relative_speed_km_s": 10.3384,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7962
+  },
+  {
+   "norad_a": 32163,
+   "norad_b": 43252,
+   "tca_utc": "2026-09-29T00:51:51.631914Z",
+   "miss_distance_km": 3.8727,
+   "relative_speed_km_s": 8.7307,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8727
+  },
+  {
+   "norad_a": 32179,
+   "norad_b": 43252,
+   "tca_utc": "2026-09-28T03:06:00.181138Z",
+   "miss_distance_km": 4.8777,
+   "relative_speed_km_s": 8.8204,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.8777
+  },
+  {
+   "norad_a": 32197,
+   "norad_b": 43571,
+   "tca_utc": "2026-09-29T01:00:47.967366Z",
+   "miss_distance_km": 3.4192,
+   "relative_speed_km_s": 14.9109,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4191
+  },
+  {
+   "norad_a": 32230,
+   "norad_b": 43923,
+   "tca_utc": "2026-09-28T23:52:35.981390Z",
+   "miss_distance_km": 3.2678,
+   "relative_speed_km_s": 13.986,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2657
+  },
+  {
+   "norad_a": 32323,
+   "norad_b": 37919,
+   "tca_utc": "2026-09-28T03:10:49.764735Z",
+   "miss_distance_km": 3.0126,
+   "relative_speed_km_s": 14.7394,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.0126
+  },
+  {
+   "norad_a": 32362,
+   "norad_b": 37907,
+   "tca_utc": "2026-09-28T21:07:37.438893Z",
+   "miss_distance_km": 4.0716,
+   "relative_speed_km_s": 14.1082,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.0729
+  },
+  {
+   "norad_a": 33625,
+   "norad_b": 35165,
+   "tca_utc": "2026-09-28T07:15:35.887125Z",
+   "miss_distance_km": 1.2984,
+   "relative_speed_km_s": 3.0621,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.2997
+  },
+  {
+   "norad_a": 33639,
+   "norad_b": 33733,
+   "tca_utc": "2026-09-28T08:53:09.077368Z",
+   "miss_distance_km": 4.2518,
+   "relative_speed_km_s": 0.389,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2519
+  },
+  {
+   "norad_a": 33682,
+   "norad_b": 35090,
+   "tca_utc": "2026-09-28T06:42:27.523063Z",
+   "miss_distance_km": 3.326,
+   "relative_speed_km_s": 5.7031,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.3268
+  },
+  {
+   "norad_a": 33687,
+   "norad_b": 38513,
+   "tca_utc": "2026-09-28T23:13:56.401779Z",
+   "miss_distance_km": 2.1928,
+   "relative_speed_km_s": 15.1841,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.1929
+  },
+  {
+   "norad_a": 33719,
+   "norad_b": 47042,
+   "tca_utc": "2026-09-28T10:49:47.577617Z",
+   "miss_distance_km": 2.8685,
+   "relative_speed_km_s": 14.3997,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8686
+  },
+  {
+   "norad_a": 33720,
+   "norad_b": 37028,
+   "tca_utc": "2026-09-28T15:44:20.570554Z",
+   "miss_distance_km": 4.3401,
+   "relative_speed_km_s": 8.4892,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3407
+  },
+  {
+   "norad_a": 35102,
+   "norad_b": 37064,
+   "tca_utc": "2026-09-28T13:52:19.367954Z",
+   "miss_distance_km": 0.7599,
+   "relative_speed_km_s": 14.2683,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.7602
+  },
+  {
+   "norad_a": 35142,
+   "norad_b": 38829,
+   "tca_utc": "2026-09-28T11:47:09.019750Z",
+   "miss_distance_km": 3.7683,
+   "relative_speed_km_s": 2.8957,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.768
+  },
+  {
+   "norad_a": 35144,
+   "norad_b": 36711,
+   "tca_utc": "2026-09-28T22:29:22.574505Z",
+   "miss_distance_km": 4.1627,
+   "relative_speed_km_s": 4.3772,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1628
+  },
+  {
+   "norad_a": 35155,
+   "norad_b": 37439,
+   "tca_utc": "2026-09-28T05:11:59.374438Z",
+   "miss_distance_km": 2.4137,
+   "relative_speed_km_s": 10.2333,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.4137
+  },
+  {
+   "norad_a": 35155,
+   "norad_b": 37439,
+   "tca_utc": "2026-09-28T17:52:54.361494Z",
+   "miss_distance_km": 1.0452,
+   "relative_speed_km_s": 10.2287,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.0451
+  },
+  {
+   "norad_a": 35220,
+   "norad_b": 38147,
+   "tca_utc": "2026-09-28T03:07:46.762160Z",
+   "miss_distance_km": 4.2834,
+   "relative_speed_km_s": 8.5285,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.2827
+  },
+  {
+   "norad_a": 35220,
+   "norad_b": 38147,
+   "tca_utc": "2026-09-28T04:48:56.802873Z",
+   "miss_distance_km": 4.561,
+   "relative_speed_km_s": 8.529,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5609
+  },
+  {
+   "norad_a": 35220,
+   "norad_b": 38147,
+   "tca_utc": "2026-09-28T12:23:53.879901Z",
+   "miss_distance_km": 4.9583,
+   "relative_speed_km_s": 8.5206,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9581
+  },
+  {
+   "norad_a": 36160,
+   "norad_b": 38813,
+   "tca_utc": "2026-09-28T04:52:02.837568Z",
+   "miss_distance_km": 2.6853,
+   "relative_speed_km_s": 14.5122,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.6852
+  },
+  {
+   "norad_a": 36182,
+   "norad_b": 37049,
+   "tca_utc": "2026-09-28T11:10:34.485756Z",
+   "miss_distance_km": 3.2725,
+   "relative_speed_km_s": 8.6458,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.2723
+  },
+  {
+   "norad_a": 36261,
+   "norad_b": 38158,
+   "tca_utc": "2026-09-28T02:03:43.392735Z",
+   "miss_distance_km": 4.0907,
+   "relative_speed_km_s": 10.1466,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.091
+  },
+  {
+   "norad_a": 36645,
+   "norad_b": 38512,
+   "tca_utc": "2026-09-29T00:00:10.395734Z",
+   "miss_distance_km": 3.9618,
+   "relative_speed_km_s": 10.8452,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.961
+  },
+  {
+   "norad_a": 36681,
+   "norad_b": 37914,
+   "tca_utc": "2026-09-28T09:10:54.829552Z",
+   "miss_distance_km": 4.7765,
+   "relative_speed_km_s": 1.7285,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7764
+  },
+  {
+   "norad_a": 36692,
+   "norad_b": 39540,
+   "tca_utc": "2026-09-28T11:43:40.548004Z",
+   "miss_distance_km": 3.4295,
+   "relative_speed_km_s": 11.6759,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.432
+  },
+  {
+   "norad_a": 36707,
+   "norad_b": 37428,
+   "tca_utc": "2026-09-28T22:13:40.023955Z",
+   "miss_distance_km": 4.9956,
+   "relative_speed_km_s": 14.2698,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.9943
+  },
+  {
+   "norad_a": 36719,
+   "norad_b": 37477,
+   "tca_utc": "2026-09-28T18:01:38.790644Z",
+   "miss_distance_km": 0.7752,
+   "relative_speed_km_s": 13.9259,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.7745
+  },
+  {
+   "norad_a": 36719,
+   "norad_b": 37687,
+   "tca_utc": "2026-09-28T03:48:40.043148Z",
+   "miss_distance_km": 2.785,
+   "relative_speed_km_s": 13.9982,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.7832
+  },
+  {
+   "norad_a": 36734,
+   "norad_b": 41918,
+   "tca_utc": "2026-09-28T05:16:58.582629Z",
+   "miss_distance_km": 3.4295,
+   "relative_speed_km_s": 8.9275,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.4295
+  },
+  {
+   "norad_a": 36996,
+   "norad_b": 37437,
+   "tca_utc": "2026-09-28T21:31:40.649750Z",
+   "miss_distance_km": 4.783,
+   "relative_speed_km_s": 14.175,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.7814
+  },
+  {
+   "norad_a": 37053,
+   "norad_b": 41009,
+   "tca_utc": "2026-09-28T08:06:18.207201Z",
+   "miss_distance_km": 0.2263,
+   "relative_speed_km_s": 13.4209,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.2261
+  },
+  {
+   "norad_a": 37404,
+   "norad_b": 42961,
+   "tca_utc": "2026-09-28T08:37:06.231110Z",
+   "miss_distance_km": 4.3209,
+   "relative_speed_km_s": 8.6762,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.3207
+  },
+  {
+   "norad_a": 37406,
+   "norad_b": 38813,
+   "tca_utc": "2026-09-28T10:21:03.229076Z",
+   "miss_distance_km": 2.8957,
+   "relative_speed_km_s": 14.5266,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 2.8957
+  },
+  {
+   "norad_a": 37427,
+   "norad_b": 47041,
+   "tca_utc": "2026-09-28T03:20:17.845015Z",
+   "miss_distance_km": 3.7203,
+   "relative_speed_km_s": 13.1879,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7208
+  },
+  {
+   "norad_a": 37588,
+   "norad_b": 38158,
+   "tca_utc": "2026-09-28T10:50:00.947418Z",
+   "miss_distance_km": 1.9509,
+   "relative_speed_km_s": 0.5564,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.9509
+  },
+  {
+   "norad_a": 37589,
+   "norad_b": 47101,
+   "tca_utc": "2026-09-28T10:03:26.144316Z",
+   "miss_distance_km": 1.2376,
+   "relative_speed_km_s": 14.2394,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 1.2338
+  },
+  {
+   "norad_a": 37593,
+   "norad_b": 43931,
+   "tca_utc": "2026-09-28T03:39:53.795297Z",
+   "miss_distance_km": 1.4124,
+   "relative_speed_km_s": 14.1609,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 1.4125
+  },
+  {
+   "norad_a": 37694,
+   "norad_b": 38159,
+   "tca_utc": "2026-09-28T21:16:04.193837Z",
+   "miss_distance_km": 0.5002,
+   "relative_speed_km_s": 13.9466,
+   "risk_level": "moderate",
+   "linear_estimate_miss_km": 0.5003
+  },
+  {
+   "norad_a": 37712,
+   "norad_b": 38149,
+   "tca_utc": "2026-09-28T18:13:02.215001Z",
+   "miss_distance_km": 3.3511,
+   "relative_speed_km_s": 14.7393,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.351
+  },
+  {
+   "norad_a": 37712,
+   "norad_b": 38510,
+   "tca_utc": "2026-09-28T16:25:47.343640Z",
+   "miss_distance_km": 3.6574,
+   "relative_speed_km_s": 14.2363,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.6563
+  },
+  {
+   "norad_a": 37900,
+   "norad_b": 43359,
+   "tca_utc": "2026-09-28T03:45:01.957095Z",
+   "miss_distance_km": 4.5419,
+   "relative_speed_km_s": 10.3708,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.5419
+  },
+  {
+   "norad_a": 38513,
+   "norad_b": 42961,
+   "tca_utc": "2026-09-28T01:24:03.786648Z",
+   "miss_distance_km": 3.1012,
+   "relative_speed_km_s": 14.8301,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1015
+  },
+  {
+   "norad_a": 40695,
+   "norad_b": 42961,
+   "tca_utc": "2026-09-28T03:30:11.161692Z",
+   "miss_distance_km": 4.1152,
+   "relative_speed_km_s": 10.4195,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 4.1152
+  },
+  {
+   "norad_a": 41921,
+   "norad_b": 47042,
+   "tca_utc": "2026-09-28T07:42:52.560492Z",
+   "miss_distance_km": 3.7437,
+   "relative_speed_km_s": 14.7962,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.7436
+  },
+  {
+   "norad_a": 43251,
+   "norad_b": 46468,
+   "tca_utc": "2026-09-28T11:01:34.695817Z",
+   "miss_distance_km": 3.8662,
+   "relative_speed_km_s": 13.0106,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.8642
+  },
+  {
+   "norad_a": 43569,
+   "norad_b": 46450,
+   "tca_utc": "2026-09-28T23:54:48.281617Z",
+   "miss_distance_km": 3.1673,
+   "relative_speed_km_s": 10.474,
+   "risk_level": "low",
+   "linear_estimate_miss_km": 3.1671
+  }
+ ],
+ "co_located_pairs": [
+  {
+   "norad_a": 30276,
+   "norad_b": 30640,
+   "min_separation_km": 1.7236,
+   "samples_within_threshold": 5
+  }
+ ]
+}
