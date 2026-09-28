@@ -97,5 +97,6 @@ worthwhile.
   deployment sizing should use the memory numbers above, not these wall-clock times.
 - Reproduce with `uv run python scripts/scaling_spike.py`, followed by
   `uv run python scripts/coarse_filter_headroom.py`. The frozen snapshot lives in
-  `cache/scaling-spike/` (gitignored, about 16 MB, deliberately not committed). Delete it to
-  re-freeze.
+  `cache/scaling-spike/` (gitignored, about 16 MB, deliberately not committed). Its identity
+  (window start, record counts, file hashes) and the deliberate re-freeze policy are in
+  `scripts/README.md`.

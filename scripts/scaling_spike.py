@@ -5,7 +5,9 @@
 The first run fetches CelesTrak's `active` and `fengyun-1c-debris` groups (GP + SATCAT) exactly
 once into `cache/scaling-spike/` and pins the window start in a manifest. Every later run is served
 from that frozen copy with network access blocked, so repeated timing runs never re-pull the large
-`active` feed and all measure identical inputs. Delete `cache/scaling-spike/` to re-freeze.
+`active` feed and all measure identical inputs. The snapshot is gitignored and never committed.
+Re-freezing (deleting `cache/scaling-spike/`) is a deliberate, separate step that produces a new
+measurement: see scripts/README.md, which also records the snapshot behind ADR 0007's numbers.
 
 This never touches `config/screening.yaml`'s demo scope: groups, cache dir and report dir are
 overridden here only. Each invocation is one pipeline run in a fresh process, so
