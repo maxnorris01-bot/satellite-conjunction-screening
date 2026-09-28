@@ -11,15 +11,13 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 - [ ] **Max:** start the Space-Track.org account registration. Approval timing is unknown. It's no
       longer needed for SATCAT metadata (CelesTrak covers that), but it's still wanted for a
       supplemental feed and for CDM cross-validation.
-- [ ] Session 2: implement ADR 0003's KD-tree fine filter (same `screen_conjunctions` signature).
-      Validate it flags the exact same encounters as the naive version on the session-1 scope
-      before trusting it.
-- [ ] Session 2: implement ADR 0003's coarse perigee/apogee filter. Validate that it never drops a
-      pair the naive screen flags.
+- [ ] Session 2 Step B: scaling spike. Measure the KD-tree pipeline at larger scope (CelesTrak
+      `active` + major debris groups, or GP `GROUP=all` if fair use allows). That measurement
+      decides whether Step C is needed, and it's also ADR 0005's deployment input.
+- [ ] Session 2 Step C (only if Step B shows it's needed): ADR 0003's coarse perigee/apogee filter.
+      Validate that it never drops a pair the unfiltered screen flags.
 - [ ] Time-chunked propagation, so full-catalog position/velocity arrays don't need about 2 GB at
       once.
-- [ ] Measure the full-catalog run (CelesTrak `active` + major debris groups, or GP `GROUP=all`
-      if fair use allows) once the KD-tree lands. That measurement is ADR 0005's deployment input.
 
 ## Later
 
@@ -43,6 +41,11 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Completed (most recent first)
 
+- [x] 2026-09-27 - Session 2 Step A: KD-tree fine filter (`cKDTree.query_pairs` per timestep).
+      Exact parity with the naive version on the frozen default-scope snapshot (509 conjunctions,
+      0/31/478, closest active 1.29 km). Screening went from 26.4 s to 2.9 s (median of 3) and the
+      pipeline from about 26 s to about 5.3 s. See
+      `docs/sessions/2026-09-27-session-2a-kdtree-fine-filter.md`.
 - [x] 2026-09-27 - Switched the default demo scope to `iridium-NEXT` + `fengyun-1c-debris`, dropped
       Cosmos-1408 from the spec, and added README Known failures (no live `high` example yet).
       The new default flagged 509 encounters (0 high, 31 moderate, 478 low) in 26 s.
