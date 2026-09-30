@@ -1,0 +1,19 @@
+{
+ "fetched_at": "2026-09-30T23:00:00+00:00",
+ "payload": [
+  {
+   "OBJECT_NAME": "SYN ACTIVE A",
+   "OBJECT_ID": "2099-001A",
+   "NORAD_CAT_ID": 91001,
+   "OBJECT_TYPE": "PAY",
+   "OPS_STATUS_CODE": "+"
+  },
+  {
+   "OBJECT_NAME": "SYN DEBRIS B",
+   "OBJECT_ID": "2099-002A",
+   "NORAD_CAT_ID": 91002,
+   "OBJECT_TYPE": "DEB",
+   "OPS_STATUS_CODE": ""
+  }
+ ]
+}

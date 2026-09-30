@@ -1,0 +1,33 @@
+{
+ "fetched_at": "2026-09-30T23:00:00+00:00",
+ "payload": [
+  {
+   "OBJECT_NAME": "SYN DEBRIS A",
+   "OBJECT_ID": "2099-071A",
+   "NORAD_CAT_ID": 91071,
+   "OBJECT_TYPE": "DEB",
+   "OPS_STATUS_CODE": ""
+  },
+  {
+   "OBJECT_NAME": "SYN DEBRIS B",
+   "OBJECT_ID": "2099-072A",
+   "NORAD_CAT_ID": 91072,
+   "OBJECT_TYPE": "DEB",
+   "OPS_STATUS_CODE": ""
+  },
+  {
+   "OBJECT_NAME": "SYN DEBRIS C",
+   "OBJECT_ID": "2099-073A",
+   "NORAD_CAT_ID": 91073,
+   "OBJECT_TYPE": "DEB",
+   "OPS_STATUS_CODE": ""
+  },
+  {
+   "OBJECT_NAME": "SYN DEBRIS D",
+   "OBJECT_ID": "2099-074A",
+   "NORAD_CAT_ID": 91074,
+   "OBJECT_TYPE": "DEB",
+   "OPS_STATUS_CODE": ""
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "scenario": "co-located-and-stale",
+ "group": "eval-co-located-and-stale",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "An active payload with a twin 0.3 km ahead in the same orbit (co-located: reported separately, never risk-rated), plus a debris object on a 1 km crossing with it whose elements are 20 days old (must be dropped as stale, so no conjunction).",
+ "designed": [
+  {
+   "pair": [
+    91061,
+    91062
+   ],
+   "co_located": true,
+   "separation_km": 0.3
+  },
+  {
+   "pair": [
+    91061,
+    91063
+   ],
+   "t_s": 12000.0,
+   "miss_km": 1.0,
+   "stale_days": 20
+  }
+ ]
+}

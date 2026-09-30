@@ -1,0 +1,7 @@
+{
+ "scenario": "crowd-oracle",
+ "group": "eval-crowd-oracle",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "40 objects converging on 4 hubs from random planes. No hand-picked expectations: every sub-threshold encounter the dense oracle finds must be found by the screener, and nothing else.",
+ "designed": []
+}

@@ -1,0 +1,16 @@
+{
+ "scenario": "missing-satcat-counts-as-active",
+ "group": "eval-missing-satcat-counts-as-active",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Debris vs an object with no SATCAT record, 0.5 km miss at hypervelocity. Unknown status counts as possibly active (ADR 0004), so this rates high where the debris-debris scenario rates moderate.",
+ "designed": [
+  {
+   "pair": [
+    91031,
+    91032
+   ],
+   "t_s": 15021.0,
+   "miss_km": 0.5
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "scenario": "high-tier-hypervelocity",
+ "group": "eval-high-tier-hypervelocity",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Active payload vs debris, 0.4 km miss at hypervelocity. The default demo scope has never produced a live `high`; this exercises that path end to end.",
+ "designed": [
+  {
+   "pair": [
+    91011,
+    91012
+   ],
+   "t_s": 13333.0,
+   "miss_km": 0.4
+  }
+ ]
+}
