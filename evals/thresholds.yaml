@@ -1,13 +1,13 @@
-# Starting points, not standards. Tune per project, and change only in dedicated commits.
-# These numbers are guesses until validated against a real `make eval-fast-live` run - the first
-# project built from this template needed max_latency_p95_s raised twice (an initial 2.0s guess
-# turned out unrealistic for any live model call, let alone a multi-step agent one) and
-# max_cost_usd raised once, both only after real measurement. See docs/lessons-learned.md.
-min_pass_rate: 0.90
+# Eval gates. Change only in dedicated commits, never alongside the change they'd excuse.
+#
+# The screening pipeline is deterministic (frozen inputs, no LLM calls), so every case must pass: a
+# failing case is a bug, not noise. The template's 0.90 was sized for LLM run-to-run variance and
+# would let one broken case in ten through. See docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md.
+min_pass_rate: 1.0
+# Per-case pipeline wall-clock (not the oracle's). The frozen default-scope snapshot takes ~1.3 s on
+# an Apple Silicon Mac and ~5 s on the Intel i5 behind ADR 0007's numbers; 30 s leaves headroom
+# for slow CI runners while still catching an order-of-magnitude regression.
 max_latency_p95_s: 30.0
+# No LLM calls, so cost is always $0. Kept so that a future LLM step's spend is gated from day one.
 max_mean_cost_usd: 0.10
-# Bounds this run's TOTAL spend across every case, on top of Config.max_cost_usd (which only
-# bounds one case at a time - see evals/run.py). A guess like everything else here - tune it to
-# roughly (max_mean_cost_usd * expected case count) with headroom, not a number pulled from thin
-# air. This is a CI-time backstop; it doesn't replace a real spend limit on the API account itself.
 max_total_cost_usd: 5.00
