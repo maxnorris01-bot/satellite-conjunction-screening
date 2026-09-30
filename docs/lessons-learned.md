@@ -109,6 +109,25 @@ behavior change. No other issues found.
 
 ---
 
+## From: Satellite Conjunction Screening, 2026-09-29
+
+### Gaps found in this template
+
+1. **The eval harness assumes the project is an LLM app. `[NOT APPLIED]`** `evals/run.py` scores
+   `app.pipeline.run(text)` with `expected_contains` string matching, and its metrics and
+   `known-unstable/` convention are built around model variance. A project whose core is
+   deterministic (this one makes no LLM calls) gets a harness that passes vacuously for sessions
+   before anyone notices. Suggest the template say up front that the harness is one shape among
+   several, and that a deterministic project should replace `score_case` with its own checks and
+   set `min_pass_rate: 1.0`. This project's version (oracle-checked scenarios plus named cases) is
+   in `evals/` and ADR 0008.
+2. **`make format` stops before formatting. `[NOT APPLIED]`** It runs `ruff check --fix` and then
+   `ruff format`, and make aborts on the first command's non-zero exit. That happens whenever an
+   unfixable lint error (for example, a long line) remains, which is exactly when formatting would
+   have shortened most of them. Fix: run `ruff format` first, or prefix the check with `-`.
+
+---
+
 ## Workspace note (resolved)
 
 `~/Desktop/Projects/ai-project-template/` - the stale, untracked duplicate of this repo noted

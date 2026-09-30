@@ -23,21 +23,23 @@ test:
 screen:
 	uv run python -m app.cli $(ARGS)
  
-# Free, no API key needed: exercises routing/shape/tracing/budget against a mock client.
-# Not a quality signal - see evals/run.py's docstring. This is the default; APP_LLM_MODE is
-# forced here so a stray `APP_LLM_MODE=live` in .env can't make a "fast" run silently cost money.
+# Screening evals (evals/README.md): the real pipeline on frozen synthetic scenarios, checked against
+# a brute-force oracle, plus named encounters from the frozen real-data snapshot. No network, no LLM
+# calls, $0. APP_LLM_MODE is still forced to mock so that a future LLM step can't make a "fast" run
+# silently cost money.
 eval-fast:
-	APP_LLM_MODE=mock uv run python -m evals.run --tier fast
- 
-# Costs real API money. Run deliberately, not routinely.
+	APP_LLM_MODE=mock APP_TRACING_DISABLED=1 uv run python -m evals.run --tier fast
+
+# The pipeline makes no LLM calls, so there's no live variant to run: this target says so and runs
+# the same free suite. Give it a real live mode if an LLM step (e.g. report summaries) is ever added.
 eval-fast-live:
-	APP_LLM_MODE=live uv run python -m evals.run --tier fast
- 
-# NOTE: unlike fast/fast-live, these two don't force a mode - they inherit whatever APP_LLM_MODE
-# is set to (mock by default). Worth adding the same explicit mock/live split before either is
-# used for real - see docs/lessons-learned.md, this is a known, still-open gap.
+	@echo "No LLM calls in this pipeline: eval-fast-live runs the same free suite as eval-fast."
+	APP_LLM_MODE=mock APP_TRACING_DISABLED=1 uv run python -m evals.run --tier fast
+
+# Same suite at larger tiers (all cases fit in fast today). Mode is forced to mock for the same
+# reason as eval-fast.
 eval-standard:
-	uv run python -m evals.run --tier standard
- 
+	APP_LLM_MODE=mock APP_TRACING_DISABLED=1 uv run python -m evals.run --tier standard
+
 eval-nightly:
-	uv run python -m evals.run --tier nightly
+	APP_LLM_MODE=mock APP_TRACING_DISABLED=1 uv run python -m evals.run --tier nightly

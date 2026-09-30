@@ -1,0 +1,16 @@
+{
+ "scenario": "slow-crossing",
+ "group": "eval-slow-crossing",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Two active payloads crossing at a shallow angle (headings about 4 degrees apart at 60N): a 0.5 km miss at about 0.5 km/s. Sub-1 km with an active payload, but below hypervelocity, so moderate. Still a crossing, not co-located.",
+ "designed": [
+  {
+   "pair": [
+    91051,
+    91052
+   ],
+   "t_s": 7777.0,
+   "miss_km": 0.5
+  }
+ ]
+}

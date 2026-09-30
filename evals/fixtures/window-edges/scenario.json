@@ -1,0 +1,24 @@
+{
+ "scenario": "window-edges",
+ "group": "eval-window-edges",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Debris crossings 25 s after the window opens and 25 s before it closes, each 1.5 km. Both must be found; neither may be extrapolated past the window.",
+ "designed": [
+  {
+   "pair": [
+    91071,
+    91072
+   ],
+   "t_s": 25.0,
+   "miss_km": 1.5
+  },
+  {
+   "pair": [
+    91073,
+    91074
+   ],
+   "t_s": 21575.0,
+   "miss_km": 1.5
+  }
+ ]
+}

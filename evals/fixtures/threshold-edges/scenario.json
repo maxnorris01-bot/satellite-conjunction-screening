@@ -1,0 +1,24 @@
+{
+ "scenario": "threshold-edges",
+ "group": "eval-threshold-edges",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Two debris pairs either side of the 5 km threshold: 4.7 km (flagged, low) and 5.3 km (not flagged). Same-altitude pairs meet again half an orbit (~50 min) later at a drifted miss that can fall under 5 km, so the designed passes are 5 minutes apart and this scenario's case uses a short window (00:40-01:16Z) that excludes the re-encounters.",
+ "designed": [
+  {
+   "pair": [
+    91041,
+    91042
+   ],
+   "t_s": 3601.0,
+   "miss_km": 4.7
+  },
+  {
+   "pair": [
+    91043,
+    91044
+   ],
+   "t_s": 3903.0,
+   "miss_km": 5.3
+  }
+ ]
+}

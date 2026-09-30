@@ -1,0 +1,16 @@
+{
+ "scenario": "debris-debris-subkm",
+ "group": "eval-debris-debris-subkm",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Debris vs debris, 0.6 km miss at hypervelocity: sub-1 km but no active payload, so moderate, not high.",
+ "designed": [
+  {
+   "pair": [
+    91021,
+    91022
+   ],
+   "t_s": 5000.5,
+   "miss_km": 0.6
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "scenario": "between-samples-crossing",
+ "group": "eval-between-samples-crossing",
+ "window_start_utc": "2026-10-01T00:00:00Z",
+ "purpose": "Active payload vs debris, 2.0 km miss at a TCA 37 s past a sample. A sample-only distance check misses it; the screener must find it and rate it moderate (active payload, miss under 2.5 km).",
+ "designed": [
+  {
+   "pair": [
+    91001,
+    91002
+   ],
+   "t_s": 8257.0,
+   "miss_km": 2.0
+  }
+ ]
+}

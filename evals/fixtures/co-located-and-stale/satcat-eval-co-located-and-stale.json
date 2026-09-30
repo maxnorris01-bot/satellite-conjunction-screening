@@ -1,0 +1,26 @@
+{
+ "fetched_at": "2026-09-30T23:00:00+00:00",
+ "payload": [
+  {
+   "OBJECT_NAME": "SYN ACTIVE A",
+   "OBJECT_ID": "2099-061A",
+   "NORAD_CAT_ID": 91061,
+   "OBJECT_TYPE": "PAY",
+   "OPS_STATUS_CODE": "+"
+  },
+  {
+   "OBJECT_NAME": "SYN ACTIVE A TWIN",
+   "OBJECT_ID": "2099-062A",
+   "NORAD_CAT_ID": 91062,
+   "OBJECT_TYPE": "PAY",
+   "OPS_STATUS_CODE": "+"
+  },
+  {
+   "OBJECT_NAME": "SYN STALE DEBRIS",
+   "OBJECT_ID": "2099-063A",
+   "NORAD_CAT_ID": 91063,
+   "OBJECT_TYPE": "DEB",
+   "OPS_STATUS_CODE": ""
+  }
+ ]
+}
