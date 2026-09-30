@@ -17,11 +17,11 @@
 
 ## Results
 
-Every claim below is backed by a reproducible run. Reports live in [`evals/reports/`](evals/reports/).
+Every claim below is backed by a reproducible run. `make eval-fast` writes its report to `evals/reports/` (git-ignored).
 
 | Claim | Evidence | Result |
 |-------|----------|--------|
-| Meets task quality bar | Fast eval tier, N cases | _TBD_ |
+| **Finds every encounter an independent oracle finds** | `make eval-fast`: 9 engineered SGP4 scenarios checked against a brute-force 1 s oracle, plus 3 named-encounter cases on the frozen default-scope snapshot ([ADR 0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md)) | 12/12 cases pass. Oracle recall 1.0 (359/359 encounters), miss error at most 0.1 m, TCA error at most 0.5 ms |
 | Improvement over baseline | Baseline vs. current on same cases | _TBD_ |
 | Handles failures gracefully | Reproducible timeout/error cases | _TBD_ |
 | Cost and latency | Measured per run, p50/p95 | _TBD_ |
@@ -29,9 +29,9 @@ Every claim below is backed by a reproducible run. Reports live in [`evals/repor
 | Scales to an active-catalog scope (scale test, not the demo) | One-off `scripts/scaling_spike.py`, CelesTrak `active` + `fengyun-1c-debris`, frozen snapshot, median of 3 runs | 18,526 objects, ~140 s per 24 h window, 2.2 GB peak. See [Scale test](#scale-test-active-catalog-18526-objects) below |
 
 The default demo scope is the documented example; the scale test is an extra data point about
-performance at about 9x the object count. Screening evidence lives in `docs/sessions/` and
-`docs/adr/`, not `evals/reports/`: the pipeline makes no LLM calls, so the template's eval harness
-doesn't exercise it.
+performance at about 9x the object count. Timing figures in this section come from an Intel
+i5-6267U with 8 GB RAM (see ADR 0007). The eval harness's own latency numbers come from whatever
+machine runs it.
 
 ### Scale test: active catalog (18,526 objects)
 
@@ -98,8 +98,8 @@ flowchart LR
     A[Input] --> B[Step 1] --> C[Step 2] --> D[Output]
 ```
 
-Every LLM call is wrapped in `app.llm.complete` (or, for anything not yet wired to a real model,
-still logged via `app.tracing.span` directly - see `app.pipeline.run`), tagged with its prompt
+Every LLM call is wrapped in `app.llm.complete` (none exist yet - the screening pipeline logs its
+steps via `app.tracing.span` directly, see `app.conjunction_pipeline`), tagged with its prompt
 name and version, tokens, and cost. The whole `run()` call is metered by `app.llm.Budget` against
 `Config.max_steps` / `max_cost_usd`; exceeding either raises `BudgetExceededError` rather than
 truncating silently.
@@ -113,7 +113,7 @@ git clone https://github.com/OWNER/REPO && cd REPO
 cp .env.example .env        # add ANTHROPIC_API_KEY if you'll run anything live (see below)
 make install
 make test
-make eval-fast               # mock mode, default - free, no key required
+make eval-fast               # screening evals on frozen data - free, no key required
 ```
 
 ### Mock vs. live
@@ -126,28 +126,27 @@ exercise routing, tracing, and budget accounting, but it has no real-world knowl
 values are generic placeholders, not reasoned about. **A passing mock run is a plumbing signal,
 not a quality signal.**
 
-Only `make eval-fast-live` (or `APP_LLM_MODE=live`) calls the real API and costs real money. Run
-it deliberately, not routinely - see Evaluation below.
+Nothing in this project calls the API today: the screening pipeline makes no LLM calls, and
+`make eval-fast-live` runs the same free suite as `make eval-fast`. `APP_LLM_MODE=live` only
+matters if an LLM step is added later.
 
 ## Evaluation
 
-| Tier | When | Size | Cost | Command |
-|------|------|------|------|---------|
-| fast (mock) | every PR, routinely | ~10-15 cases | free | `make eval-fast` |
-| fast (live) | deliberately, not routinely | ~10-15 cases | real API cost | `make eval-fast-live` |
-| standard | CI on main | ~50 cases | real API cost | `make eval-standard` |
-| nightly | scheduled | 100+ cases | real API cost | `make eval-nightly` |
+`make eval-fast` runs the real pipeline on frozen inputs with the network blocked. It makes no LLM
+calls, so it's free, and `make eval-fast-live` just runs the same suite. Details are in
+[`evals/README.md`](evals/README.md) and the design is in
+[ADR 0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md).
 
-- Cases live in `evals/cases/` and change through PRs like code. Cases the model itself proves
-  unstable on across identical live runs move to `evals/cases/known-unstable/` instead of gating
-  CI on a coin flip - see `evals/README.md` and that directory's own `README.md`.
-- Thresholds live in `evals/thresholds.yaml`; CI fails if they're missed. They start as guesses -
-  see that file's own comment - and should get tuned in their own dedicated commits once you have
-  real measurements, not left at their starting values indefinitely.
-- LLM-as-judge rubrics live in `evals/rubrics/` and are validated against a human-labeled gold set (see `evals/README.md`).
-- `eval-standard` and `eval-nightly` don't yet have mock-forced/live-forced variants the way
-  `eval-fast`/`eval-fast-live` do - they inherit whatever `APP_LLM_MODE` is set to (mock by
-  default). Worth adding the same explicit split before either is used for real.
+- **Known-answer cases:** small engineered catalogs (a crossing between samples, a sub-1 km
+  hypervelocity pass, threshold and window edges, a slow crossing, a co-located twin, a stale
+  element set, missing SATCAT, a 40-object crowd). Each checks risk levels and misses, and each is
+  checked against a brute-force oracle: raw SGP4 on a 1 s grid, every pair, every sample.
+- **Named-encounter cases:** specific, human-checked facts from the frozen default-scope snapshot
+  (closest active-payload pass, co-located pair, stale drops).
+- **Gates** in `evals/thresholds.yaml`: every case must pass (the pipeline is deterministic),
+  p95 latency under 30 s.
+- Cases, thresholds and fixtures change only in their own commits, never to make a failing eval
+  pass.
 
 ## Known failures and limitations
 
@@ -182,8 +181,8 @@ does not replace or match CSpOC's operational conjunction assessments.
 
 ## Security and cost notes
 
-- Every entry point defaults to `APP_LLM_MODE=mock` (zero cost, no key required); only an explicit
-  `live` override (or `make eval-fast-live`) spends real money - see Mock vs. live above.
+- Every entry point defaults to `APP_LLM_MODE=mock` (zero cost, no key required). No code path
+  calls the API today; see Mock vs. live above.
 - Secrets are read from environment variables; nothing sensitive is committed.
 - Untrusted inputs: describe how they're handled.
 - Agent loops have step and cost caps (`src/app/config.py`) - both are guesses until validated

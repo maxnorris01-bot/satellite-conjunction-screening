@@ -13,8 +13,6 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Replace the template's placeholder eval harness (`evals/`, `app.pipeline`) with screening
-      regression cases, e.g. a frozen GP snapshot plus the expected encounters.
 - [ ] Dashboard view over the JSON report.
 - [ ] README: project boundary section (heuristic risk, not Pc, per ADR 0004), results, quickstart.
 - [ ] Scheduled daily fetch+screen run with report and snapshot storage plus a retention window
@@ -37,6 +35,9 @@ list yet - see that decision entry.*
 
 ## Lower priority / opportunistic
 
+- [ ] Add eval scenarios beyond the single 780 km circular shell: eccentric orbits, mixed-altitude
+      crossings (ADR 0008's consequences).
+
 - [ ] Flag co-located pairs whose separation trends toward zero (see ADR 0006's consequences).
 - [ ] Cross-check a few flagged encounters against CelesTrak SOCRATES for the same window, as a
       correctness spot-check.
@@ -44,6 +45,12 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-09-29 - Replaced the placeholder eval harness with screening evals: 9 engineered SGP4
+      scenarios checked against a brute-force 1 s oracle, plus 3 named-encounter cases on the frozen
+      snapshot. 12/12 pass, oracle recall 1.0 (359 encounters), miss error at most 0.1 m. A
+      mutation check confirmed that four deliberate breakages each fail cases. Surprise: the first
+      scenario build set the miss offset sideways instead of radially, which only moved the TCA,
+      and the oracle caught it. See ADR 0008 and `docs/sessions/2026-09-29-screening-eval-harness.md`.
 - [x] 2026-09-30 - Max registered a Space-Track.org account (wanted for a supplemental feed and CDM cross-validation, no longer needed for SATCAT metadata since CelesTrak covers that).
 
 - [x] 2026-09-28 - Session 2 Step B: scaling spike at 18,526 objects (`active` + Fengyun-1C,

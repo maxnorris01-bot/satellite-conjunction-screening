@@ -10,6 +10,18 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-29 - Eval harness replaced: oracle-checked synthetic scenarios plus named real-data
+encounters.** The template's harness scored an echo placeholder, so every `make eval-fast` pass so
+far measured nothing. Max picked this design over "named encounters on the snapshot only" (no
+independent correctness check, overlaps the parity test) and "an oracle recall metric on real data"
+(slow, and no control over which edge cases occur). Nine engineered scenarios run the real pipeline
+and must match a brute-force 1 s SGP4 oracle exactly. Three more cases pin human-checked facts on
+the frozen default-scope snapshot. Max also picked removing the placeholder (`app.pipeline`, the
+example case/rubric, `known-unstable/`) while keeping `app.llm`, `app.mock_llm` and `prompts/` as
+dormant template infrastructure. `min_pass_rate` went 0.90 -> 1.0 because the pipeline is
+deterministic. Full reasoning: [ADR 0008](adr/adr-0008-screening-evals-oracle-and-named-cases.md).
+Case format and the mutation check that proves the cases can fail: `evals/README.md`.
+
 **2026-09-30 - Longer-term vision locked in (daily history, 3D tracking globe, owner/operator
 filtering, location-based sky view, satellite POV); MVP stays the screening pipeline plus only the
 foundation that vision needs.** Cowork scoping sketched a follow-on product direction: scheduled
@@ -176,6 +188,9 @@ this template, and two different files with the same name invite confusion.
   classified co-located and never rated. See ADR 0006's consequences.
 - **ADR 0001 still says SATCAT metadata comes from Space-Track.** Worth a one-line status note on
   that ADR, since CelesTrak's SATCAT now covers it (see the decision above).
+
+- **Synthetic scenarios cover one shell only.** All nine are circular orbits at 780 km. Eccentric
+  orbits, mixed-altitude crossings and GEO aren't exercised. See ADR 0008's consequences.
 
 ## See also
 
