@@ -1,7 +1,9 @@
 # ADR 0007: The KD-tree alone reaches full-catalog scale on time; the coarse filter is optional, and ADR 0003's element-band design is unsafe as written
 
-**Status:** Proposed (session 2 Step B, 2026-09-28). The conclusion comes from measurement; whether
-and how to build Step C goes back to Cowork before any implementation.
+**Status:** Accepted (Cowork decision, 2026-09-30). Step C and full-catalog scale are not being
+pursued for now - see `docs/working-notes-and-decisions.md`'s 2026-09-30 entry. If full-catalog
+scale becomes a goal later, this ADR's measurements and propagation-derived band design still
+apply.
 
 ## Context
 

@@ -10,6 +10,38 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-09-30 - Longer-term vision locked in (daily history, 3D tracking globe, owner/operator
+filtering, location-based sky view, satellite POV); MVP stays the screening pipeline plus only the
+foundation that vision needs.** Cowork scoping sketched a follow-on product direction: scheduled
+daily fetches with retained history and forward propagation ("where will this be tomorrow" is
+already free - it's just `propagate_orbits` with tomorrow's window), a 3D globe showing all tracked
+objects, filtering by owner/operator (SpaceX, USA, etc.), a browser-geolocation sky view with
+per-satellite visibility/pass predictions, and a camera view from a selected satellite looking back
+at Earth. None of this needs an LLM call, so it's still consistent with the MVP tier's zero-AI-cost
+framing - but it's a real scope expansion beyond a batch screening tool, closer to its own flagship
+project than a quick MVP entry, so it's being tracked as a deliberate decision rather than drifted
+into.
+
+Decision: finish the collision-tracker polish already on the to-do list (eval harness, dashboard,
+README), and build only the foundation every one of those future features would need regardless of
+which get built: (1) scheduled daily fetch+screen runs with report and snapshot storage plus a
+retention window (this is ADR 0005's deployment decision, now with concrete purpose - see ADR 0005
+update), (2) SATCAT owner/operator metadata joined onto each tracked object, (3) a small API layer
+serving the current report and recent history, replacing the static-file approach (this is also the
+seam `portfolio-site`'s satellite tab would eventually read from instead of its hardcoded data
+file - see that repo's `Portfolio_Site_Plan.md`). The 3D globe, sky view, and satellite-POV camera
+are explicitly NOT being built yet.
+
+Gate: once the foundation is in place - especially the API/deployment piece, the one item here with
+real effort behind it - re-assess. If extending toward the visualization vision looks easy from
+there, keep going. If it's a significant lift, close this project out at that point and move to
+City Livability Scoring Tool's MVP instead, per the roadmap's tiering discipline. This mirrors
+`Engineering_Standards.md`'s "validate before building out scope" lesson from Claim Verification
+Agent.
+
+This also resolves ADR 0007's open question: Step C (the coarse filter) and full-catalog scale are
+**not being pursued for now** - see that ADR's status update.
+
 **2026-09-28 - Schema-version rule changed: bump only on breaking changes.** From now on,
 `REPORT_SCHEMA_VERSION` is bumped only when an existing report field is **renamed, removed, or has
 its meaning changed**. Purely additive new fields don't bump it: a consumer that ignores unknown

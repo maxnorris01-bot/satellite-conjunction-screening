@@ -8,24 +8,32 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Up next (in priority order)
 
-- [ ] **Cowork decision:** review ADR 0007. Is Step C wanted as an optional optimization, and is
-      full-catalog scale a goal on this machine at all?
-- [ ] Time-chunked propagation and screening. Per ADR 0007 this is the binding constraint at full
-      catalog, not Step C: about 3.5 GB peak is projected at ~30k objects, against 2.2 GB measured
-      at 18.5k. The report needs streaming or a cap too (76 MB at 64k conjunctions).
-- [ ] Step C, only if Cowork wants it: a coarse filter using ADR 0007's propagation-derived band,
-      not ADR 0003's mean-element band, which drops real conjunctions. Validate zero wrongly
-      dropped conjunctions against the Step B snapshot and the regression test.
-
-## Later
+*Phase per the 2026-09-30 decision in `docs/working-notes-and-decisions.md`: finish collision-tracker
+polish, then build only the foundation a possible later visualization product would need. Full
+scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
+list yet - see that decision entry.*
 
 - [ ] Replace the template's placeholder eval harness (`evals/`, `app.pipeline`) with screening
       regression cases, e.g. a frozen GP snapshot plus the expected encounters.
 - [ ] Dashboard view over the JSON report.
 - [ ] README: project boundary section (heuristic risk, not Pc, per ADR 0004), results, quickstart.
-- [ ] Containerization and a scheduled run (ADR 0005). Pick Fly.io/VPS cron vs. Lambda using
-      measured runtime and memory.
+- [ ] Scheduled daily fetch+screen run with report and snapshot storage plus a retention window
+      (ADR 0005's deployment decision, now with concrete purpose). Pick Fly.io/VPS cron vs. Lambda
+      using the measured runtime/memory numbers from ADR 0007.
+- [ ] SATCAT owner/operator metadata joined onto each tracked object (needed for any future
+      "filter by owner" feature; extends the existing active-vs-debris SATCAT join).
+- [ ] Small API layer serving the current report and recent history, replacing the static-file
+      approach. This is the foundation-gate item: if this turns out easy, the visualization vision
+      stays realistic; if it's a significant lift, bank what's built and move to City Livability
+      Scoring Tool's MVP instead.
+
+## Later
+
 - [ ] Add a status note to ADR 0001: SATCAT metadata now comes from CelesTrak.
+- [ ] **Deferred pending the foundation gate above:** 3D globe of all tracked objects (client-side
+      SGP4 via `satellite.js`, fed by the API layer), owner/operator filtering UI, browser-geolocation
+      sky view with per-satellite visibility/pass predictions, and a satellite-POV camera view. See
+      the 2026-09-30 working-notes entry for the full vision and sequencing.
 
 ## Lower priority / opportunistic
 
