@@ -8,9 +8,6 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Up next (in priority order)
 
-- [ ] **Max:** start the Space-Track.org account registration. Approval timing is unknown. It's no
-      longer needed for SATCAT metadata (CelesTrak covers that), but it's still wanted for a
-      supplemental feed and for CDM cross-validation.
 - [ ] **Cowork decision:** review ADR 0007. Is Step C wanted as an optional optimization, and is
       full-catalog scale a goal on this machine at all?
 - [ ] Time-chunked propagation and screening. Per ADR 0007 this is the binding constraint at full
@@ -39,6 +36,7 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-09-30 - Max registered a Space-Track.org account (wanted for a supplemental feed and CDM cross-validation, no longer needed for SATCAT metadata since CelesTrak covers that).
 
 - [x] 2026-09-28 - Session 2 Step B: scaling spike at 18,526 objects (`active` + Fengyun-1C,
       frozen snapshot). Pipeline 139.8 s against 4.9 s at 1,995 objects; survivor math is the
