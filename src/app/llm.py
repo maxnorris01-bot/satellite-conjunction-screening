@@ -68,7 +68,7 @@ class LLMOutputError(RuntimeError):
 
 
 class Budget:
-    """Step and cost accounting for one `pipeline.run` call."""
+    """Step and cost accounting for one pipeline run."""
 
     def __init__(self, config: Config) -> None:
         self.config = config

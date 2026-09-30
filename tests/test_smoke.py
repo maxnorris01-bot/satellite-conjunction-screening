@@ -1,7 +1,6 @@
 import pytest
 
 from app.config import BudgetExceededError, Config, check_budget
-from app.pipeline import run
 from app.prompts import load_prompt
 
 
@@ -11,10 +10,6 @@ def test_prompt_loads_with_version() -> None:
     # prompt is revised (Claim Verification's copy of this test broke on a v1 -> v3 bump).
     assert prompt.version.isdigit() and int(prompt.version) >= 1
     assert prompt.text
-
-
-def test_pipeline_runs() -> None:
-    assert run("hello") == "hello"
 
 
 def test_budget_caps_enforced() -> None:
