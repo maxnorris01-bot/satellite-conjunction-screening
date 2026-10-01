@@ -170,9 +170,10 @@ this template, and two different files with the same name invite confusion.
 
 ## Open items / parking lot
 
-- **No live `high`-tier example yet.** High-tier risk logic is verified only by unit tests. It's
-  documented in the README's Known failures section; record the first real example there when one
-  appears.
+- **First live `high` at the default scope: 2026-10-01 (resolved as an open item).** Run
+  `20261001T0222Z-f4a843` flagged IRIDIUM 105 vs. Fengyun-1C fragment 30413 at 0.57 km, 11.8 km/s.
+  Recorded in the README's Known failures. A `high` still appears only in some windows, so the
+  synthetic `high-tier-hypervelocity` eval case remains the guaranteed check of that tier.
 - **One-off 560 s first run, unreproduced.** The very first `python -m app.cli` run (2026-09-27)
   took 560 s wall-clock. The pipeline's own spans totaled 28 s and user CPU was about 25 s, so the
   process sat idle for the rest. Every run since has taken about 24-26 s, which is pipeline time
