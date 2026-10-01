@@ -10,6 +10,17 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-01 - Daily run: Fly.io scheduled Machine -> public Tigris bucket, report + raw snapshot,
+no history.** Cowork picked Fly.io over Lambda and no retention window (reasoning in
+`docs/todo.md`'s item). This session settled the rest. A scheduled Machine (`--schedule daily`,
+`--restart no`, 1 GB, `sjc`) runs `app.publish`, which overwrites `reports/current.json` and
+`snapshots/current/*.json.gz` in a Tigris bucket. Not a volume, because a volume is readable only
+by the one Machine it's attached to. Max chose a **public** bucket, so `portfolio-site` can fetch
+the report directly today, and chose to **publish the raw CelesTrak snapshot** alongside it, so
+any published report is reproducible. A dry run confirmed that re-screening from the published
+snapshot reproduces the report exactly. Full reasoning:
+[ADR 0009](adr/adr-0009-daily-run-on-fly-scheduled-machine.md).
+
 **2026-09-29 - Eval harness replaced: oracle-checked synthetic scenarios plus named real-data
 encounters.** The template's harness scored an echo placeholder, so every `make eval-fast` pass so
 far measured nothing. Max picked this design over "named encounters on the snapshot only" (no
