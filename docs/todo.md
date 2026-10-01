@@ -8,9 +8,6 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Up next (in priority order)
 
-- [ ] Run the one-time Fly setup (README "Daily run") and confirm the first scheduled run publishes:
-      the image builds, `fly logs` shows `"event": "published"`, and the public report URL serves.
-
 *Phase per the 2026-09-30 decision in `docs/working-notes-and-decisions.md`: finish collision-tracker
 polish, then build only the foundation a possible later visualization product would need. Full
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
@@ -43,6 +40,7 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-01 - Ran the one-time Fly setup. Image built (202 MB), scheduled Machine created in sjc, first run published successfully (2,010 objects, 509 conjunctions: 1 high / 32 moderate / 476 low, 5.3 s). Confirmed the public report URL serves real content with a matching run_id. See ADR 0009's verification note.
 - [x] 2026-10-01 - Daily run code: `app.publish` (report + raw CelesTrak snapshot to a public
       Tigris bucket, overwritten each run), Dockerfile, fly.toml, Makefile targets, ADR 0009.
       Verified by local dry run, including that the published snapshot reproduces the report

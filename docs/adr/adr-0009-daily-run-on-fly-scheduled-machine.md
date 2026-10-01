@@ -64,5 +64,8 @@ What remained open was how the run gets triggered and where its output lands.
   Adding history later means writing dated keys alongside `current`, not a redesign.
 - **The fuzzy schedule.** If a consumer ever needs a fixed time, switch to option 2 above or an
   external trigger.
-- **Not verified on Fly yet.** Docker isn't available on the machine where this was written, so
-  the image's first build happens on Fly's remote builder during setup.
+- **Verified on Fly, 2026-10-01.** First setup run: image built via Fly's remote builder (202 MB),
+  scheduled Machine created in `sjc`, and the triggered-on-create run published successfully
+  (`run_id 20261001T0304Z-7f5497`, 2,010 objects, 509 conjunctions - 1 high / 32 moderate / 476
+  low - in 5.3 s). The public URL is `https://<bucket>.fly.storage.tigris.dev/reports/current.json`,
+  confirmed with a direct `curl` returning `200 OK` and the matching `run_id`.

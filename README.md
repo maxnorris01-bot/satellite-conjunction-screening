@@ -204,8 +204,9 @@ fly logs -a satellite-conjunction-screening
 ```
 
 `fly storage create` sets `BUCKET_NAME` and the S3 credentials as app secrets. With a public
-bucket, the report is served at `https://<bucket>.t3.tigrisfiles.io/reports/current.json` (confirm
-the exact host in the `fly storage create` output). **After code changes:** `make fly-build`, then
+bucket, the report is served at `https://<bucket>.fly.storage.tigris.dev/reports/current.json`
+(confirmed 2026-10-01; the raw CelesTrak snapshot is at `snapshots/current/manifest.json` and
+`snapshots/current/*.json.gz`). **After code changes:** `make fly-build`, then
 `make fly-update FLY_MACHINE_ID=<id>` (`fly machine list` shows the id).
 
 ## Evaluation
