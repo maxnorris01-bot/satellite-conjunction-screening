@@ -33,8 +33,8 @@ level.
 - **Not a replacement for CSpOC.** The U.S. Space Force's conjunction data messages (CDMs) on
   Space-Track are the authoritative product. This project deliberately builds its own pipeline
   rather than consuming that feed ([ADR 0001](docs/adr/adr-0001-data-source-and-build-own-screening.md)).
-- **Not real-time.** One scheduled-style batch run per window; there's no streaming ingestion and no
-  alerting.
+- **Not real-time.** One batch run a day (see [Daily run](#daily-run)), with no streaming ingestion,
+  no alerting and no history: each run replaces the previous report.
 
 **How risk levels are assigned.** First matching row wins. Thresholds live in
 `config/screening.yaml` and their reasoning is in
@@ -171,6 +171,43 @@ flowchart LR
 Every step runs inside an `app.tracing.span`, which appends a JSON line (duration, counts, peak
 memory, run id) to `runs/trace.jsonl`.
 
+## Daily run
+
+A Fly.io scheduled Machine runs `python -m app.publish` about once a day. Fly's schedule is
+approximate, with no fixed time of day. Each run screens the default scope with fresh CelesTrak
+data and overwrites three things in a public Tigris bucket:
+
+| Object | Contents |
+|---|---|
+| `reports/current.json` | The report, same format as `make screen`'s |
+| `snapshots/current/{gp,satcat}-<group>.json.gz` | The exact CelesTrak responses behind it, in the regression test's snapshot format |
+| `snapshots/current/manifest.json` | The run id and snapshot file list, to check against the report's `run_id` |
+
+There's no history: yesterday's report is gone once today's lands. A failed run uploads nothing,
+so the previous report stays, and the failure shows in `fly logs` as one JSON line. Design and
+tradeoffs: [ADR 0009](docs/adr/adr-0009-daily-run-on-fly-scheduled-machine.md).
+
+**Dry run locally** (same objects, written to `runs/publish/`, reusing the 2-hour cache):
+
+```bash
+make publish-local
+```
+
+**One-time Fly setup** (needs `flyctl` and `fly auth login`):
+
+```bash
+fly apps create satellite-conjunction-screening
+fly storage create -a satellite-conjunction-screening -n satellite-conjunction-screening --public
+make fly-build                 # remote build, pushes registry.fly.io/satellite-conjunction-screening:<commit>
+make fly-machine-create        # scheduled Machine: daily, no restart, 1 GB, sjc; also runs once now
+fly logs -a satellite-conjunction-screening
+```
+
+`fly storage create` sets `BUCKET_NAME` and the S3 credentials as app secrets. With a public
+bucket, the report is served at `https://<bucket>.t3.tigrisfiles.io/reports/current.json` (confirm
+the exact host in the `fly storage create` output). **After code changes:** `make fly-build`, then
+`make fly-update FLY_MACHINE_ID=<id>` (`fly machine list` shows the id).
+
 ## Evaluation
 
 `make eval-fast` runs the real pipeline on frozen inputs with the network blocked. Details are in
@@ -278,8 +315,11 @@ By design, not a defect: see [Project boundary](#project-boundary).
 
 ## Security and cost notes
 
-- No secrets are needed: CelesTrak requires no account. `.env.example` lists the template's
+- No secrets are needed locally: CelesTrak requires no account. The daily run's bucket credentials
+  exist only as Fly app secrets, set by `fly storage create`. `.env.example` lists the template's
   optional settings; nothing sensitive is committed.
+- The bucket is public on purpose: it holds only the report and CelesTrak data that's already
+  public. The Machine's credentials can write to it; nothing else can.
 - Inputs from CelesTrak are validated: records missing required fields are skipped and recorded,
   and a non-JSON response (for example, a mistyped group name) raises `CelesTrakError`.
 - Requests are cached and rate-limited by design (at most one per group every 2 hours).
@@ -296,10 +336,11 @@ Decision records live in [`docs/adr/`](docs/adr/):
 | [0002](docs/adr/adr-0002-sgp4-library-choice.md) | `sgp4` directly (vectorized `SatrecArray`) rather than `skyfield` |
 | [0003](docs/adr/adr-0003-screening-algorithm-coarse-fine-filter.md) | Coarse filter plus per-timestep KD-tree fine filter (KD-tree shipped) |
 | [0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md) | Risk is a documented heuristic, not a Pc |
-| [0005](docs/adr/adr-0005-deployment-sequencing.md) | Deployment deferred until runtime and memory are measured |
+| [0005](docs/adr/adr-0005-deployment-sequencing.md) | Deployment deferred until runtime and memory are measured (superseded by 0009) |
 | [0006](docs/adr/adr-0006-between-sample-closest-approach-detection.md) | Between-sample closest-approach detection and the co-located split |
 | [0007](docs/adr/adr-0007-coarse-filter-not-required-for-full-catalog.md) | The coarse filter isn't needed for full-catalog runtime; memory is the next limit |
 | [0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md) | Evals: oracle-checked synthetic scenarios plus named real-data encounters |
+| [0009](docs/adr/adr-0009-daily-run-on-fly-scheduled-machine.md) | Daily run on a Fly.io scheduled Machine, publishing to a public Tigris bucket (supersedes 0005) |
 
 The running decisions log is [`docs/working-notes-and-decisions.md`](docs/working-notes-and-decisions.md),
 and per-session write-ups are in [`docs/sessions/`](docs/sessions/).
@@ -307,12 +348,11 @@ and per-session write-ups are in [`docs/sessions/`](docs/sessions/).
 ## What's next
 
 Priorities are in [`docs/todo.md`](docs/todo.md). The current phase finishes the tracker polish and
-then builds only the foundation a later visualization product would need:
+then builds only the foundation a later visualization product would need. The daily run is in
+place (above). Still to come:
 
-1. **A scheduled daily fetch-and-screen run** that stores reports and snapshots with a retention
-   window (ADR 0005's deployment decision, sized from ADR 0007's measured runtime and memory).
-2. **SATCAT owner/operator metadata** joined onto each tracked object.
-3. **A small API** serving the current report and recent history. This is the gate: if it comes
+1. **SATCAT owner/operator metadata** joined onto each tracked object.
+2. **A small API** serving the current report and recent history. This is the gate: if it comes
    easily, the visualization ideas (3D globe, owner filtering, sky view) stay on the table; if it's
    a significant lift, the project closes out there.
 

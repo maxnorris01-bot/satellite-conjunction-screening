@@ -1,0 +1,9 @@
+# Fly app for the scheduled daily screening run (ADR 0009). There are no services and no `fly deploy`
+# of a long-running process: the image is built and pushed with `make fly-build`, and one scheduled
+# Machine runs it about once a day (`fly machine run ... --schedule daily`, see the README's
+# "Daily run" section). Report and snapshot land in the app's Tigris bucket (`fly storage create`).
+app = "satellite-conjunction-screening"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"

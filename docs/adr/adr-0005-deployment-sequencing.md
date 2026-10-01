@@ -1,6 +1,8 @@
 # ADR 0005: Defer containerization/scheduled deployment past session 1
 
-**Status:** Proposed (Cowork scoping session, 2026-09-27)
+**Status:** Proposed (Cowork scoping session, 2026-09-27). **Superseded 2026-10-01 by
+[ADR 0009](adr-0009-daily-run-on-fly-scheduled-machine.md):** with ADR 0007's measurements in hand,
+the daily run is on a Fly.io scheduled Machine publishing to a public Tigris bucket.
 
 ## Context
 

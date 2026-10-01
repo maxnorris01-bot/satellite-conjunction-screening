@@ -8,17 +8,14 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Up next (in priority order)
 
+- [ ] Run the one-time Fly setup (README "Daily run") and confirm the first scheduled run publishes:
+      the image builds, `fly logs` shows `"event": "published"`, and the public report URL serves.
+
 *Phase per the 2026-09-30 decision in `docs/working-notes-and-decisions.md`: finish collision-tracker
 polish, then build only the foundation a possible later visualization product would need. Full
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Scheduled daily fetch+screen run on Fly.io scheduled machines (ADR 0005's deployment
-      decision - Cowork decided 2026-10-01: Fly.io over Lambda, since ADR 0007's numbers (seconds
-      to ~140s, under 2.2 GB) don't need Lambda's scale, and Fly.io avoids standing up a second
-      cloud account's IAM/container-registry surface for no benefit at this size). No retention
-      window: each run overwrites the current report. History/trend storage is explicitly deferred
-      with the rest of the visualization vision, not built speculatively now.
 - [ ] SATCAT owner/operator metadata joined onto each tracked object (needed for any future
       "filter by owner" feature; extends the existing active-vs-debris SATCAT join).
 - [ ] Small API layer serving the current report and recent history, replacing the static-file
@@ -46,6 +43,12 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-01 - Daily run code: `app.publish` (report + raw CelesTrak snapshot to a public
+      Tigris bucket, overwritten each run), Dockerfile, fly.toml, Makefile targets, ADR 0009.
+      Verified by local dry run, including that the published snapshot reproduces the report
+      exactly. **Not yet deployed:** the one-time Fly setup (README "Daily run") is Max's to run;
+      the image has never been built (no Docker locally). See
+      `docs/sessions/2026-10-01-fly-daily-run.md`.
 - [x] 2026-10-01 - README polish: project boundary section (heuristic risk, not Pc), results trimmed
       to real rows with the scale-test detail moved down, quickstart with real live `make screen`
       output, how-it-works diagram, ADR table, current "What's next". Surprise: that live run

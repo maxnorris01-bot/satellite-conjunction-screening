@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "anthropic>=1.7.0",
+    "boto3>=1.43.106",
     "httpx>=0.28.1",
     "numpy>=2.4.6",
     "python-dotenv>=1.2.3",
@@ -22,6 +23,7 @@ dev = [
     "mypy>=1.10",
     "types-PyYAML",
     "pre-commit>=3.7",
+    "boto3-stubs[s3]>=1.43.106",
 ]
 
 [build-system]
