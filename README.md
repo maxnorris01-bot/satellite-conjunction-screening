@@ -1,39 +1,194 @@
-# PROJECT_NAME
+# Satellite Conjunction Screening
 
-> One-sentence pitch: what it does and for whom.
+> Screens public satellite tracking data for close approaches between tracked objects over the
+> next 24 hours, and rates each one with a documented, deliberately simple risk heuristic.
 
-![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
-<!-- Add an eval-score badge once the nightly job publishes one. -->
+![CI](https://github.com/maxnorris01-bot/satellite-conjunction-screening/actions/workflows/ci.yml/badge.svg)
 
-<!-- DEMO: replace with a GIF (docs/demo.gif) or a live link. Keep it under 30 seconds. -->
+It fetches CelesTrak element sets, propagates every object with SGP4, finds every pair that comes
+within 5 km, refines each pass's time and miss distance, and writes a JSON report. The core pipeline
+makes no LLM or other paid API calls.
 
-## What it does (and doesn't)
+## Project boundary
 
-- **Users:** who this is for.
-- **Inputs:** what it accepts.
-- **Outputs:** what it produces.
-- **Out of scope:** what it deliberately does not do.
-- **Data:** public / licensed / synthetic, and where it comes from.
+**What it is.** A batch screener over public GP/TLE data. For a chosen scope (CelesTrak named
+groups; the default demo is Iridium NEXT plus the Fengyun-1C debris cloud, which share a ~780 km
+shell), it reports every predicted pass under the screening threshold in the window, with time of
+closest approach (TCA), miss distance, closing speed, both objects' identity and status, and a risk
+level.
+
+**What it is not.**
+
+- **Not a probability of collision.** Real conjunction assessment computes a Pc from each object's
+  position covariance. Public GP/TLE data carries no covariance, so this tool can't compute one.
+  Risk levels come from a threshold table instead
+  ([ADR 0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md)).
+- **Not operational-grade.** SGP4 position error for fresh LEO elements is roughly 1 km and grows
+  with element age, so miss distances are screening estimates. A 0.3 km and a 1.3 km prediction
+  can't be told apart at this accuracy.
+- **Blind to maneuvers.** Each element set is propagated as if the object never thrusts again, so
+  station-keeping constellations (Starlink especially) can look like they're on collision courses
+  their operators are actively avoiding. See the
+  [scale test](#what-the-2299-high-results-are-and-arent).
+- **Not a replacement for CSpOC.** The U.S. Space Force's conjunction data messages (CDMs) on
+  Space-Track are the authoritative product. This project deliberately builds its own pipeline
+  rather than consuming that feed ([ADR 0001](docs/adr/adr-0001-data-source-and-build-own-screening.md)).
+- **Not real-time.** One scheduled-style batch run per window; there's no streaming ingestion and no
+  alerting.
+
+**How risk levels are assigned.** First matching row wins. Thresholds live in
+`config/screening.yaml` and their reasoning is in
+[`docs/working-notes-and-decisions.md`](docs/working-notes-and-decisions.md).
+
+| Level | Miss distance | Closing speed | Objects |
+|---|---|---|---|
+| `high` | under 1 km | at least 1 km/s | at least one active payload |
+| `moderate` | under 1 km | any | any |
+| `moderate` | under 2.5 km | any | at least one active payload |
+| `low` | under the 5 km screening threshold | any | any |
+
+An object with no SATCAT record counts as possibly active: a screening tool should err toward
+surfacing a pass, not hiding it. Pairs moving slower than 0.1 km/s relative to each other (docked
+vehicles, formation flyers) are reported separately as co-located and never rated. Read `high` as
+"worth a closer look with better data", not "collision risk". Every report carries the same caveat
+in its `limitations` field.
 
 ## Results
 
-Every claim below is backed by a reproducible run. `make eval-fast` writes its report to `evals/reports/` (git-ignored).
+Every row is reproducible from the repo. Correctness comes from `make eval-fast`, which writes its
+report to `evals/reports/` (git-ignored). The other two rows come from pipeline runs on frozen
+CelesTrak snapshots.
 
 | Claim | Evidence | Result |
 |-------|----------|--------|
 | **Finds every encounter an independent oracle finds** | `make eval-fast`: 9 engineered SGP4 scenarios checked against a brute-force 1 s oracle, plus 3 named-encounter cases on the frozen default-scope snapshot ([ADR 0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md)) | 12/12 cases pass. Oracle recall 1.0 (359/359 encounters), miss error at most 0.1 m, TCA error at most 0.5 ms |
-| Improvement over baseline | Baseline vs. current on same cases | _TBD_ |
-| Handles failures gracefully | Reproducible timeout/error cases | _TBD_ |
-| Cost and latency | Measured per run, p50/p95 | _TBD_ |
 | **Screens a real scope end to end (default demo)** | `make screen` on the default scope, CelesTrak `iridium-NEXT` + `fengyun-1c-debris`. Pinned by the frozen-snapshot regression test (`tests/regression/`) | 1,995 objects, 509 conjunctions (0 high / 31 moderate / 478 low), ~5 s per 24 h window, 362 MB peak |
 | Scales to an active-catalog scope (scale test, not the demo) | One-off `scripts/scaling_spike.py`, CelesTrak `active` + `fengyun-1c-debris`, frozen snapshot, median of 3 runs | 18,526 objects, ~140 s per 24 h window, 2.2 GB peak. See [Scale test](#scale-test-active-catalog-18526-objects) below |
+
+**Cost:** $0 per run. No LLM or paid API calls anywhere in the pipeline.
 
 The default demo scope is the documented example; the scale test is an extra data point about
 performance at about 9x the object count. Timing figures in this section come from an Intel
 i5-6267U with 8 GB RAM (see ADR 0007). The eval harness's own latency numbers come from whatever
 machine runs it.
 
-### Scale test: active catalog (18,526 objects)
+## Quickstart
+
+Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No account or API key is needed.
+
+```bash
+git clone https://github.com/maxnorris01-bot/satellite-conjunction-screening
+cd satellite-conjunction-screening
+make install
+make screen          # live CelesTrak data, default scope, 24 h window from now
+```
+
+A real run (2026-10-01, default scope, live CelesTrak data; one `WARNING` line per dropped stale
+element set omitted):
+
+```text
+$ make screen
+report: runs/reports/20261001T0222Z-f4a843.json
+objects screened: 2010 (fetched 2060, dropped 50)
+conjunctions flagged: 515 {'high': 1, 'moderate': 31, 'low': 483}
+co-located pairs (not rated): 3
+timings (s): fetch_tle_data=4.2233, propagate_orbits=0.4334, screen_conjunctions=0.8813, assess_risk=0.0003, write_report=0.0039, total=5.5429
+```
+
+Numbers change with every run: the catalog updates every few hours and the window starts at the
+current minute. The report lands in `runs/reports/<run_id>.json`. Each conjunction record looks like this one, a real pass from the frozen default-scope snapshot
+(`object_a` trimmed):
+
+```json
+{
+  "risk_level": "moderate",
+  "risk_reason": "miss < 2.5 km with an active payload involved",
+  "tca_utc": "2026-09-28T09:44:38.004788Z",
+  "miss_distance_km": 1.2889,
+  "relative_speed_km_s": 14.425,
+  "object_a": { "norad_id": 31471, "name": "FENGYUN 1C DEB", "object_type": "DEB", "...": "..." },
+  "object_b": {
+    "norad_id": 42806,
+    "name": "IRIDIUM 115",
+    "international_designator": "2017-039D",
+    "object_type": "PAY",
+    "ops_status": "+",
+    "active_payload": true,
+    "element_epoch_utc": "2026-09-27T05:49:46.169472Z",
+    "element_age_at_tca_days": 1.163
+  },
+  "screening": {
+    "linear_estimate_miss_km": 1.2894,
+    "linear_estimate_tca_utc": "2026-09-28T09:44:38.000861Z"
+  }
+}
+```
+
+The report also records its window, every parameter used, dropped objects (with reasons),
+co-located pairs and screening diagnostics. `schema_version` changes only on breaking changes.
+
+**Other scopes and windows.** Flags override `config/screening.yaml` for one run:
+
+```bash
+make screen ARGS="--groups stations --window-hours 48"
+make screen ARGS="--threshold-km 10 --step-seconds 30"
+```
+
+CelesTrak responses are cached in `cache/` for 2 hours, matching CelesTrak's update cadence and
+fair-use policy, so re-running within that window makes no network requests.
+
+**Checks** (all offline, no network):
+
+```bash
+make test            # unit tests + frozen-snapshot parity regression
+make eval-fast       # screening evals: oracle-checked scenarios + named encounters
+make lint typecheck
+```
+
+## How it works
+
+```mermaid
+flowchart LR
+    A["fetch_tle_data<br/>CelesTrak GP + SATCAT,<br/>cached 2 h"] --> B["propagate_orbits<br/>vectorized SGP4, 60 s steps,<br/>drops elements > 14 days old"]
+    B --> C["screen_conjunctions<br/>per-step KD-tree radius search,<br/>linear TCA, SGP4 refinement"]
+    C --> D["assess_risk<br/>threshold table"]
+    D --> E["JSON report"]
+```
+
+- **Fetch** (`app.data`): GP elements as OMM JSON (catalog numbers above 99999 don't fit TLE
+  lines) plus SATCAT object type and status, both from CelesTrak with no account.
+- **Propagate** (`app.propagation`): `sgp4`'s vectorized C++ propagator, in the TEME frame (pair
+  separations don't depend on the frame). [ADR 0002](docs/adr/adr-0002-sgp4-library-choice.md).
+- **Screen** (`app.screening`): LEO closing speeds reach ~15 km/s, so at a 60 s step a 5 km pass
+  almost always falls between samples. Each step therefore keeps pairs within
+  `threshold + max_closing_speed x step / 2` (485 km) via a KD-tree, estimates the straight-line
+  closest approach in the half-step around the sample, and refines every candidate with SGP4.
+  [ADR 0003](docs/adr/adr-0003-screening-algorithm-coarse-fine-filter.md),
+  [ADR 0006](docs/adr/adr-0006-between-sample-closest-approach-detection.md).
+- **Assess and report** (`app.risk`, `app.reporting`): the threshold table above, then one JSON
+  file per run.
+
+Every step runs inside an `app.tracing.span`, which appends a JSON line (duration, counts, peak
+memory, run id) to `runs/trace.jsonl`.
+
+## Evaluation
+
+`make eval-fast` runs the real pipeline on frozen inputs with the network blocked. Details are in
+[`evals/README.md`](evals/README.md) and the design is in
+[ADR 0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md).
+
+- **Known-answer cases:** small engineered catalogs (a crossing between samples, a sub-1 km
+  hypervelocity pass, threshold and window edges, a slow crossing, a co-located twin, a stale
+  element set, missing SATCAT, a 40-object crowd). Each checks risk levels and misses, and each is
+  checked against a brute-force oracle: raw SGP4 on a 1 s grid, every pair, every sample.
+- **Named-encounter cases:** specific, human-checked facts from the frozen default-scope snapshot
+  (closest active-payload pass, co-located pair, stale drops).
+- **Parity regression** (`tests/regression/`, part of `make test`): the full default-scope output on
+  a frozen snapshot must not change at all. It's the gate for pure speedups.
+- **Gates** in `evals/thresholds.yaml`: every case must pass (the pipeline is deterministic),
+  p95 latency under 30 s. Cases, thresholds and fixtures change only in their own commits.
+
+## Scale test: active catalog (18,526 objects)
 
 A one-off measurement (session 2 Step B,
 [ADR 0007](docs/adr/adr-0007-coarse-filter-not-required-for-full-catalog.md)). It used CelesTrak
@@ -55,7 +210,7 @@ on an Intel i5-6267U with 8 GB RAM.
 Extrapolated (not measured) to the ~30k-object public catalog, screening time stays around 5
 minutes per window. Memory, not time, becomes the constraint. Details are in ADR 0007.
 
-#### What the 2,299 "high" results are, and aren't
+### What the 2,299 "high" results are, and aren't
 
 **They are not 2,299 near-misses.** They're 2,299 predicted passes that meet the `high` row of a
 threshold table (miss under 1 km, closing speed at least 1 km/s, an active payload involved). The
@@ -89,70 +244,9 @@ This is the limitation [ADR 0004](docs/adr/adr-0004-risk-heuristic-not-probabili
 describes, a heuristic over public data rather than a probability of collision, made visible at
 scale. Read `high` as "worth a closer look with better data", not "collision risk".
 
-## Architecture
-
-<!-- Request-flow diagram (Mermaid or image): input -> steps -> output. Name each LLM call and tool. -->
-
-```mermaid
-flowchart LR
-    A[Input] --> B[Step 1] --> C[Step 2] --> D[Output]
-```
-
-Every LLM call is wrapped in `app.llm.complete` (none exist yet - the screening pipeline logs its
-steps via `app.tracing.span` directly, see `app.conjunction_pipeline`), tagged with its prompt
-name and version, tokens, and cost. The whole `run()` call is metered by `app.llm.Budget` against
-`Config.max_steps` / `max_cost_usd`; exceeding either raises `BudgetExceededError` rather than
-truncating silently.
-
-## Quickstart
-
-Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/).
-
-```bash
-git clone https://github.com/OWNER/REPO && cd REPO
-cp .env.example .env        # add ANTHROPIC_API_KEY if you'll run anything live (see below)
-make install
-make test
-make eval-fast               # screening evals on frozen data - free, no key required
-```
-
-### Mock vs. live
-
-Every entry point (`make eval-fast`, and any script you add) defaults to `APP_LLM_MODE=mock`:
-`app.llm.get_client` returns `app.mock_llm.MockAnthropicClient` instead of the real Anthropic
-client, so nothing hits the network and nothing costs money. The mock auto-generates schema-valid
-responses from whatever `output_config.format.schema` a request passes - real enough in *shape* to
-exercise routing, tracing, and budget accounting, but it has no real-world knowledge: its output
-values are generic placeholders, not reasoned about. **A passing mock run is a plumbing signal,
-not a quality signal.**
-
-Nothing in this project calls the API today: the screening pipeline makes no LLM calls, and
-`make eval-fast-live` runs the same free suite as `make eval-fast`. `APP_LLM_MODE=live` only
-matters if an LLM step is added later.
-
-## Evaluation
-
-`make eval-fast` runs the real pipeline on frozen inputs with the network blocked. It makes no LLM
-calls, so it's free, and `make eval-fast-live` just runs the same suite. Details are in
-[`evals/README.md`](evals/README.md) and the design is in
-[ADR 0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md).
-
-- **Known-answer cases:** small engineered catalogs (a crossing between samples, a sub-1 km
-  hypervelocity pass, threshold and window edges, a slow crossing, a co-located twin, a stale
-  element set, missing SATCAT, a 40-object crowd). Each checks risk levels and misses, and each is
-  checked against a brute-force oracle: raw SGP4 on a 1 s grid, every pair, every sample.
-- **Named-encounter cases:** specific, human-checked facts from the frozen default-scope snapshot
-  (closest active-payload pass, co-located pair, stale drops).
-- **Gates** in `evals/thresholds.yaml`: every case must pass (the pipeline is deterministic),
-  p95 latency under 30 s.
-- Cases, thresholds and fixtures change only in their own commits, never to make a failing eval
-  pass.
-
 ## Known failures and limitations
 
-<!-- Real failures only. For each: the input, what went wrong, how you investigated, status. -->
-
-### No high-risk conjunction at the default demo scope
+### `high` results are rare at the default demo scope
 
 - **Input:** the default scope, CelesTrak `iridium-NEXT` + `fengyun-1c-debris` (about 2,000
   objects), over a 24 h window at a 60 s step with a 5 km screening threshold.
@@ -168,38 +262,67 @@ calls, so it's free, and `make eval-fast-live` just runs the same suite. Details
   involve a Starlink satellite. That confirms the logic triggers on live inputs. It is **not**
   evidence of real collision risk: see
   [What the 2,299 "high" results are, and aren't](#what-the-2299-high-results-are-and-arent).
-- **Status:** open for the default scope. It's a scope choice, not a code defect. Options: add a
-  dense active constellation to the demo scope (at the cost of runtime), or keep the demo small
-  and point to the Step B run as the live `high` example.
+- **Update 2026-10-01:** the first live `high` at the default scope. Run `20261001T0222Z-f4a843`
+  (window from 2026-10-01T02:22Z) flagged IRIDIUM 105 (NORAD 41921, active) vs. a Fengyun-1C
+  fragment (NORAD 30413): 0.57 km at 11.8 km/s, TCA 2026-10-01T22:56:33Z, both element sets about
+  1.5 days old. The same caveats apply as for any `high` here: it's a threshold-table result inside
+  the ~1 km prediction error, not a collision warning.
+- **Status:** mostly resolved. The default scope can produce a `high`, but whether a given run does
+  depends on the window, so a reviewer may still see none. The frozen snapshot behind the tests and
+  the Results table (window 2026-09-28T01:01Z) still has 0 high, and the synthetic
+  `high-tier-hypervelocity` eval case exercises the tier on every run.
 
 ### Risk levels are a heuristic, not a probability of collision
 
-Public GP/TLE data carries no covariance, so risk tiers come from a documented threshold table
-([ADR 0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md)), not a computed Pc.
-Miss distances are screening estimates with roughly km-level error for fresh elements. This tool
-does not replace or match CSpOC's operational conjunction assessments.
+By design, not a defect: see [Project boundary](#project-boundary).
 
 ## Security and cost notes
 
-- Every entry point defaults to `APP_LLM_MODE=mock` (zero cost, no key required). No code path
-  calls the API today; see Mock vs. live above.
-- Secrets are read from environment variables; nothing sensitive is committed.
-- Untrusted inputs: describe how they're handled.
-- Agent loops have step and cost caps (`src/app/config.py`) - both are guesses until validated
-  against a real live run, see `evals/thresholds.yaml`'s comment.
-- `Config.max_cost_usd` bounds one agent run, not a whole eval run's total spend.
-  `evals/thresholds.yaml`'s `max_total_cost_usd` bounds that instead. Neither replaces a real
-  spend limit set on the API account itself - set one there too.
+- No secrets are needed: CelesTrak requires no account. `.env.example` lists the template's
+  optional settings; nothing sensitive is committed.
+- Inputs from CelesTrak are validated: records missing required fields are skipped and recorded,
+  and a non-JSON response (for example, a mistyped group name) raises `CelesTrakError`.
+- Requests are cached and rate-limited by design (at most one per group every 2 hours).
+- The repo inherits an LLM client (`app.llm`, `app.mock_llm`, mock mode by default) from its
+  template. Nothing calls it today; it's there for a possible later summary step.
 
 ## Design decisions
 
-Short decision records live in [`docs/adr/`](docs/adr/). Cross-project lessons - patterns worth
-porting into this template, gaps found while building a real project from it - live in
-[`docs/lessons-learned.md`](docs/lessons-learned.md); check it before starting a new project from
-this template, and add to it when you find the next gap.
+Decision records live in [`docs/adr/`](docs/adr/):
+
+| ADR | Decision |
+|---|---|
+| [0001](docs/adr/adr-0001-data-source-and-build-own-screening.md) | CelesTrak as the source; build the screening pipeline rather than consume Space-Track CDMs |
+| [0002](docs/adr/adr-0002-sgp4-library-choice.md) | `sgp4` directly (vectorized `SatrecArray`) rather than `skyfield` |
+| [0003](docs/adr/adr-0003-screening-algorithm-coarse-fine-filter.md) | Coarse filter plus per-timestep KD-tree fine filter (KD-tree shipped) |
+| [0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md) | Risk is a documented heuristic, not a Pc |
+| [0005](docs/adr/adr-0005-deployment-sequencing.md) | Deployment deferred until runtime and memory are measured |
+| [0006](docs/adr/adr-0006-between-sample-closest-approach-detection.md) | Between-sample closest-approach detection and the co-located split |
+| [0007](docs/adr/adr-0007-coarse-filter-not-required-for-full-catalog.md) | The coarse filter isn't needed for full-catalog runtime; memory is the next limit |
+| [0008](docs/adr/adr-0008-screening-evals-oracle-and-named-cases.md) | Evals: oracle-checked synthetic scenarios plus named real-data encounters |
+
+The running decisions log is [`docs/working-notes-and-decisions.md`](docs/working-notes-and-decisions.md),
+and per-session write-ups are in [`docs/sessions/`](docs/sessions/).
 
 ## What's next
 
-- One design decision I'd revisit:
-- One unresolved limitation:
-- Next planned test:
+Priorities are in [`docs/todo.md`](docs/todo.md). The current phase finishes the tracker polish and
+then builds only the foundation a later visualization product would need:
+
+1. **A scheduled daily fetch-and-screen run** that stores reports and snapshots with a retention
+   window (ADR 0005's deployment decision, sized from ADR 0007's measured runtime and memory).
+2. **SATCAT owner/operator metadata** joined onto each tracked object.
+3. **A small API** serving the current report and recent history. This is the gate: if it comes
+   easily, the visualization ideas (3D globe, owner filtering, sky view) stay on the table; if it's
+   a significant lift, the project closes out there.
+
+There's no standalone dashboard planned: the JSON report is consumed programmatically, and the API
+will serve it.
+
+- **A decision I'd revisit:** the default demo scope. It puts active payloads and debris in the same
+  shell, but a `high` result appears only in some windows (see Known failures).
+- **An unresolved limitation:** no covariance and no maneuver knowledge, so risk stays a heuristic.
+  A real Pc would need covariance from somewhere, such as Space-Track CDMs used as a comparison
+  set, which would be its own ADR.
+- **The next correctness check:** compare a few flagged encounters against CelesTrak SOCRATES for
+  the same window.
