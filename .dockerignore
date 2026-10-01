@@ -1,0 +1,12 @@
+# Only pyproject.toml, uv.lock, README.md, src/ and config/ go into the image (see Dockerfile).
+.git
+.venv
+cache
+runs
+evals
+tests
+scripts
+docs
+prompts
+.env
+**/__pycache__

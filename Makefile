@@ -1,4 +1,4 @@
-.PHONY: install lint format typecheck test screen eval-fast eval-fast-live eval-standard eval-nightly
+.PHONY: install lint format typecheck test screen publish-local fly-build fly-machine-create fly-update eval-fast eval-fast-live eval-standard eval-nightly
  
 install:
 	uv sync
@@ -23,6 +23,30 @@ test:
 screen:
 	uv run python -m app.cli $(ARGS)
  
+# Dry run of the scheduled job (ADR 0009): same pipeline and objects as the Fly run, written to
+# runs/publish/ instead of the bucket. Reuses the normal CelesTrak cache, so it's free to repeat.
+publish-local:
+	uv run python -m app.publish --local-dir runs/publish --cache-dir cache/celestrak
+
+# Fly.io (ADR 0009). Requires flyctl and `fly auth login`. One-time setup is in the README's
+# "Daily run" section. FLY_IMAGE_LABEL defaults to the current commit.
+FLY_APP ?= satellite-conjunction-screening
+FLY_IMAGE_LABEL ?= $(shell git rev-parse --short HEAD)
+FLY_IMAGE = registry.fly.io/$(FLY_APP):$(FLY_IMAGE_LABEL)
+# --restart no: a failed day leaves yesterday's report in place instead of retrying against CelesTrak.
+FLY_MACHINE_FLAGS = --schedule daily --restart no --vm-memory 1024 --region sjc
+
+fly-build:
+	fly deploy --build-only --push --image-label $(FLY_IMAGE_LABEL) -a $(FLY_APP)
+
+fly-machine-create:
+	fly machine run $(FLY_IMAGE) $(FLY_MACHINE_FLAGS) -a $(FLY_APP)
+
+# Point the existing scheduled Machine at a newly built image: make fly-update FLY_MACHINE_ID=<id>
+fly-update:
+	@test -n "$(FLY_MACHINE_ID)" || (echo "set FLY_MACHINE_ID (see: fly machine list -a $(FLY_APP))"; exit 1)
+	fly machine update $(FLY_MACHINE_ID) --image $(FLY_IMAGE) $(FLY_MACHINE_FLAGS) -a $(FLY_APP) --yes
+
 # Screening evals (evals/README.md): the real pipeline on frozen synthetic scenarios, checked against
 # a brute-force oracle, plus named encounters from the frozen real-data snapshot. No network, no LLM
 # calls, $0. APP_LLM_MODE is still forced to mock so that a future LLM step can't make a "fast" run
