@@ -1,7 +1,7 @@
 [project]
 name = "app"
 version = "0.1.0"
-description = "PROJECT_NAME"
+description = "Screens public satellite tracking data for close approaches and rates them with a documented risk heuristic"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
