@@ -13,7 +13,6 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Dashboard view over the JSON report.
 - [ ] README: project boundary section (heuristic risk, not Pc, per ADR 0004), results, quickstart.
 - [ ] Scheduled daily fetch+screen run with report and snapshot storage plus a retention window
       (ADR 0005's deployment decision, now with concrete purpose). Pick Fly.io/VPS cron vs. Lambda
@@ -45,6 +44,7 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-09-30 - Decided not to build a dashboard/report viewer. The JSON report is consumed programmatically (by portfolio-site's data file today, by the planned API layer later); no standalone viewer is needed.
 - [x] 2026-09-29 - Replaced the placeholder eval harness with screening evals: 9 engineered SGP4
       scenarios checked against a brute-force 1 s oracle, plus 3 named-encounter cases on the frozen
       snapshot. 12/12 pass, oracle recall 1.0 (359 encounters), miss error at most 0.1 m. A
