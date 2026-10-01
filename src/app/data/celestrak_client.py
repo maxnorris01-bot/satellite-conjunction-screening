@@ -1,4 +1,4 @@
-"""`fetch_tle_data` primary path: CelesTrak GP (elements) + SATCAT (object type/status) data.
+"""`fetch_tle_data` primary path: CelesTrak GP (elements) + SATCAT (type/status/owner) data.
 
 No account or auth. Both endpoints are cached on disk for `cache_ttl_hours` (see `tle_cache`).
 """
@@ -178,6 +178,7 @@ def fetch_tle_data(
                 obj,
                 object_type=meta.get("OBJECT_TYPE") or None,
                 ops_status=meta.get("OPS_STATUS_CODE") or "",
+                satcat_owner=meta.get("OWNER") or None,
             )
         )
     stats["objects"] = len(merged)

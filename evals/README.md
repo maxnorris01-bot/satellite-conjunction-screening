@@ -37,7 +37,7 @@ Order matters: tiers take the first N, so the highest-signal cases go first.
 | `fixture` | Directory (repo-relative) of CelesTrak cache files, `.json` or `.json.gz` |
 | `groups`, `window_start_utc`, `window_hours` | Scope and window; `step_seconds` and `threshold_km` optional, else `config/screening.yaml` |
 | `oracle` | `true` to also require exact agreement with `oracle.py` |
-| `expect` | Any of: `objects_screened`, `by_risk_level`, `encounters` (per pair: closest pass's `risk_level`, `miss_km` range, `events` count), `absent_pairs`, `co_located_pairs` (exact set), `dropped` (norad id + reason), `dropped_count`, `min_oracle_events` |
+| `expect` | Any of: `objects_screened`, `by_risk_level`, `encounters` (per pair: closest pass's `risk_level`, `miss_km` range, `events` count, `satcat_owners` codes in pair order), `absent_pairs`, `co_located_pairs` (exact set), `dropped` (norad id + reason), `dropped_count`, `min_oracle_events` |
 
 Oracle agreement means every oracle encounter under threshold is reported, TCA within 0.5 s and
 miss within 1 m, with nothing extra reported, and the co-located pairs match. Encounters within 1 m
