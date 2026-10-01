@@ -9,6 +9,8 @@ v2: `summary.screening` replaced `pair_checks`/`pairs_per_timestep` with
 v3: `summary.screening` added `phase_timings_s`, `mean_pairs_within_radius_per_timestep`,
 `max_pairs_within_radius_in_a_timestep` and `refined_events` (additive; Step B instrumentation).
 Bumped under the earlier any-shape-change rule; under the current rule it wouldn't have been.
+v3, additive (no bump): every object record, including the `co_located_pairs` stubs, gained
+`satcat_owner` ({"code", "name"} or null) on 2026-10-01.
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 from app.data.models import CatalogObject
+from app.data.satcat_owners import owner_record
 from app.propagation.sgp4_propagator import PropagationResult
 from app.risk.risk_model import RISK_ORDER, RiskAssessment
 from app.screening.conjunction_screen import CoLocatedPair, Conjunction
@@ -51,6 +54,7 @@ def _object_record(obj: CatalogObject, at: datetime) -> dict[str, Any]:
         "object_type": obj.object_type,
         "ops_status": obj.ops_status,
         "active_payload": obj.is_active,
+        "satcat_owner": owner_record(obj.satcat_owner),
         "source": obj.source,
         "source_groups": list(obj.groups),
         "element_epoch_utc": _iso(obj.epoch),
@@ -96,10 +100,12 @@ def build_report(
             "object_a": {
                 "norad_id": prop.objects[p.index_a].norad_id,
                 "name": prop.objects[p.index_a].name,
+                "satcat_owner": owner_record(prop.objects[p.index_a].satcat_owner),
             },
             "object_b": {
                 "norad_id": prop.objects[p.index_b].norad_id,
                 "name": prop.objects[p.index_b].name,
+                "satcat_owner": owner_record(prop.objects[p.index_b].satcat_owner),
             },
             "min_separation_km": round(p.min_separation_km, 4),
             "max_relative_speed_km_s": round(p.max_relative_speed_km_s, 5),

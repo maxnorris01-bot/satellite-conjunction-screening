@@ -33,6 +33,9 @@ class CatalogObject:
     # From SATCAT: "PAY", "R/B", "DEB", "UNK", or None if SATCAT had no record.
     object_type: str | None = None
     ops_status: str | None = None
+    # SATCAT's OWNER code ("US", "PRC", ...): the registering state or organization, not the
+    # operator. None if SATCAT had no record or left it blank. See app.data.satcat_owners.
+    satcat_owner: str | None = None
 
     @property
     def is_active(self) -> bool | None:

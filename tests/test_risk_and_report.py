@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 from app.data.models import CatalogObject
+from app.data.satcat_owners import owner_names, owner_record
 from app.propagation.sgp4_propagator import PropagationResult
 from app.reporting.report_builder import AssessedConjunction, build_report, write_report
 from app.risk.risk_model import assess_risk
@@ -19,14 +20,17 @@ from conftest import gp_record, objects_from
 RISK = RiskSettings(high_miss_km=1.0, moderate_miss_km_active=2.5, hypervelocity_km_s=1.0)
 
 
-def _obj(object_type: str | None, status: str | None, norad_id: int) -> CatalogObject:
+def _obj(
+    object_type: str | None, status: str | None, norad_id: int, owner: str | None = None
+) -> CatalogObject:
     (base,) = objects_from([gp_record(NORAD_CAT_ID=norad_id)])
-    return replace(base, object_type=object_type, ops_status=status)
+    return replace(base, object_type=object_type, ops_status=status, satcat_owner=owner)
 
 
-ACTIVE = _obj("PAY", "+", 1)
-DEAD_PAYLOAD = _obj("PAY", "-", 2)
-DEBRIS = _obj("DEB", "", 3)
+ACTIVE = _obj("PAY", "+", 1, "US")
+# A code missing from config/satcat_owners.yaml still reaches the report, with a null name.
+DEAD_PAYLOAD = _obj("PAY", "-", 2, "ZZZZ")
+DEBRIS = _obj("DEB", "", 3, "PRC")
 UNKNOWN = _obj(None, None, 4)
 
 
@@ -82,9 +86,23 @@ def test_report_shape_sorting_and_serialization(tmp_path: Path) -> None:
     assert top["tca_utc"] == "2026-09-27T06:01:30.500000Z"
     assert top["object_a"]["active_payload"] is True
     assert top["object_b"]["object_type"] == "DEB"
+    assert top["object_a"]["satcat_owner"] == {"code": "US", "name": "United States"}
+    assert top["object_b"]["satcat_owner"] == {"code": "PRC", "name": "People's Republic of China"}
+    low_rec = report["conjunctions"][1]
+    assert low_rec["object_b"]["satcat_owner"] == {"code": "ZZZZ", "name": None}
+    co = report["co_located_pairs"][0]
+    assert co["object_a"]["satcat_owner"]["code"] == "US"
+    assert co["object_b"]["satcat_owner"] == {"code": "ZZZZ", "name": None}
     assert report["summary"]["by_risk_level"] == {"high": 1, "moderate": 0, "low": 1}
     assert report["co_located_pairs"][0]["samples_within_threshold"] == 3
     assert report["window"]["end_utc"] == "2026-09-27T06:02:00Z"
 
     path = write_report(report, tmp_path)
     assert json.loads(path.read_text())["run_id"] == "test-run"
+
+
+def test_satcat_owner_absent_is_null_and_table_is_well_formed() -> None:
+    assert owner_record(None) is None
+    names = owner_names()
+    assert len(names) > 100
+    assert all(code == code.strip() and code and name for code, name in names.items())

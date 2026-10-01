@@ -14,8 +14,10 @@ makes no LLM or other paid API calls.
 **What it is.** A batch screener over public GP/TLE data. For a chosen scope (CelesTrak named
 groups; the default demo is Iridium NEXT plus the Fengyun-1C debris cloud, which share a ~780 km
 shell), it reports every predicted pass under the screening threshold in the window, with time of
-closest approach (TCA), miss distance, closing speed, both objects' identity and status, and a risk
-level.
+closest approach (TCA), miss distance, closing speed, both objects' identity, status and SATCAT
+owner, and a risk level. The SATCAT owner (`satcat_owner`) is usually the registering state ("US",
+"PRC"), not the operator: SATCAT has no operator field, so Iridium NEXT shows as "US" and there's no
+code for SpaceX.
 
 **What it is not.**
 
@@ -114,6 +116,7 @@ current minute. The report lands in `runs/reports/<run_id>.json`. Each conjuncti
     "object_type": "PAY",
     "ops_status": "+",
     "active_payload": true,
+    "satcat_owner": { "code": "US", "name": "United States" },
     "element_epoch_utc": "2026-09-27T05:49:46.169472Z",
     "element_age_at_tca_days": 1.163
   },
@@ -350,10 +353,9 @@ and per-session write-ups are in [`docs/sessions/`](docs/sessions/).
 
 Priorities are in [`docs/todo.md`](docs/todo.md). The current phase finishes the tracker polish and
 then builds only the foundation a later visualization product would need. The daily run is in
-place (above). Still to come:
+place (above), and each object carries its SATCAT owner. Still to come:
 
-1. **SATCAT owner/operator metadata** joined onto each tracked object.
-2. **A small API** serving the current report and recent history. This is the gate: if it comes
+1. **A small API** serving the current report and recent history. This is the gate: if it comes
    easily, the visualization ideas (3D globe, owner filtering, sky view) stay on the table; if it's
    a significant lift, the project closes out there.
 

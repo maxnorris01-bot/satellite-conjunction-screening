@@ -13,14 +13,18 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] SATCAT owner/operator metadata joined onto each tracked object (needed for any future
-      "filter by owner" feature; extends the existing active-vs-debris SATCAT join).
 - [ ] Small API layer serving the current report and recent history, replacing the static-file
       approach. This is the foundation-gate item: if this turns out easy, the visualization vision
       stays realistic; if it's a significant lift, bank what's built and move to City Livability
       Scoring Tool's MVP instead.
 
 ## Later
+
+- [ ] Operator join from GCAT (Jonathan McDowell's catalog: `Owner` = owner/operator org code,
+      `State` = country) onto each object, for "filter by operator" (e.g. SpaceX). SATCAT can't
+      supply it (see the 2026-10-01 working-notes entry). Needs its own ADR: source reliability
+      (one maintainer), GCAT-to-NORAD id mapping, license, and how often the daily run refreshes
+      a large TSV.
 
 - [ ] Add a status note to ADR 0001: SATCAT metadata now comes from CelesTrak.
 - [ ] **Deferred pending the foundation gate above:** 3D globe of all tracked objects (client-side
@@ -40,6 +44,12 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-01 - SATCAT owner joined onto each tracked object as `satcat_owner` ({code, name})
+      in every report object record, with names from a vendored 132-code table
+      (`config/satcat_owners.yaml`). Additive, so `schema_version` stays 3. Surprise: SATCAT has no
+      operator field and its OWNER is mostly the registering state (Iridium NEXT is "US", not
+      "IRID"; there is no SpaceX code), so the operator join was split out below. See
+      `docs/sessions/2026-10-01-satcat-owner.md`.
 - [x] 2026-10-01 - Ran the one-time Fly setup. Image built (202 MB), scheduled Machine created in sjc, first run published successfully (2,010 objects, 509 conjunctions: 1 high / 32 moderate / 476 low, 5.3 s). Confirmed the public report URL serves real content with a matching run_id. See ADR 0009's verification note.
 - [x] 2026-10-01 - Daily run code: `app.publish` (report + raw CelesTrak snapshot to a public
       Tigris bucket, overwritten each run), Dockerfile, fly.toml, Makefile targets, ADR 0009.

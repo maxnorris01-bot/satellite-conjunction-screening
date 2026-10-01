@@ -140,6 +140,15 @@ def check_expectations(report: dict[str, Any], expect: dict[str, Any]) -> list[s
                 )
         if "events" in e and len(events) != e["events"]:
             fails.append(f"{pair} has {len(events)} events, expected {e['events']}")
+        if "satcat_owners" in e:
+            # Ordered like `pair` (lower NORAD id first), whichever side the report put it on.
+            by_id = {
+                closest[s]["norad_id"]: closest[s].get("satcat_owner")
+                for s in ("object_a", "object_b")
+            }
+            owners = [(by_id[n] or {}).get("code") for n in pair]
+            if owners != e["satcat_owners"]:
+                fails.append(f"{pair} satcat_owner codes {owners}, expected {e['satcat_owners']}")
     for a, b in expect.get("absent_pairs", []):
         if (a, b) in by_pair:
             fails.append(f"pair {(a, b)} reported but should not be")

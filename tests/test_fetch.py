@@ -71,12 +71,21 @@ def _fake_celestrak(requests: list[str]) -> httpx.MockTransport:
         if group == "nope":
             return httpx.Response(200, text="Invalid query: GROUP=nope")
         if request.url.path.endswith("gp.php"):
-            return httpx.Response(200, json=[gp_record(), gp_record(NORAD_CAT_ID=99999)])
+            return httpx.Response(
+                200,
+                json=[gp_record(), gp_record(NORAD_CAT_ID=88888), gp_record(NORAD_CAT_ID=99999)],
+            )
+        # 88888 has no SATCAT record at all; 99999 has one with a blank OWNER.
         return httpx.Response(
             200,
             json=[
-                {"NORAD_CAT_ID": 25544, "OBJECT_TYPE": "PAY", "OPS_STATUS_CODE": "+"},
-                {"NORAD_CAT_ID": 99999, "OBJECT_TYPE": "DEB", "OPS_STATUS_CODE": ""},
+                {
+                    "NORAD_CAT_ID": 25544,
+                    "OBJECT_TYPE": "PAY",
+                    "OPS_STATUS_CODE": "+",
+                    "OWNER": "ISS",
+                },
+                {"NORAD_CAT_ID": 99999, "OBJECT_TYPE": "DEB", "OPS_STATUS_CODE": "", "OWNER": ""},
             ],
         )
 
@@ -91,11 +100,12 @@ def test_fetch_joins_satcat_metadata_and_caches(tmp_path: Path) -> None:
 
     tle_set, stats = fetch_tle_data(["stations"], settings, client=client, now=now)
     assert len(requests) == 2  # one GP + one SATCAT request
-    assert [(o.norad_id, o.object_type, o.is_active) for o in tle_set.objects] == [
-        (25544, "PAY", True),
-        (99999, "DEB", False),
+    assert [(o.norad_id, o.object_type, o.is_active, o.satcat_owner) for o in tle_set.objects] == [
+        (25544, "PAY", True, "ISS"),
+        (88888, None, None, None),
+        (99999, "DEB", False, None),
     ]
-    assert stats["objects"] == 2 and stats["missing_satcat"] == 0
+    assert stats["objects"] == 3 and stats["missing_satcat"] == 1
 
     fetch_tle_data(["stations"], settings, client=client, now=now + timedelta(hours=1))
     assert len(requests) == 2  # served from cache
