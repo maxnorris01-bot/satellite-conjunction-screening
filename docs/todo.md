@@ -13,9 +13,12 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Scheduled daily fetch+screen run with report and snapshot storage plus a retention window
-      (ADR 0005's deployment decision, now with concrete purpose). Pick Fly.io/VPS cron vs. Lambda
-      using the measured runtime/memory numbers from ADR 0007.
+- [ ] Scheduled daily fetch+screen run on Fly.io scheduled machines (ADR 0005's deployment
+      decision - Cowork decided 2026-10-01: Fly.io over Lambda, since ADR 0007's numbers (seconds
+      to ~140s, under 2.2 GB) don't need Lambda's scale, and Fly.io avoids standing up a second
+      cloud account's IAM/container-registry surface for no benefit at this size). No retention
+      window: each run overwrites the current report. History/trend storage is explicitly deferred
+      with the rest of the visualization vision, not built speculatively now.
 - [ ] SATCAT owner/operator metadata joined onto each tracked object (needed for any future
       "filter by owner" feature; extends the existing active-vs-debris SATCAT join).
 - [ ] Small API layer serving the current report and recent history, replacing the static-file
