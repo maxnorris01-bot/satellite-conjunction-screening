@@ -34,13 +34,16 @@ FLY_APP ?= satellite-conjunction-screening
 FLY_IMAGE_LABEL ?= $(shell git rev-parse --short HEAD)
 FLY_IMAGE = registry.fly.io/$(FLY_APP):$(FLY_IMAGE_LABEL)
 # --restart no: a failed day leaves yesterday's report in place instead of retrying against CelesTrak.
-FLY_MACHINE_FLAGS = --schedule daily --restart no --vm-memory 1024 --region sjc
+# --region is valid on `fly machine run` (Machine creation) but not on `fly machine update`
+# (a Machine's region is fixed at creation), so it's kept separate from the shared flags below.
+FLY_MACHINE_FLAGS = --schedule daily --restart no --vm-memory 1024
+FLY_REGION = sjc
 
 fly-build:
 	fly deploy --build-only --push --image-label $(FLY_IMAGE_LABEL) -a $(FLY_APP)
 
 fly-machine-create:
-	fly machine run $(FLY_IMAGE) $(FLY_MACHINE_FLAGS) -a $(FLY_APP)
+	fly machine run $(FLY_IMAGE) $(FLY_MACHINE_FLAGS) --region $(FLY_REGION) -a $(FLY_APP)
 
 # Point the existing scheduled Machine at a newly built image: make fly-update FLY_MACHINE_ID=<id>
 fly-update:
