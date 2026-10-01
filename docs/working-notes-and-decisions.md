@@ -10,6 +10,22 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-01 - SATCAT owner added as `satcat_owner`; operator deferred to a GCAT join.** CelesTrak's
+SATCAT has one ownership field, `OWNER` ("source or ownership"), and no operator field. Its 132
+codes mix states (`US`, `PRC`, `CIS`), international bodies (`ESA`) and a few companies (`IRID`,
+`SES`), with none for SpaceX, Starlink or OneWeb. In practice it's mostly the registering state:
+all 80 Iridium NEXT satellites are `US`, not `IRID`. Max chose:
+- **`satcat_owner`, not `owner`,** so nobody reads it as the operator.
+- **A readable `name` from a vendored code table** (`config/satcat_owners.yaml`, regenerated
+  deliberately by `scripts/build_satcat_owners.py`). CelesTrak's code list is HTML-only, so it
+  isn't scraped at runtime.
+- **Operator deferred** to its own to-do item (a GCAT join, with its own ADR). Name-prefix
+  guessing (`STARLINK-*` -> SpaceX) was rejected because it's silently wrong for anything
+  unlisted.
+
+The field is additive, so `schema_version` stays 3 under the 2026-09-28 rule. It also extends the
+2026-09-27 "object type/status from CelesTrak SATCAT" join below, with no new fetches.
+
 **2026-10-01 - Daily run: Fly.io scheduled Machine -> public Tigris bucket, report + raw snapshot,
 no history.** Cowork picked Fly.io over Lambda and no retention window (reasoning in
 `docs/todo.md`'s item). This session settled the rest. A scheduled Machine (`--schedule daily`,
