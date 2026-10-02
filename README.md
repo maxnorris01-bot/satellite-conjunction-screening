@@ -12,8 +12,9 @@ makes no LLM or other paid API calls.
 ## Project boundary
 
 **What it is.** A batch screener over public GP/TLE data. For a chosen scope (CelesTrak named
-groups; the default demo is Iridium NEXT plus the Fengyun-1C debris cloud, which share a ~780 km
-shell), it reports every predicted pass under the screening threshold in the window, with time of
+groups; the default since 2026-10-02 is CelesTrak's full published catalog: every active satellite
+plus every debris-event group, about 19,000 objects. The original MVP demo scope, Iridium NEXT plus
+the Fengyun-1C debris cloud in a shared ~780 km shell, is what the tests and evals pin), it reports every predicted pass under the screening threshold in the window, with time of
 closest approach (TCA), miss distance, closing speed, both objects' identity, status and SATCAT
 owner, and a risk level. The SATCAT owner (`satcat_owner`) is usually the registering state ("US",
 "PRC"), not the operator: SATCAT has no operator field, so Iridium NEXT shows as "US" and there's no
@@ -82,11 +83,15 @@ Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No account or API ke
 git clone https://github.com/maxnorris01-bot/satellite-conjunction-screening
 cd satellite-conjunction-screening
 make install
-make screen          # live CelesTrak data, default scope, 24 h window from now
+make screen          # live CelesTrak data, full catalog (~19k objects), 24 h window from now
 ```
 
-A real run (2026-10-01, default scope, live CelesTrak data; one `WARNING` line per dropped stale
-element set omitted):
+At the full-catalog default, `make screen` takes about 35 s and peaks near 2.9 GB on an Apple M5,
+and writes a ~78 MB report (ADR 0010). For a quick look, run the MVP demo scope instead:
+`make screen ARGS="--groups iridium-NEXT fengyun-1c-debris"`.
+
+A real run at that MVP demo scope (2026-10-01, live CelesTrak data; one `WARNING` line per dropped
+stale element set omitted):
 
 ```text
 $ make screen
@@ -177,12 +182,13 @@ memory, run id) to `runs/trace.jsonl`.
 ## Daily run
 
 A Fly.io scheduled Machine runs `python -m app.publish` about once a day. Fly's schedule is
-approximate, with no fixed time of day. Each run screens the default scope with fresh CelesTrak
-data and overwrites three things in a public Tigris bucket:
+approximate, with no fixed time of day. Each run screens the full-catalog scope (about 19,000
+objects) with fresh CelesTrak data and overwrites these objects in a public Tigris bucket:
 
 | Object | Contents |
 |---|---|
-| `reports/current.json` | The report, same format as `make screen`'s |
+| `reports/current.json` | The report, same format as `make screen`'s (~78 MB at full-catalog scope) |
+| `objects/current.json` | Every screened object, flat and propagation-ready: `norad_id`, `name`, TLE lines, epoch, `satcat_owner`, `object_type`, `active_payload`, `source_groups` ([ADR 0010](docs/adr/adr-0010-portfolio-api-and-full-catalog-scope.md)). Served gzipped (`Content-Encoding: gzip`, ~1.4 MB) |
 | `snapshots/current/{gp,satcat}-<group>.json.gz` | The exact CelesTrak responses behind it, in the regression test's snapshot format |
 | `snapshots/current/manifest.json` | The run id and snapshot file list, to check against the report's `run_id` |
 
@@ -202,7 +208,7 @@ make publish-local
 fly apps create satellite-conjunction-screening
 fly storage create -a satellite-conjunction-screening -n satellite-conjunction-screening --public
 make fly-build                 # remote build, pushes registry.fly.io/satellite-conjunction-screening:<commit>
-make fly-machine-create        # scheduled Machine: daily, no restart, 1 GB, sjc; also runs once now
+make fly-machine-create        # scheduled Machine: daily, no restart, shared-cpu-4x 8 GB, sjc; runs once now
 fly logs -a satellite-conjunction-screening
 ```
 

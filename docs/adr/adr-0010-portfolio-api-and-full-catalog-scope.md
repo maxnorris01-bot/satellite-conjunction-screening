@@ -155,3 +155,35 @@ Machine) require Max's explicit go-ahead at the time, after Claude Code reports 
 memory/runtime and the resulting Fly Machine type and its per-run cost — per
 `Chat_Instructions.md`'s cost/risk discipline, a step with real cost impact is called out on its
 own, not bundled into a larger batch of instructions.
+
+## Measured at full-catalog scope, 2026-10-02 (closes the open sizing item)
+
+Scope: `config/screening.yaml` groups `active`, `fengyun-1c-debris`, `iridium-33-debris` and
+`cosmos-2251-debris` (option (a) above). CelesTrak lists no other debris group;
+`cosmos-1408-debris` no longer exists. Measured with `app.publish` end to end (fetch, screen,
+report, objects artifact, snapshot), as `/usr/bin/time -l uv run python -m app.publish
+--local-dir ...`. Three fresh-process runs on an Apple M5 (32 GB). Run 1 fetched live; runs 2-3
+reused the cache.
+
+| | Result |
+|---|---|
+| Objects fetched / screened | 19,308 / 19,240 (68 stale element sets dropped) |
+| GP records per group | active 16,636; fengyun-1c-debris 1,979; cosmos-2251-debris 583; iridium-33-debris 110 |
+| **Peak RSS, whole process** | **2,863-2,870 MB** (3 runs) |
+| **Wall time, whole process** | **34.9-37.5 s** (run 1 includes a 2.5 s live fetch) |
+| Pipeline phases (run 3) | propagation 4.1 s; neighbor search 12.6 s; survivor closest-approach 13.9 s; refinement 2.4 s; write report 0.6 s |
+| Candidate pairs per timestep (mean, 485 km radius) | 172,816 |
+| Conjunctions (run 3) | 56,367: 1,207 high / 5,778 moderate / 49,382 low; 185 co-located pairs |
+| `reports/current.json` | 78.0 MB |
+| `objects/current.json` | 19,240 objects; 7.86 MB raw, **1.39 MB gzipped** (668 use Alpha-5 TLE numbers) |
+| Snapshot (`snapshots/current/`) | 1.5 MB gzipped, 8 files + manifest |
+
+**Machine size: `shared-cpu-4x` with 8,192 MB** (`--vm-cpus 4 --vm-memory 8192`), 2.85x the
+measured peak, following ADR 0009's ~3x convention. Shared CPUs cap memory at 2 GB per vCPU, so
+8 GB needs 4 shared vCPUs. The alternative, `performance-1x` at 8 GB, costs about 20% more per
+second for faster CPU this job doesn't need. Compared with ADR 0007's 18,526-object test (2.2 GB
+on the Intel i5), this scope's peak is about 0.65 GB higher at a similar object count, because
+the published job also holds the full report and the objects artifact.
+
+Runtime on Fly will be longer than the M5's 35 s, since shared vCPUs are slower and screening is
+single-threaded. The real Fly runtime and peak are recorded below, after the first deployed run.

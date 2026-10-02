@@ -10,6 +10,21 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-02 - Full-catalog scope measured and the Fly Machine resized; `objects/current.json`
+added.** This implements ADR 0010 (with its amendment):
+- **Scope:** `config/screening.yaml` now screens CelesTrak's full published catalog, `active` plus
+  every listed debris group (`fengyun-1c-debris`, `iridium-33-debris`, `cosmos-2251-debris`;
+  `cosmos-1408-debris` no longer exists). That's 19,308 objects fetched and 19,240 screened.
+- **Measured** with the whole `app.publish` job, 3 runs on an Apple M5: **peak RSS 2,863-2,870 MB,
+  wall time 34.9-37.5 s**, 56,367 conjunctions, a 78 MB report and a 1.39 MB gzipped objects file.
+- **Machine:** `shared-cpu-4x` with 8 GB (2.85x the peak, per ADR 0009's ~3x convention). Shared
+  CPUs cap memory at 2 GB per vCPU, so 8 GB needs 4 vCPUs. `performance-1x` at 8 GB would cost
+  about 21% more for CPU speed this job doesn't need.
+- **Space-Track full-catalog source:** deferred to its own future ADR (amendment option (b)).
+- **Trimmed report and API changes:** deferred to the `portfolio-site` session.
+
+Full table: [ADR 0010](adr/adr-0010-portfolio-api-and-full-catalog-scope.md)'s measurement section.
+
 **2026-10-02 - Foundation-gate item scoped: objects/current.json, a Vercel API function, and a move
 to full-catalog scope.** Full reasoning: [ADR 0010](adr/adr-0010-portfolio-api-and-full-catalog-scope.md).
 Short version: the report alone doesn't carry full-catalog TLEs, so a new flat `objects/current.json`
