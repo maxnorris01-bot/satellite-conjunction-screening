@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import json
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -12,14 +13,19 @@ import pytest
 
 from app import publish as pub
 from app.config import Config
+from conftest import gp_record, objects_from
 
 
 class FakeStore:
     def __init__(self) -> None:
         self.puts: list[tuple[str, bytes, str]] = []
+        self.encodings: dict[str, str | None] = {}
 
-    def put(self, key: str, body: bytes, *, content_type: str) -> None:
+    def put(
+        self, key: str, body: bytes, *, content_type: str, content_encoding: str | None = None
+    ) -> None:
         self.puts.append((key, body, content_type))
+        self.encodings[key] = content_encoding
 
 
 def _fake_run_screening(settings: Any, *, config: Config) -> Any:
@@ -31,6 +37,7 @@ def _fake_run_screening(settings: Any, *, config: Config) -> Any:
         (cache / f"satcat-{group}.json").write_text(json.dumps({"payload": []}))
     report = {
         "run_id": "20261001T0000Z-abc123",
+        "generated_at_utc": "2026-10-01T00:00:05Z",
         "scope": {"objects_screened": 2},
         "summary": {
             "conjunctions_flagged": 1,
@@ -42,7 +49,13 @@ def _fake_run_screening(settings: Any, *, config: Config) -> Any:
     path.parent.mkdir(parents=True)
     path.write_text(json.dumps(report))
 
-    return SimpleNamespace(report=report, report_path=path, timings_s={"total": 1.0})
+    (obj,) = objects_from([gp_record()])
+    return SimpleNamespace(
+        report=report,
+        report_path=path,
+        timings_s={"total": 1.0},
+        objects=[replace(obj, object_type="PAY", ops_status="+", satcat_owner="ISS")],
+    )
 
 
 @pytest.fixture
@@ -64,6 +77,7 @@ def test_publishes_snapshot_then_manifest_then_report(
         "snapshots/current/gp-g1.json.gz",
         "snapshots/current/satcat-g1.json.gz",
         "snapshots/current/manifest.json",
+        "objects/current.json",
         "reports/current.json",
     ]
     by_key = {k: (body, ct) for k, body, ct in store.puts}
@@ -76,6 +90,16 @@ def test_publishes_snapshot_then_manifest_then_report(
         "groups": ["g1"],
         "files": ["gp-g1.json.gz", "satcat-g1.json.gz"],
     }
+    objects_body, objects_type = by_key["objects/current.json"]
+    assert objects_type == "application/json"
+    assert store.encodings["objects/current.json"] == "gzip"
+    assert store.encodings["reports/current.json"] is None
+    objects_doc = json.loads(gzip.decompress(objects_body))
+    assert objects_doc["run_id"] == manifest["run_id"]
+    assert objects_doc["generated_at_utc"] == "2026-10-01T00:00:05Z"
+    assert objects_doc["object_count"] == 1
+    assert objects_doc["objects"][0]["norad_id"] == 25544
+    assert summary["objects_published"] == 1
     report_body, report_type = by_key["reports/current.json"]
     assert report_type == "application/json"
     assert json.loads(report_body)["run_id"] == manifest["run_id"]
