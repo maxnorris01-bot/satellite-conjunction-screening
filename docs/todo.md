@@ -13,10 +13,17 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Small API layer serving the current report and recent history, replacing the static-file
-      approach. This is the foundation-gate item: if this turns out easy, the visualization vision
-      stays realistic; if it's a significant lift, bank what's built and move to City Livability
-      Scoring Tool's MVP instead.
+- [ ] Foundation-gate item, scoped in ADR 0010 (2026-10-02): add `objects/current.json` (flat,
+      full-catalog, propagation-ready TLE list — the artifact the globe/filtering/sky-view/
+      satellite-POV/near-miss-replay features all actually depend on) to `app.publish`'s output,
+      gzip-compressed. Then a single Vercel serverless function in `portfolio-site`,
+      `GET /api/satellite/current` (bundles report + objects, no bucket CORS needed), with
+      `GET /api/satellite/history?days=N` as a lower-priority add-on — don't let history gate
+      shipping `/current`. Separately: expand `config/screening.yaml` to the full tracked catalog
+      (re-measure actual peak memory/runtime at that real scale before sizing the Fly machine's
+      `--vm-memory` — don't extrapolate from ADR 0007's 18.5k-object test). If `/current` turns out
+      easy, the visualization vision stays realistic; if it's a significant lift, bank what's built
+      and move to City Livability Scoring Tool's MVP instead.
 
 ## Later
 

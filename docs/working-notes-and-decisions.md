@@ -10,6 +10,17 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-02 - Foundation-gate item scoped: objects/current.json, a Vercel API function, and a move
+to full-catalog scope.** Full reasoning: [ADR 0010](adr/adr-0010-portfolio-api-and-full-catalog-scope.md).
+Short version: the report alone doesn't carry full-catalog TLEs, so a new flat `objects/current.json`
+artifact (every screened object, propagation-ready) is the real foundation the 2026-09-30 vision
+needs — not the report's history, which only matters for the MVP's own trend widget. API shape is a
+single Vercel function in `portfolio-site` (`GET /api/satellite/current`), not bucket CORS or a
+standalone service. A fifth future feature came up during scoping — select a near-miss, jump the
+globe to its TCA, focus on the two objects — and needs no new data beyond the above. Catalog scope
+is also expanding to the full tracked catalog (Max's call); the Fly machine's memory needs a fresh
+measurement at that real scale before being sized, not an extrapolation from ADR 0007's number.
+
 **2026-10-01 - SATCAT owner added as `satcat_owner`; operator deferred to a GCAT join.** CelesTrak's
 SATCAT has one ownership field, `OWNER` ("source or ownership"), and no operator field. Its 132
 codes mix states (`US`, `PRC`, `CIS`), international bodies (`ESA`) and a few companies (`IRID`,
