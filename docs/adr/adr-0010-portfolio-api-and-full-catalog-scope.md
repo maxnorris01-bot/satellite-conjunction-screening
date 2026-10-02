@@ -1,6 +1,6 @@
 # ADR 0010: Portfolio API layer, full-catalog scope, and the objects/current.json foundation artifact
 
-**Status:** Accepted, 2026-10-02.
+**Status:** Accepted, 2026-10-02. Amended 2026-10-02 (see amendment at the end) after Claude Code's read-only scoping pass surfaced two real constraints this ADR hadn't accounted for: CelesTrak has no all-objects query, and the report/objects payloads exceed Vercel's serverless response limit at full-catalog scope.
 
 ## Context
 
@@ -104,3 +104,54 @@ own infrastructure consequences accounted for below.
   same-origin to the browser.
 - **If the bucket's internal layout or storage provider ever changes, only the Vercel function
   changes** — the frontend talks to `/api/satellite/*`, never the bucket directly.
+
+## Amendment, 2026-10-02: catalog definition and API payload size
+
+Claude Code's first read-only pass on this ADR (before touching anything) found two things that
+change its shape, surfaced back to Cowork for decisions rather than assumed:
+
+**"Full tracked catalog" needs a precise definition.** CelesTrak's GP endpoint has no all-objects
+query — it supports `CATNR`, `INTDES`, `GROUP`, `NAME` and `SPECIAL` (`GPZ`, `GPZ-PLUS`,
+`DECAYING`), not "everything." Two ways to get there:
+- **(a) A union of CelesTrak groups** — active plus the debris-event groups (Fengyun-1C,
+  Iridium-33, Cosmos-2251, etc.). Same source, no new credentials, but a curated subset (~20k+
+  objects), not literally every tracked object — plenty of on-orbit debris isn't in any CelesTrak
+  group.
+- **(b) The Space-Track full GP catalog**, via the account registered 2026-09-30. Genuinely
+  everything, but a new primary data source: credentials as Fly secrets, Space-Track's stricter
+  rate limits, and a revision to ADR 0001 (which deliberately kept Space-Track supplemental, not
+  primary). That's its own scope decision, not something to fold into this session.
+
+**Decision: (a) now, (b) deferred to its own future ADR.** Taking on a new primary data source
+mid-session, with new credentials and rate-limit constraints, is exactly the kind of unplanned
+scope growth `Engineering_Standards.md`'s "validate before building out scope" lesson warns
+against. (a) still moves scope from ~2,010 objects to ~20k+, which is the real change Max asked
+for; true Space-Track-backed completeness can be evaluated deliberately later, as its own decision
+with its own ADR, if (a) turns out to not be enough.
+
+**The report and `objects/current.json` are both too large for the Vercel function design as
+written.** ADR 0007 measured a 76 MB report at 18,526 objects (63,896 conjunctions); full (a)-scope
+will be larger still, and `objects/current.json` at ~20k+ objects also likely exceeds a few MB.
+Vercel serverless functions cap response bodies at roughly 4.5 MB, so `GET /api/satellite/current`
+bundling the full report and the full object list in one response — this ADR's original API
+decision — won't work at this scale.
+
+**Decision: supersede part of the API-shape decision above.** The large static artifacts (the full
+report, `objects/current.json`) are fetched **directly from the public Tigris bucket, with CORS
+enabled for those two objects** — reversing this ADR's "no bucket CORS needed" call, but only for
+these two, and only because of the size constraint, not the configuration-overhead reasoning option
+1 was originally rejected for. The Vercel function's role narrows to a small, server-computed
+`GET /api/satellite/summary` (risk-level counts, top-N near-misses with enough fields for the
+near-miss list UI) that stays comfortably under the response cap — and remains the right place for
+`/api/satellite/history`'s stitching logic once that's built. This is a provisional resolution to
+validate in the `portfolio-site` implementation session, not a final mandate on exact endpoint
+shapes.
+
+**Deploy process for this session (satellite-conjunction-screening repo only).** `flyctl` isn't
+installed on this machine; Claude Code installs it (`brew install flyctl`) and Max runs
+`fly auth login` himself, since login is interactive. The existing scheduled Machine's id is
+`1850e47cdd43e8`. Steps that change the Fly account (`fly-build`, `fly-update` against that
+Machine) require Max's explicit go-ahead at the time, after Claude Code reports the real measured
+memory/runtime and the resulting Fly Machine type and its per-run cost — per
+`Chat_Instructions.md`'s cost/risk discipline, a step with real cost impact is called out on its
+own, not bundled into a larger batch of instructions.
