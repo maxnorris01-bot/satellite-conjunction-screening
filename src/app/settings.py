@@ -47,7 +47,12 @@ class RiskSettings:
 
 @dataclass(frozen=True)
 class Settings:
-    groups: tuple[str, ...] = ("iridium-NEXT", "fengyun-1c-debris")
+    groups: tuple[str, ...] = (
+        "active",
+        "fengyun-1c-debris",
+        "iridium-33-debris",
+        "cosmos-2251-debris",
+    )
     source: SourceSettings = field(default_factory=SourceSettings)
     propagation: PropagationSettings = field(default_factory=PropagationSettings)
     screening: ScreeningSettings = field(default_factory=ScreeningSettings)
