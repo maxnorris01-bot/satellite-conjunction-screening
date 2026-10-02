@@ -13,19 +13,20 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Foundation-gate item, scoped in ADR 0010 (2026-10-02): add `objects/current.json` (flat,
-      full-catalog, propagation-ready TLE list — the artifact the globe/filtering/sky-view/
-      satellite-POV/near-miss-replay features all actually depend on) to `app.publish`'s output,
-      gzip-compressed. Then a single Vercel serverless function in `portfolio-site`,
-      `GET /api/satellite/current` (bundles report + objects, no bucket CORS needed), with
-      `GET /api/satellite/history?days=N` as a lower-priority add-on — don't let history gate
-      shipping `/current`. Separately: expand `config/screening.yaml` to the full tracked catalog
-      (re-measure actual peak memory/runtime at that real scale before sizing the Fly machine's
-      `--vm-memory` — don't extrapolate from ADR 0007's 18.5k-object test). If `/current` turns out
-      easy, the visualization vision stays realistic; if it's a significant lift, bank what's built
-      and move to City Livability Scoring Tool's MVP instead.
+- [ ] Foundation-gate item, remainder (ADR 0010 and its amendment). This repo's side is done
+      (see Completed, 2026-10-02). Still open:
+      - Enable CORS on the public bucket for `reports/current.json` and `objects/current.json`
+        only (the amendment's direct-fetch decision).
+      - In `portfolio-site`: a small Vercel `GET /api/satellite/summary` (risk counts, top-N near
+        misses) under the ~4.5 MB response cap, then `/history` as the lower-priority add-on.
+      If this turns out easy, the visualization vision stays realistic; if it's a significant lift,
+      bank what's built and move to City Livability Scoring Tool's MVP instead.
 
 ## Later
+
+- [ ] Space-Track full GP catalog as the source for true full-catalog scope (ADR 0010 amendment,
+      option (b)). Needs its own ADR: new primary source, credentials as Fly secrets, rate limits,
+      and a revision to ADR 0001.
 
 - [ ] Operator join from GCAT (Jonathan McDowell's catalog: `Owner` = owner/operator org code,
       `State` = country) onto each object, for "filter by operator" (e.g. SpaceX). SATCAT can't
@@ -41,6 +42,9 @@ list yet - see that decision entry.*
 
 ## Lower priority / opportunistic
 
+- [ ] Delete the stale `snapshots/current/{gp,satcat}-iridium-NEXT.json.gz` from the bucket (left
+      over from the MVP scope; the manifest doesn't list them, see ADR 0010).
+
 - [ ] Add eval scenarios beyond the single 780 km circular shell: eccentric orbits, mixed-altitude
       crossings (ADR 0008's consequences).
 
@@ -51,6 +55,16 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-02 - Full-catalog scope plus `objects/current.json`, deployed (ADR 0010):
+      - Scope is now CelesTrak's `active` plus all three debris groups, 19,240 objects screened.
+      - Measured locally at 2.87 GB peak and 35 s on the M5. The Machine was resized to
+        shared-cpu-4x with 8 GB.
+      - On Fly: 2,804 MB peak, 109.6 s pipeline, about $0.0035 per run.
+      - Report, objects (served with `Content-Encoding: gzip`) and snapshot all verified live with
+        the same run id.
+      - Surprise: the first `fly machine update` hit `MANIFEST_UNKNOWN` right after the push (an
+        immediate retry worked), and the update doesn't start a stopped Machine.
+      See `docs/sessions/2026-10-02-full-catalog-objects.md`.
 - [x] 2026-10-01 - SATCAT owner joined onto each tracked object as `satcat_owner` ({code, name})
       in every report object record, with names from a vendored 132-code table
       (`config/satcat_owners.yaml`). Additive, so `schema_version` stays 3. Surprise: SATCAT has no

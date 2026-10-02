@@ -65,9 +65,13 @@ own infrastructure consequences accounted for below.
   screened object — `norad_id`, `name`, `tle_line1`, `tle_line2`, `element_epoch_utc`,
   `satcat_owner`, `object_type`, `active_payload`, `source_groups` — plus its own `schema_version`,
   `run_id`, and `generated_at_utc`. Published by `app.publish` alongside the existing report and
-  snapshot objects. Stored/served gzip-compressed (same `Content-Encoding` pattern as the existing
-  snapshot files) since full-catalog scope makes this file several MB, not the sub-1MB it would be
-  at the current default scope.
+  snapshot objects. Stored gzip-compressed and served with `Content-Encoding: gzip` and
+  `Content-Type: application/json` (clarified 2026-10-02), since full-catalog scope makes this file
+  several MB, not the sub-1MB it would be at the current default scope. This is deliberately
+  **not** the snapshot files' style (`*.json.gz` keys served as opaque `application/gzip`).
+  `objects/current.json` is meant for direct browser `fetch()`, which decompresses
+  `Content-Encoding: gzip` transparently. The snapshots are reproducibility artifacts that no
+  browser reads directly.
 - **API: option 2 — one Vercel serverless function in `portfolio-site`.**
   `GET /api/satellite/current` returns `{ report, objects, run_id, generated_at_utc }` in one
   response, reading `reports/current.json` and `objects/current.json` from the Tigris bucket
@@ -155,3 +159,66 @@ Machine) require Max's explicit go-ahead at the time, after Claude Code reports 
 memory/runtime and the resulting Fly Machine type and its per-run cost — per
 `Chat_Instructions.md`'s cost/risk discipline, a step with real cost impact is called out on its
 own, not bundled into a larger batch of instructions.
+
+## Measured at full-catalog scope, 2026-10-02 (closes the open sizing item)
+
+Scope: `config/screening.yaml` groups `active`, `fengyun-1c-debris`, `iridium-33-debris` and
+`cosmos-2251-debris` (option (a) above). CelesTrak lists no other debris group;
+`cosmos-1408-debris` no longer exists. Measured with `app.publish` end to end (fetch, screen,
+report, objects artifact, snapshot), as `/usr/bin/time -l uv run python -m app.publish
+--local-dir ...`. Three fresh-process runs on an Apple M5 (32 GB). Run 1 fetched live; runs 2-3
+reused the cache.
+
+| | Result |
+|---|---|
+| Objects fetched / screened | 19,308 / 19,240 (68 stale element sets dropped) |
+| GP records per group | active 16,636; fengyun-1c-debris 1,979; cosmos-2251-debris 583; iridium-33-debris 110 |
+| **Peak RSS, whole process** | **2,863-2,870 MB** (3 runs) |
+| **Wall time, whole process** | **34.9-37.5 s** (run 1 includes a 2.5 s live fetch) |
+| Pipeline phases (run 3) | propagation 4.1 s; neighbor search 12.6 s; survivor closest-approach 13.9 s; refinement 2.4 s; write report 0.6 s |
+| Candidate pairs per timestep (mean, 485 km radius) | 172,816 |
+| Conjunctions (run 3) | 56,367: 1,207 high / 5,778 moderate / 49,382 low; 185 co-located pairs |
+| `reports/current.json` | 78.0 MB |
+| `objects/current.json` | 19,240 objects; 7.86 MB raw, **1.39 MB gzipped** (668 use Alpha-5 TLE numbers) |
+| Snapshot (`snapshots/current/`) | 1.5 MB gzipped, 8 files + manifest |
+
+**Machine size: `shared-cpu-4x` with 8,192 MB** (`--vm-cpus 4 --vm-memory 8192`), 2.85x the
+measured peak, following ADR 0009's ~3x convention. Shared CPUs cap memory at 2 GB per vCPU, so
+8 GB needs 4 shared vCPUs. The alternative, `performance-1x` at 8 GB, costs about 20% more per
+second for faster CPU this job doesn't need. Compared with ADR 0007's 18,526-object test (2.2 GB
+on the Intel i5), this scope's peak is about 0.65 GB higher at a similar object count, because
+the published job also holds the full report and the objects artifact.
+
+### First deployed run on Fly, 2026-10-02
+
+The Machine `1850e47cdd43e8` was updated to image `95d93aa`, `shared-cpu-4x` with 8,192 MB, in
+`sjc`. The first `fly machine update` attempt failed with `MANIFEST_UNKNOWN` seconds after the image
+push (registry propagation lag); an identical retry 18 s later succeeded. The update left the
+Machine stopped, so it was started once by hand (`fly machine start`) for this verification run.
+The daily schedule (`schedule: daily`, `restart: no`) is unchanged.
+
+| | Fly (shared-cpu-4x, 8 GB) | M5 (local, for comparison) |
+|---|---|---|
+| Run id | `20261002T0403Z-4a2f42` | `20261002T0355Z-9c1e47` |
+| Objects screened | 19,240 | 19,240 |
+| **Peak RSS** (`peak_rss_mb` in the publish log) | **2,804 MB** (34% of 8 GB) | 2,863 MB |
+| **Pipeline total** | **109.6 s** | 33.7 s |
+| Phases | fetch 3.9 s; propagate 19.0 s; screen 81.3 s; write report 5.2 s | fetch 0.2 s; propagate 4.1 s; screen 28.8 s; write report 0.6 s |
+| Machine start to publish | ~2 min (started 04:03:51Z, published 04:05:50Z) | - |
+| Conjunctions | 56,402 (1,211 high / 5,781 moderate / 49,410 low), 183 co-located | 56,367 |
+
+Verified in the public bucket afterwards, with all three carrying run id `20261002T0403Z-4a2f42`:
+- `reports/current.json`: 78.0 MB, `application/json`.
+- `objects/current.json`: 1.39 MB on the wire, `Content-Encoding: gzip`, `Content-Type:
+  application/json`, 19,240 objects, `schema_version` 1.
+- `snapshots/current/manifest.json`: the four groups and 8 files.
+
+**Cost per run at the measured runtime:** about $0.0000295/s in `sjc` (the shared-cpu-4x base
+plus 7 GB of extra RAM, at Fly's published rates, times the 1.19 sjc multiplier) x ~120 s
+billed = **about $0.0035 per run, or about $0.11 a month** for daily runs. A stopped Machine isn't
+billed for CPU or RAM.
+
+**Left over in the bucket, as ADR 0009 predicted:** the previous scope's
+`snapshots/current/gp-iridium-NEXT.json.gz` and `satcat-iridium-NEXT.json.gz` (last modified
+2026-10-02 03:03Z). The manifest doesn't list them. Deleting them is a one-off manual cleanup that
+wasn't done this session.

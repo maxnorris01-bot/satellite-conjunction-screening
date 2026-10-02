@@ -16,6 +16,7 @@ from typing import Any
 
 from app.config import Config
 from app.data.celestrak_client import fetch_tle_data
+from app.data.models import CatalogObject
 from app.propagation.sgp4_propagator import propagate_orbits
 from app.reporting.report_builder import AssessedConjunction, build_report, write_report
 from app.risk.risk_model import assess_risk
@@ -41,6 +42,8 @@ class RunOutput:
     timings_s: dict[str, float]
     # Process peak RSS (MB) as of the end of each step - a running high-water mark.
     peak_rss_mb: dict[str, float]
+    # Every object that was screened (after stale/failed drops), for objects/current.json.
+    objects: list[CatalogObject]
 
 
 def run_screening(
@@ -129,4 +132,4 @@ def run_screening(
         run_rec["report_path"] = str(path)
         run_rec["conjunctions"] = len(report["conjunctions"])
     timings["total"] = run_rec["duration_s"]
-    return RunOutput(report, path, timings, peaks)
+    return RunOutput(report, path, timings, peaks, prop.objects)
