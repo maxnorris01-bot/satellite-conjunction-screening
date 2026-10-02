@@ -36,7 +36,9 @@ FLY_IMAGE = registry.fly.io/$(FLY_APP):$(FLY_IMAGE_LABEL)
 # --restart no: a failed day leaves yesterday's report in place instead of retrying against CelesTrak.
 # --region is valid on `fly machine run` (Machine creation) but not on `fly machine update`
 # (a Machine's region is fixed at creation), so it's kept separate from the shared flags below.
-FLY_MACHINE_FLAGS = --schedule daily --restart no --vm-memory 1024
+# Sized from ADR 0010's full-catalog measurement: 2.87 GB peak RSS -> 8 GB (~3x, ADR 0009's margin).
+# Shared CPUs allow at most 2 GB per vCPU, so 8 GB needs 4 shared vCPUs (shared-cpu-4x).
+FLY_MACHINE_FLAGS = --schedule daily --restart no --vm-cpus 4 --vm-memory 8192
 FLY_REGION = sjc
 
 fly-build:
