@@ -23,6 +23,13 @@ added.** This implements ADR 0010 (with its amendment):
 - **Space-Track full-catalog source:** deferred to its own future ADR (amendment option (b)).
 - **Trimmed report and API changes:** deferred to the `portfolio-site` session.
 
+- **Deployed and verified on Fly** the same day: image `95d93aa` on `shared-cpu-4x`/8 GB. The
+  first run published report, objects and snapshot, all with run id `20261002T0403Z-4a2f42`. On
+  Fly: **peak RSS 2,804 MB, pipeline 109.6 s**, about $0.0035 per run.
+- **`Content-Encoding: gzip` for `objects/current.json`** is the intended design, not a deviation
+  (Max, 2026-10-02). It's for direct browser `fetch()`; the snapshots' opaque `.json.gz` style is
+  for reproducibility files. ADR 0010's wording was tightened to say so.
+
 Full table: [ADR 0010](adr/adr-0010-portfolio-api-and-full-catalog-scope.md)'s measurement section.
 
 **2026-10-02 - Foundation-gate item scoped: objects/current.json, a Vercel API function, and a move
