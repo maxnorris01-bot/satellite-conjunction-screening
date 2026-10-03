@@ -10,6 +10,134 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Frame-time spike results: the worst case fails under throttling; slicing
+propagation across frames passes with margin.** Run by Claude Code on `portfolio-site`'s
+`spike/globe-frame-time` branch (local only, one commit, not pushed) against the entry below.
+
+**Setup:**
+- **Data:** the real `objects/current.json` (run `20261002T0403Z-4a2f42`). All 19,240 objects
+  parsed and propagated with 0 errors, including the 668 Alpha-5 numbers.
+- **Libraries:** `satellite.js` 7.1.0 (plain-JS SGP4 plus ECI->ECF for every object, every
+  frame) and raw three.js 0.186 `Points`.
+- **Browser:** Chromium 153 in a headed window on the M5. That gives the real GPU (`ANGLE Metal
+  Renderer: Apple M5`), a 60 Hz display, devicePixelRatio 2 and a 1440x900 viewport. Chrome
+  isn't installed, so it ran under Playwright.
+- **Throttling:** CDP `Emulation.setCPUThrottlingRate`, the same call DevTools' "CPU: Nx
+  slowdown" makes.
+- **Measurement:** a 5 s warm-up, then 45 s measured per run.
+
+Frame time is the interval between `requestAnimationFrame` callbacks, so 16.7 ms is the 60 Hz
+ceiling. The worst-case rows show two runs each as A / B.
+
+| CPU | Variant | Frame mean (ms) | Frame p95 (ms) | Propagate mean / p50 (ms) | fps |
+|---|---|---|---|---|---|
+| 1x (M5) | every object, every frame | 18.2 / 16.7 | 33.3 / 17.6 | 9.7 / 6.5, p50 ~6.6 | 55 / 60 |
+| 4x | every object, every frame | **30.4 / 38.4** | 116 / 133 | 30-37, p50 ~21 | 33 / 26 |
+| 6x | every object, every frame | **54.9 / 59.3** | 151 / 232 | 53-57, p50 ~31 | 18 / 17 |
+| 4x | `slice=10` (1/10 of objects per frame) | **16.8** | 17.6 | 7.8, p50 9.0 | 59 |
+| 6x | `slice=10` | **20.5** | 33.9 | 11.0, p50 3.2 | 49 |
+
+**Against the bar:**
+- The M5 unthrottled clears it easily, so neither "shrink the vision" nor "bank" is triggered
+  on that branch of the rule.
+- The worst case **fails** throttled. At 4x the mean straddles 33 ms across two runs, and the
+  p95 of 116-133 ms means visible hitches regardless. At 6x it fails clearly.
+- The mitigation the scoping entry named **passes with margin**. `?slice=10` refreshes each
+  object every 10 frames (~0.17 s, ~1.3 km of LEO motion, invisible at globe scale) and holds
+  ~60 fps at 4x and ~49 fps at 6x.
+- Rendering isn't the bottleneck. Frame work is almost entirely propagation; three.js draws
+  19k points in well under 1 ms.
+
+**Observations worth carrying forward:**
+- **The worst case's tail is garbage-collection-shaped.** p50 propagation is 6.5 ms on the M5,
+  but some runs show 26-48 ms spikes. Each `propagate` and `eciToEcf` call allocates result
+  objects, roughly 19k x several per frame. Slicing helps mainly because it allocates less
+  per frame.
+- **CPU throttling slows only main-thread JS, not the GPU.** That's fine here, since the cost is
+  propagation, but it's an approximation of a slower laptop, not a measurement of one.
+- **Unmeasured further headroom** if it's ever needed:
+  - propagate in a Web Worker
+  - `satellite.js` 7's WASM `BulkPropagator`
+  - interpolating between once-a-second positions, the scoping entry's other idea
+
+**Claude Code's read, for Cowork's decision:** go, with time-sliced (or otherwise
+non-every-frame) propagation as a design requirement from day one, not an optimization later.
+Rendering all 19,240 objects works, so filtering to active payloads isn't needed for
+performance. The branch is kept locally until Cowork decides, in case a re-run is wanted. It
+gets deleted per the scoping entry once the call is made (`git branch -D spike/globe-frame-time`
+in `portfolio-site`).
+
+**2026-10-03 - Frame-time spike run: go, with propagation sliced across frames as a requirement
+from the start.** Measured on `portfolio-site`'s `spike/globe-frame-time` branch (Playwright's
+Chromium on the M5, real `objects/current.json`, all 19,240 objects including the 668 Alpha-5
+ones, 0 parse/propagation errors). Every-object-every-frame propagation passes unthrottled on the
+M5 (18.2/16.7 ms mean) but fails once CPU-throttled to approximate a slower laptop (4x: 30.4/38.4
+ms mean, p95 over 110 ms, visible stutter; 6x: fails clearly). Spreading propagation across frames
+(`slice=10` - each object re-propagated every 10th frame, about every 0.17 s, roughly 1.3 km of
+motion for a LEO object and invisible at globe scale) clears the bar with margin: about 60 fps at
+4x throttle, about 49 fps at 6x. Rendering is cheap regardless (under 1 ms for 19k points); the
+entire cost is SGP4 propagation and its per-call allocation - the slow unsliced frames look like
+GC pauses from the tens of thousands of small result objects created every frame. Caveat: CPU
+throttling only slows JS, not the GPU, so this approximates a slower laptop rather than measuring
+one.
+
+**Decision: go.** Neither fallback from the spike-scoping entry (shrink the rendered catalog,
+bank the project) is triggered - the M5 clears the bar on its own, and the slicing mitigation
+clears it even throttled. Frame-sliced propagation (each object updated on a staggered ~10-frame
+cycle, not every frame) is **not an optional later optimization - it's a hard requirement from the
+start** of any globe implementation, per this result. This reopens the 2026-09-30 gate: the
+visualization vision (3D globe, owner/operator filtering, sky view, satellite POV) is real scope
+again, not deferred.
+
+Spike code stays on `portfolio-site`'s `spike/globe-frame-time` branch, unmerged, in case a re-run
+is wanted; delete with `git branch -D spike/globe-frame-time` once that's no longer needed.
+
+**2026-10-03 - Frame-time spike scoped (Cowork): the gate's real test, before any globe feature
+work.** The foundation gate closed easily on 2026-10-02 (CORS, `/summary`, `objects/current.json`
+all shipped without friction) - but that gate tested the *data and API* foundation, not the
+visualization vision's actual risk: can a browser propagate 19,240 objects with `satellite.js` and
+render them as points on a 3D globe without choking. Nothing has exercised that yet. This is the
+"validate before building out scope" step from `Engineering_Standards.md`, applied to the
+visualization vision itself before any globe UI gets built around it.
+
+**Scope, deliberately minimal (time-boxed):**
+- Fetch the real `objects/current.json` from the public bucket (CORS already allows
+  `localhost:5173`/`4173` and the Vercel origin) - real 19,240-object data, not synthetic.
+- Parse each object's TLE with `satellite.js` and propagate every object to the current moment.
+- Render all positions as points on a bare sphere with **raw three.js**
+  (`Points`/`BufferGeometry`), not `globe.gl` - the point of the spike is to isolate the two real
+  unknowns (SGP4 propagation cost, point-rendering cost) without a wrapper's own overhead
+  muddying the number. Basic orbit-controls camera only.
+- Propagate every object every animation frame (the worst case - no throttling to "recompute once
+  a second and interpolate" yet; that's a mitigation to try *if* the worst case fails, not the
+  first thing measured).
+- Measure frame time via `performance.now()` across a sustained ~30-60 s run: mean and p95 frame
+  time, logged to the console or a simple on-screen readout.
+- **Test twice:** once unthrottled on Max's M5 (a ceiling, not representative), and once with
+  Chrome DevTools CPU throttling at 4x-6x slowdown, to approximate what a hiring manager's actual
+  laptop would see. The M5 number alone isn't the answer to "will this look smooth to a visitor."
+- **Explicitly out of scope:** UI controls, filtering, labels, click-to-select, camera polish,
+  Earth texture/stars, the near-miss replay feature, any production wiring. This is a
+  measurement, not a feature.
+
+**Where it lives:** a disposable branch in `portfolio-site` (`spike/globe-frame-time`), not wired
+into nav, never merged to `main` regardless of outcome. Findings get written up here (a follow-up
+entry to this one) and the branch gets deleted once the number is in - keeps `main`'s visible
+history clean of a throwaway experiment either way.
+
+**Success bar (working definition, not yet validated):** mean frame time at or under ~33 ms
+(≈30 fps) under the 4x-6x-throttled run counts as "smooth enough for a portfolio demo." If the
+unthrottled M5 run itself can't clear that bar, the vision needs to shrink (fewer rendered objects,
+e.g. active payloads only at ~16,636, or a user-toggle filter) or the project banks here per the
+2026-09-30 gate decision and work moves to City Livability Scoring Tool's MVP.
+
+**Division of labor:** scoped here; handed to Claude Code in `portfolio-site` to implement and
+run, per `Engineering_Standards.md`'s workflow split. Numbers come back as a short write-up (not a
+polished session doc, since nothing here survives), and the resulting go/no-go gets decided back
+in Cowork against the bar above.
+
+
+
 **2026-10-02 - Foundation gate closed: bucket CORS is bucket-wide (origin-narrowed), `/summary`
 shipped, `/history` deferred.**
 - **CORS:** Tigris CORS rules can't target individual keys (dashboard, S3 `PutBucketCors` and
