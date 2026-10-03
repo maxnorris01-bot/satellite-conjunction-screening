@@ -17,13 +17,12 @@ the active work.*
       (likely a short-term block after an interrupted run plus an immediate restart). Start it
       once after about 2 h, not repeatedly. Then verify the dated keys and `history/index.json`
       land in the bucket. The globe's backward range fills in one day per run after that.
-- [ ] **Globe Phase 1b (Claude Code, in `portfolio-site`):** color-category toggles (hide/show
-      a legend swatch's points), a playback speed control (1x/2x/5x/10x, Live only, default
-      stays 1x), near-miss replay highlighting both objects with a labeled distance line between
-      them, and click-to-inspect on any of the 19,240 objects (name/type/owner/position panel,
-      same treatment as the near-miss panel). Full scope in the 2026-10-03 "Globe Phase 1b"
-      working-notes entry. Fresh branch (e.g. `feat/satellite-globe-phase-1b`), separate from the
-      merged Phase 1 branch.
+      As of 2026-10-03 21:42Z the Machine still had `schedule: daily` but no run since the failed
+      start. If Fly resets the daily timer on update or start (unverified), the next scheduled run
+      is around 04:45Z on 2026-10-04.
+- [ ] **Review and merge globe Phase 1b** (`portfolio-site` branch `feat/satellite-globe-phase-1b`,
+      3 commits, local): category toggles, Live speed, both-objects replay with a labelled miss
+      line, click-to-inspect. See `docs/sessions/2026-10-03-globe-phase-1b.md`.
 
 ## Later
 
@@ -63,6 +62,13 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-03 - Globe Phase 1b implemented in `portfolio-site` (`feat/satellite-globe-phase-1b`,
+      pending review).
+      - Phase 1's replay drew both rings, but identical and overlapping, so it read as one. The
+        pair now gets two colours and sizes plus a dashed, labelled miss line.
+      - Verified: picking is pixel-threshold and zoom-independent, and the replay line matches
+        the report's miss distance within 1 m.
+      See `docs/sessions/2026-10-03-globe-phase-1b.md`.
 
 - [x] 2026-10-03 - Globe Phase 1 (`portfolio-site` PR #3, merged): textured/rotating Earth
       (GMST-based, satellites stay in native ECI frame), all 19,240 objects live-animating with

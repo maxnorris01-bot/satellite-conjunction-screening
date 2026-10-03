@@ -10,6 +10,18 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1b built; implementation choices.** Per the Phase 1b entry below
+(`portfolio-site` `feat/satellite-globe-phase-1b`; details in
+`docs/sessions/2026-10-03-globe-phase-1b.md`):
+- **Both objects marked:** Phase 1 already ringed both, but identically, and flagged pairs are
+  usually sub-pixel apart. The pair now gets two colours and sizes, read as concentric rings.
+- **Miss line:** drawn in 3D. Replay can zoom to about 2 km so multi-km lines are visible; the
+  on-screen label carries the distance at normal zoom.
+- **Picking:** nearest visible point within 10 px (20 px on touch), skipping points behind the
+  Earth or the camera.
+- **Live speed:** re-anchors on change, so it never jumps, and the readout says when Live is
+  running ahead of real time.
+
 **2026-10-03 - Globe Phase 1b scoped: color-category toggles, playback speed control,
 near-miss distance callout, click-to-inspect any object.** Follows Max reviewing Phase 1 live on
 localhost. All four are additions to the already-shipped and -verified globe (orientation,
