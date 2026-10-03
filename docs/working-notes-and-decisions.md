@@ -10,6 +10,19 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1c built; two catalog corrections and the zoom floor.** Per the Phase 1c
+entry below (`portfolio-site` `feat/satellite-globe-phase-1c`; details in
+`docs/sessions/2026-10-03-globe-phase-1c.md`):
+- **ISS = 5 pieces, not 13.** The `ISS (` modules are co-located. The other 8 substring hits
+  were unrelated names and four `ISS OBJECT`s flying freely 7,500-11,000 km away.
+- **Fengyun-1C debris uses `FENGYUN 1C DEB`** (1,940), since the `FENGYUN` prefix includes 14
+  working weather satellites.
+- **Free-roam zoom floor is 1.10 Earth radii (~640 km).** At 1.06 the centre-facing camera sat
+  beneath the LEO shell and saw almost nothing. Close-ups come from replay and station views
+  (~2 km); "zoom to / follow this object" from the inspect panel is a natural follow-up.
+- **Name filters:** every verified constellation of roughly 150+ objects, plus NAVSTAR and the
+  two historical debris groups.
+
 **2026-10-03 - Globe Phase 1c scoped: curated object/keyword filters, real-collision-history
 panel, deeper zoom, nearest-neighbor-on-select.** Follows Max reviewing Phase 1b live. Replaces
 the originally-floated free-text search bar with curated filters per Max's call - deterministic,
