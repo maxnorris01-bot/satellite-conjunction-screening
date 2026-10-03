@@ -10,6 +10,51 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1c fix round: visibility reset, nearest-neighbor line, single-select,
+zoom-floor verification.** Follows Max testing the merged Phase 1c live. Four issues, scoped for a
+follow-up branch - none touch orientation/propagation.
+
+**1. No way back to "show all" after isolating an incident's debris.** The collision-history
+panel's per-event "show only this debris" buttons (`CollisionHistory.tsx`) leave no path back to
+full visibility - confirmed by Max, not a maybe. Fix: either make the button a toggle (clicking
+the active one again restores the prior view), or route it through the same visibility state the
+name-filter panel's "Show all" control already clears (`globe/groups.ts`) rather than a separate
+mechanism. Either way, there must always be an obvious, working way back to showing everything
+after using *either* filter entry point.
+
+**2. Nearest-neighbor needs the same dashed line the near-miss replay already has.** This is a
+gap in the Phase 1c scoping entry, not an implementation bug - that entry only asked for the
+distance to appear in the inspect panel's text (`globe/neighbors.ts`), not the visual connection.
+It should get the same treatment Phase 1b built for near-miss replay: a dashed line between the
+selected object and its nearest neighbor, labeled with the distance. Reuse that existing line/label
+component rather than building a second one.
+
+**3. Selection needs to actually be single-select.** Right now (per Max) it's possible to end up
+with more than one object looking selected, clicking empty space does nothing, and there's no
+explicit way to clear a selection. Required behavior:
+   - Selecting a new object always replaces any previous selection - never additive.
+   - Clicking anywhere that isn't an object (not a drag) clears the current selection.
+   - The inspect panel gets an explicit deselect/close control, for discoverability and for
+     mobile, where an empty-space tap is easy to confuse with a camera drag.
+
+**4. Zoom floor change doesn't appear to have taken effect.** The reported change (1.15 -> 1.10
+Earth radii, roughly 955 km -> 637 km above the surface) is large enough that it should be
+obviously noticeable, not subtle - so something likely isn't taking effect rather than this being
+a perception issue. Check, in order: (a) whether the deployed production bundle actually contains
+the change (Vercel auto-deploys on merge to `main`, but confirm the live bundle's hash/build time,
+not just that the PR merged) and whether a stale browser cache is masking it - have Max hard-reload
+after confirming the deploy; (b) whether the new floor is wired to *every* zoom input path (mouse
+wheel, trackpad pinch, and touch pinch may be separate code paths in whatever controls library is
+in use - a fix applied to one path and not the others would look exactly like "nothing changed" to
+someone testing with a different input method); (c) whether Max was actually testing free-roam
+zoom and not the replay/station-follow zoom, which already goes much closer (~2 km) via a separate
+path and was unaffected by this change by design - rule this out before assuming the fix itself is
+broken.
+
+**Branch:** a fresh branch in `portfolio-site` (e.g. `fix/satellite-globe-phase-1c-feedback`),
+separate from the merged Phase 1c branch.
+
+
 **2026-10-03 - Globe Phase 1c built; two catalog corrections and the zoom floor.** Per the Phase 1c
 entry below (`portfolio-site` `feat/satellite-globe-phase-1c`; details in
 `docs/sessions/2026-10-03-globe-phase-1c.md`):

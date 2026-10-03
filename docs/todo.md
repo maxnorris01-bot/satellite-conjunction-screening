@@ -12,9 +12,12 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Review and merge globe Phase 1c** (`portfolio-site` branch `feat/satellite-globe-phase-1c`,
-      3 commits, local): name filters, ISS/Tiangong views, nearest neighbour, collision history,
-      zoom floor 1.10. See `docs/sessions/2026-10-03-globe-phase-1c.md`.
+- [ ] **Globe Phase 1c fix round (Claude Code, in `portfolio-site`):** no way back to "show
+      all" after isolating an incident's debris; nearest-neighbor needs the same dashed line
+      near-miss replay has; selection must be single-select with click-empty-to-deselect plus an
+      explicit deselect button; verify the zoom-floor change actually reaches the deployed build
+      and every zoom input path. Full detail in the 2026-10-03 "Globe Phase 1c fix round"
+      working-notes entry. Fresh branch (e.g. `fix/satellite-globe-phase-1c-feedback`).
 - [ ] **Watch the daily schedule.** Confirmed working as of the 2026-10-03 21:46Z manual run
       (dated snapshots + history index verified in the bucket). Still unconfirmed whether that
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
@@ -58,6 +61,14 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+
+- [x] 2026-10-03 - Globe Phase 1c (`portfolio-site` PR #5, merged): name filters by verified
+      prefix groups with "only"/"show all" controls, ISS/Tiangong station-follow views, a sourced
+      real-collision-history panel tied to live catalog counts, nearest-neighbor-on-select, and
+      a deeper zoom floor (1.10 Earth radii). Corrected two of the scoping entry's own catalog
+      numbers during implementation (ISS is 5 modules not 13; Fengyun debris is 1,940 not 1,954).
+      Feedback after testing live surfaced 4 follow-up issues - see the fix-round item above.
+      See `docs/sessions/2026-10-03-globe-phase-1c.md`.
 - [x] 2026-10-03 - Globe Phase 1c implemented in `portfolio-site` (`feat/satellite-globe-phase-1c`,
       pending review). Two corrections to the scoping notes:
       - The ISS is 5 co-located modules, not 13 (the substring count caught unrelated names and
