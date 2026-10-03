@@ -188,13 +188,18 @@ objects) with fresh CelesTrak data and overwrites these objects in a public Tigr
 | Object | Contents |
 |---|---|
 | `reports/current.json` | The report, same format as `make screen`'s (~78 MB at full-catalog scope) |
+| `objects/<date>.json.gz`, `reports/<date>.json.gz` | Dated copies of the two above for the globe's time slider, gzipped (`Content-Encoding: gzip`; report ~5.3 MB compressed). Kept for 7 days, pruned every run ([ADR 0011](docs/adr/adr-0011-dated-snapshot-retention.md)) |
+| `history/index.json` | Which dates have both a dated objects and a dated report key, newest first |
 | `objects/current.json` | Every screened object, flat and propagation-ready: `norad_id`, `name`, TLE lines, epoch, `satcat_owner`, `object_type`, `active_payload`, `source_groups` ([ADR 0010](docs/adr/adr-0010-portfolio-api-and-full-catalog-scope.md)). Served gzipped (`Content-Encoding: gzip`, ~1.4 MB) |
 | `snapshots/current/{gp,satcat}-<group>.json.gz` | The exact CelesTrak responses behind it, in the regression test's snapshot format |
 | `snapshots/current/manifest.json` | The run id and snapshot file list, to check against the report's `run_id` |
 
-There's no history: yesterday's report is gone once today's lands. A failed run uploads nothing,
-so the previous report stays, and the failure shows in `fly logs` as one JSON line. Design and
-tradeoffs: [ADR 0009](docs/adr/adr-0009-daily-run-on-fly-scheduled-machine.md).
+The `current.json` keys always hold the latest run. History is only the dated keys: one per UTC
+date (a second run that day overwrites it), deleted once more than 7 days older than the latest
+run's date. A failed run uploads nothing, so the previous report stays, and the failure shows in
+`fly logs` as one JSON line. If only the retention step fails, the run still publishes and logs a
+`retention_error`. Design and tradeoffs: [ADR 0009](docs/adr/adr-0009-daily-run-on-fly-scheduled-machine.md)
+and [ADR 0011](docs/adr/adr-0011-dated-snapshot-retention.md).
 
 **Dry run locally** (same objects, written to `runs/publish/`, reusing the 2-hour cache):
 

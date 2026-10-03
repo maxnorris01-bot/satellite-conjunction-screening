@@ -12,12 +12,10 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Retention ADR (Claude Code, in `satellite-conjunction-screening`, do first):** a new
-      ADR for the daily Fly job to retain 7 days of dated, gzip-compressed `objects/<date>.json.gz`
-      and `reports/<date>.json.gz` snapshots (alongside the existing `current.json` overwrites),
-      pruning anything older than 7 days on every run. Prerequisite for the time slider's backward
-      range below - not needed for the live globe itself. Full reasoning in the 2026-10-03
-      "Globe build plan" amendment in the working notes.
+- [ ] **Deploy the retention change** (ADR 0011): `make fly-build`, then
+      `make fly-update FLY_MACHINE_ID=1850e47cdd43e8` and `fly machine start 1850e47cdd43e8`.
+      Verify the first dated keys and `history/index.json` land in the bucket. The slider's
+      backward range fills in one day per run after that.
 - [ ] **Globe build, Phase 1 (Claude Code, in `portfolio-site`):** textured, correctly-rotating
       Earth (real continents/oceans, GMST-based rotation, satellites stay in their native ECI
       frame - no per-object frame conversion) with all 19,240 objects live-animating in real
@@ -68,6 +66,12 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-02 - Retention ADR 0011 written and implemented:
+      - Dated `objects/<date>.json.gz` and `reports/<date>.json.gz` (gzip, `Content-Encoding:
+        gzip`), pruned past 7 days every run, plus `history/index.json`.
+      - Local dry run: report 76.2 MB to 5.3 MB, peak 2,875 MB, seeded old keys pruned, dated
+        copies byte-identical to `current.json`.
+      - Not deployed yet (item above). See `docs/sessions/2026-10-02-snapshot-retention.md`.
 
 - [x] **Frame-time spike (Claude Code, in `portfolio-site`), run 2026-10-03:** every-object-every
       -frame propagation fails once throttled (4x: 30.4/38.4 ms mean, p95 >110 ms; 6x: 54.9/59.3
