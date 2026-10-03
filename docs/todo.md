@@ -8,10 +8,27 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 
 ## Up next (in priority order)
 
-*Phase per the 2026-09-30 decision in `docs/working-notes-and-decisions.md`: finish collision-tracker
-polish, then build only the foundation a possible later visualization product would need. Full
-scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
-list yet - see that decision entry.*
+*Phase per the 2026-10-03 gate decision (go) in `docs/working-notes-and-decisions.md`: the
+foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
+the active work.*
+
+- [ ] **Retention ADR (Claude Code, in `satellite-conjunction-screening`, do first):** a new
+      ADR for the daily Fly job to retain 7 days of dated, gzip-compressed `objects/<date>.json.gz`
+      and `reports/<date>.json.gz` snapshots (alongside the existing `current.json` overwrites),
+      pruning anything older than 7 days on every run. Prerequisite for the time slider's backward
+      range below - not needed for the live globe itself. Full reasoning in the 2026-10-03
+      "Globe build plan" amendment in the working notes.
+- [ ] **Globe build, Phase 1 (Claude Code, in `portfolio-site`):** textured, correctly-rotating
+      Earth (real continents/oceans, GMST-based rotation, satellites stay in their native ECI
+      frame - no per-object frame conversion) with all 19,240 objects live-animating in real
+      time (`slice=10` propagation, raw three.js, orbit camera); near-miss replay/focus (click a
+      row in the near-miss table, camera jumps to that pair's TCA); a user-selectable
+      point-coloring toggle (by object type / by SATCAT owner / flat); and a time slider (7 days
+      back using the retained snapshots above, about 1 day forward using the existing live
+      report/objects - no new data needed for that direction - plus a "Live" control to resume
+      real-time). Full scope, what's deferred, and known risks in the 2026-10-03 "Globe build
+      plan" working-notes entry and its amendment. Branch `feat/satellite-globe`, real PR, no AI
+      attribution.
 
 ## Later
 
@@ -31,14 +48,10 @@ list yet - see that decision entry.*
       a large TSV.
 
 - [ ] Add a status note to ADR 0001: SATCAT metadata now comes from CelesTrak.
-- [ ] **Unblocked by the 2026-10-03 gate decision (go):** 3D globe of all tracked objects
-      (client-side SGP4 via `satellite.js`, fed by `objects/current.json`), owner/operator
-      filtering UI, browser-geolocation sky view with per-satellite visibility/pass predictions,
-      and a satellite-POV camera view. See the 2026-09-30 working-notes entry for the full vision
-      and sequencing. **Hard requirement from the frame-time spike:** propagation must be spread
-      across frames (not every object every frame) from the first implementation - see the
-      2026-10-03 spike-results working-notes entry for the `slice=10` approach and numbers. Not
-      yet scoped into a concrete build plan - that's the next Cowork session on this project.
+- [ ] **Deferred to later phases** (see the same working-notes entry for why): true operator
+      filtering (blocked on the GCAT join, its own to-do item below), browser-geolocation sky
+      view with per-satellite visibility/pass predictions, and the satellite-POV camera view.
+      Each needs its own Cowork scoping session once Phase 1 is live and reviewed.
 
 ## Lower priority / opportunistic
 
