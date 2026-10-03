@@ -13,16 +13,17 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] Foundation-gate item, remainder (ADR 0010 and its amendment). This repo's side is done
-      (see Completed, 2026-10-02). Still open:
-      - Enable CORS on the public bucket for `reports/current.json` and `objects/current.json`
-        only (the amendment's direct-fetch decision).
-      - In `portfolio-site`: a small Vercel `GET /api/satellite/summary` (risk counts, top-N near
-        misses) under the ~4.5 MB response cap, then `/history` as the lower-priority add-on.
-      If this turns out easy, the visualization vision stays realistic; if it's a significant lift,
-      bank what's built and move to City Livability Scoring Tool's MVP instead.
+- [ ] **Gate decision (Cowork):** the foundation gate is done (see Completed, 2026-10-02). Decide
+      whether to keep going toward the visualization vision or bank this project and move to City
+      Livability Scoring Tool's MVP. Claude Code's read is in
+      `docs/sessions/2026-10-02-foundation-gate-cors-summary.md`.
 
 ## Later
+
+- [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
+      run overwrites `reports/current.json` and keeps no history (ADR 0009), so there's nothing
+      to stitch. Needs dated reports or dated small summaries published with a retention window,
+      then the `portfolio-site` function.
 
 - [ ] Space-Track full GP catalog as the source for true full-catalog scope (ADR 0010 amendment,
       option (b)). Needs its own ADR: new primary source, credentials as Fly secrets, rate limits,
@@ -55,6 +56,17 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-02 - Foundation-gate item, remainder (ADR 0010's amendment):
+      - Bucket CORS applied: GET only, from `portfolio-site`'s Vercel origin plus localhost
+        5173/4173.
+      - `portfolio-site` PR #2: `GET /api/satellite/summary` (risk counts plus the top-N
+        conjunctions, ~11 KB) feeds the satellite page and the home page's stats.
+      - Surprise: Tigris CORS can't target individual keys, so the rule is bucket-wide and
+        narrowed by origin (Max approved).
+      - `/history` wasn't built, because there's no stored history to serve (moved to Later).
+      - The deployed route was checked on the Vercel preview by Max, since Deployment Protection
+        blocks curl.
+      See `docs/sessions/2026-10-02-foundation-gate-cors-summary.md`.
 - [x] 2026-10-02 - Full-catalog scope plus `objects/current.json`, deployed (ADR 0010):
       - Scope is now CelesTrak's `active` plus all three debris groups, 19,240 objects screened.
       - Measured locally at 2.87 GB peak and 35 s on the M5. The Machine was resized to
