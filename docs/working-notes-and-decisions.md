@@ -10,6 +10,25 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-02 - 7-day dated snapshot retention: ADR 0011 written and implemented.** This is the
+prerequisite the Globe build plan amendment set for the time slider's backward range. Each daily
+run now also writes `objects/<date>.json.gz` and `reports/<date>.json.gz`, plus a
+`history/index.json` of the dates that have both. `<date>` is the run window's UTC date.
+- **Encoding:** gzipped, served with `Content-Encoding: gzip`. The report uses level 6 (5.3 MB
+  instead of 78 MB).
+- **Pruning:** keys dated more than 7 days before the run's date are deleted, so up to 8 dates
+  per prefix exist at once and a full 7-day drag always lands on a stored date.
+- **Choices this session made that the plan didn't specify:**
+  - **The index.** The frontend learns which past dates exist without bucket listing, and gaps
+    from skipped runs show up as gaps.
+  - **Pruning in code rather than a bucket lifecycle rule.** Expiry is by snapshot date, not
+    object age.
+  - **A retention failure doesn't undo the publish.** The run logs `retention_error` and exits
+    non-zero.
+- **Measured:** about 55 MB at most in the bucket, free on Tigris. Peak memory moved from 2.87 GB
+  to 2.88 GB.
+- **Not yet deployed:** see the to-do list.
+
 **2026-10-03 - Globe build plan (Phase 1): core globe + near-miss replay, user-selectable point
 coloring.** Follows the 2026-10-03 gate decision (go). Scoped in Cowork, to hand off to Claude Code
 in `portfolio-site`.
