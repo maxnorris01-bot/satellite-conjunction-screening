@@ -12,21 +12,15 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Deploy the retention change** (ADR 0011): `make fly-build`, then
-      `make fly-update FLY_MACHINE_ID=1850e47cdd43e8` and `fly machine start 1850e47cdd43e8`.
-      Verify the first dated keys and `history/index.json` land in the bucket. The slider's
-      backward range fills in one day per run after that.
-- [ ] **Globe build, Phase 1 (Claude Code, in `portfolio-site`):** textured, correctly-rotating
-      Earth (real continents/oceans, GMST-based rotation, satellites stay in their native ECI
-      frame - no per-object frame conversion) with all 19,240 objects live-animating in real
-      time (`slice=10` propagation, raw three.js, orbit camera); near-miss replay/focus (click a
-      row in the near-miss table, camera jumps to that pair's TCA); a user-selectable
-      point-coloring toggle (by object type / by SATCAT owner / flat); and a time slider (7 days
-      back using the retained snapshots above, about 1 day forward using the existing live
-      report/objects - no new data needed for that direction - plus a "Live" control to resume
-      real-time). Full scope, what's deferred, and known risks in the 2026-10-03 "Globe build
-      plan" working-notes entry and its amendment. Branch `feat/satellite-globe`, real PR, no AI
-      attribution.
+- [ ] **Get the daily run publishing again.** The retention image (`e7f3427`) is deployed on
+      Machine `1850e47cdd43e8`, but the 2026-10-03 04:43Z run failed with CelesTrak `403 Forbidden`
+      (likely a short-term block after an interrupted run plus an immediate restart). Start it
+      once after about 2 h, not repeatedly. Then verify the dated keys and `history/index.json`
+      land in the bucket. The globe's backward range fills in one day per run after that.
+- [ ] **Review and merge globe Phase 1** (`portfolio-site` branch `feat/satellite-globe`, 4
+      commits, local). Decide whether Vercel preview origins should be added to the bucket's
+      CORS rule (previews can't load the globe today). See
+      `docs/sessions/2026-10-03-globe-phase-1.md`.
 
 ## Later
 
@@ -66,6 +60,14 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-03 - Globe Phase 1 implemented in `portfolio-site` (`feat/satellite-globe`, pending
+      review): textured GMST-rotated Earth, all 19,240 objects live with `slice=10`, near-miss
+      replay, type/owner/flat colouring, and a time slider with Live. Also
+      `/api/satellite/summary?date=`.
+      - Verified at 60 fps on the M5 unthrottled and at 4x CPU throttling.
+      - Surprise: only three categorical hues pass the all-pairs colour checks on the dark
+        globe, so owner colouring is US / China / CIS plus Other.
+      See `docs/sessions/2026-10-03-globe-phase-1.md`.
 - [x] 2026-10-02 - Retention ADR 0011 written and implemented:
       - Dated `objects/<date>.json.gz` and `reports/<date>.json.gz` (gzip, `Content-Encoding:
         gzip`), pruned past 7 days every run, plus `history/index.json`.
