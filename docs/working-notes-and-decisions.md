@@ -10,6 +10,118 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe build plan (Phase 1): core globe + near-miss replay, user-selectable point
+coloring.** Follows the 2026-10-03 gate decision (go). Scoped in Cowork, to hand off to Claude Code
+in `portfolio-site`.
+
+**What ships in this phase:**
+- **The core globe.** Fetch `objects/current.json` directly from the bucket (CORS already allows
+  the Vercel origin and localhost); parse every object's TLE with `satellite.js`; render all
+  19,240 as points with raw three.js on a bare sphere, orbit-style camera (pan/zoom/rotate, no
+  fixed "up"). **Propagation is frame-sliced from the first commit** (`slice=10` - each object
+  re-propagated roughly every 10th frame, not every frame every time) - this is the hard
+  requirement the 2026-10-03 spike established, not a later optimization.
+- **Near-miss replay/focus**, wired to the near-miss table already on the page
+  (`SatelliteTool.tsx`'s `NearMissList`, fed by `GET /api/satellite/summary`). Clicking a row:
+  looks up both objects' TLEs in the already-fetched `objects/current.json` by `norad_id`,
+  propagates each to that row's `tca_utc` (not "now"), animates the camera to that point, and
+  visually marks the two objects (e.g. a highlight ring or enlarged point) so they're findable at
+  globe scale. A visible "back to full view" control returns to the free-roam camera. No new data
+  needed - `tca_utc` and both `norad_id`s are already in the summary response; this is exactly
+  what ADR 0010 anticipated when it specified this feature needs nothing beyond
+  `objects/current.json` covering the full catalog.
+- **User-selectable point coloring**, a small control (e.g. a segmented toggle) with three modes:
+  - **By object type** (default) - active payload / rocket body / debris / unknown, from
+    `object_type` + `active_payload` already in `objects/current.json`. No new data.
+  - **By SATCAT owner** - `satcat_owner.name`, already in the data. Note: this field has dozens of
+    distinct values; the legend needs a sensible "top N + other" grouping rather than one swatch
+    per owner, or it becomes unreadable. Decide the exact cutoff during implementation, not here.
+  - **Flat / single color** - what the spike itself measured; the simplest fallback view.
+  Switching modes only recolors existing points (no re-fetch, no re-propagation) - should be
+  instant.
+
+**Explicitly deferred to later phases (not this session):**
+- True operator filtering (SpaceX, etc.) - blocked on the GCAT join, which has its own unresolved
+  to-do item and needs its own ADR. Owner-coloring above uses the state/org-level `satcat_owner`
+  field that already exists, which is a different, looser thing than "operator."
+- Browser-geolocation sky view and the satellite-POV camera - each is its own real feature, not
+  an incremental add to the globe; scope those in their own future Cowork session once this phase
+  is live and reviewed.
+
+**Known open risks, not blockers for v1:**
+- The frame-time spike validated `slice=10` on desktop Chromium (CPU-throttled to approximate a
+  slower laptop), not actual mobile hardware or Safari. If the page looks janky on a phone,
+  revisit then rather than guessing now - a portfolio site is mostly viewed on desktop anyway.
+- `three.js` (~600 KB) plus `satellite.js` add real bundle weight. Since the page is already a
+  separate route (`react-router-dom`), import the globe module so it code-splits onto the
+  satellite-tool route rather than the app's main bundle - confirm this actually happens
+  (`npm run build`'s chunk output), don't just assume route-based splitting is automatic.
+
+**Branch:** `feat/satellite-globe` in `portfolio-site`, real feature branch (unlike the spike),
+Conventional Commits, PR + review per the usual sequence. No AI attribution per the standing
+convention.
+
+**Amendment, 2026-10-03: textured/rotating Earth, real-time motion, and a 7-day time slider
+folded into Phase 1.** Three more requirements came out of the same scoping session, after the
+above was first written but before any of it was handed to Claude Code - all three change the
+plan materially, so folded in here rather than left implicit.
+
+- **The Earth must look like Earth, not a solid-colored sphere.** Texture the sphere with a
+  public-domain day map showing real continents/oceans (e.g. NASA's Blue Marble/Visible Earth
+  imagery), at a resolution that stays reasonable for bundle size (around 2k, not 8k).
+- **Correct orientation is a rotation, not a conversion.** `satellite.js` already returns
+  positions in an Earth-centered *inertial* frame (ECI/TEME) - the frame satellites naturally
+  orbit in without the planet's spin added back in. The cheap and correct way to make the
+  continents line up with real geography at the displayed moment is to **rotate the Earth mesh**
+  by the sidereal angle (GMST) for that moment, computed once per frame from the simulated clock,
+  and leave every satellite's already-computed ECI position alone. Converting each of 19,240
+  satellite positions into an Earth-fixed frame instead would be the same visual result for far
+  more per-frame cost, and would need redoing for every selected time anyway - rotating one mesh
+  is strictly cheaper and is the standard technique for this.
+- **Real-time motion, by default.** The simulated clock runs at true 1x: satellites visibly move
+  within seconds (they're moving several km/s); Earth's spin itself is close to imperceptible
+  over a short visit (one rotation is ~24h), which is fine - it doesn't need to be artificially
+  sped up to look correct, it just needs to actually be live and continuously advancing rather
+  than a static snapshot.
+- **A time slider: 7 days back, about 1 day forward, with a "Live" control to snap back to
+  real-time.** This is bigger than a frontend-only addition:
+  - **Forward (now to about +24h) needs no new data.** The daily report already screens the
+    *next* 24 hours from its own generation time (see `SatelliteTool.tsx`'s existing "following
+    24 hours" copy), so today's `objects/current.json` and `reports/current.json` already cover
+    this whole range - propagate the existing elements forward to the selected time, no new
+    fetch.
+  - **Backward (up to 7 days) needs real stored history, not extrapolation.** Running today's
+    TLEs backward 7 days with SGP4 would drift from what actually happened (real drag/maneuvers
+    aren't in old elements propagated the "wrong" direction for that long) - the risk-table entry
+    above already notes SGP4 error grows with element age. Giving an accurate past view means the
+    daily publish job on Fly needs to **start retaining dated snapshots instead of only
+    overwriting `current.json`**: both `objects/<date>.json.gz` and, per Max's call, **a dated,
+    gzip-compressed `reports/<date>.json.gz` too** (so near-miss replay also works on past
+    dates, not just positions) - alongside the existing `current.json` overwrites, which stay for
+    today's live consumers. A 7-day retention window, pruned on every run (delete any dated key
+    older than 7 days so the bucket doesn't grow unbounded).
+  - **This needs its own ADR** in this repo before implementation, the same way every other real
+    storage/architecture decision here has (ADR 0009's bucket layout, ADR 0010's API shape) - the
+    retention policy, the new dated-key naming, the pruning step, and the report's storage size
+    once compressed (reports/current.json was measured at 78 MB uncompressed; confirm the gzipped
+    size and multiply by 7 before treating this as a settled cost) all belong in that ADR rather
+    than assumed here.
+  - **Bucket CORS already covers this** - the existing rule is bucket-wide (not per-key), so new
+    dated keys need no CORS change, same reasoning ADR 0010 already established for the two
+    large current artifacts.
+  - **Frontend:** dragging the slider into the backward range fetches that date's dated
+    objects+report snapshot and propagates from *that day's own elements*, not today's;
+    dragging into the forward range or back to "now" uses today's `current.json` as already
+    planned; "Live" exits slider mode and resumes the continuous real-time animation.
+
+**Decision: folded into this same Phase 1**, rather than split into its own later phase, per
+Max's call - so `feat/satellite-globe` now also depends on the new retention work in this repo.
+Sequencing within the one PR cycle is Claude Code's to work out, but the retention/ADR piece in
+*this* repo is a real prerequisite for the slider's backward range specifically (not for the
+globe, the real-time motion, or the forward range, which need nothing new).
+
+
+
 **2026-10-03 - Frame-time spike results: the worst case fails under throttling; slicing
 propagation across frames passes with margin.** Run by Claude Code on `portfolio-site`'s
 `spike/globe-frame-time` branch (local only, one commit, not pushed) against the entry below.
