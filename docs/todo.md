@@ -12,12 +12,9 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Globe Phase 1c (Claude Code, in `portfolio-site`):** curated object-of-interest filter
-      (ISS, CSS), verified keyword filters by name prefix (Starlink, OneWeb, Kuiper, the two named
-      debris clouds, NAVSTAR, etc.), a real-collision-history panel (2009 Iridium/Cosmos, 2007
-      Fengyun ASAT test, both sourced), a deeper zoom floor, and nearest-neighbor distance on
-      click-to-inspect. Full scope in the 2026-10-03 "Globe Phase 1c" working-notes entry. Fresh
-      branch (e.g. `feat/satellite-globe-phase-1c`).
+- [ ] **Review and merge globe Phase 1c** (`portfolio-site` branch `feat/satellite-globe-phase-1c`,
+      3 commits, local): name filters, ISS/Tiangong views, nearest neighbour, collision history,
+      zoom floor 1.10. See `docs/sessions/2026-10-03-globe-phase-1c.md`.
 - [ ] **Watch the daily schedule.** Confirmed working as of the 2026-10-03 21:46Z manual run
       (dated snapshots + history index verified in the bucket). Still unconfirmed whether that
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
@@ -61,6 +58,12 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-03 - Globe Phase 1c implemented in `portfolio-site` (`feat/satellite-globe-phase-1c`,
+      pending review). Two corrections to the scoping notes:
+      - The ISS is 5 co-located modules, not 13 (the substring count caught unrelated names and
+        free-flying `ISS OBJECT`s).
+      - The Fengyun ASAT debris is `FENGYUN 1C DEB` (1,940), not the whole `FENGYUN` prefix.
+      See `docs/sessions/2026-10-03-globe-phase-1c.md`.
 - [x] 2026-10-03 - Globe Phase 1b implemented and merged in `portfolio-site` (PR #4).
       - Phase 1's replay drew both rings, but identical and overlapping, so it read as one. The
         pair now gets two colours and sizes plus a dashed, labelled miss line.
