@@ -12,17 +12,16 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Get the daily run publishing again.** The retention image (`e7f3427`) is deployed on
-      Machine `1850e47cdd43e8`, but the 2026-10-03 04:43Z run failed with CelesTrak `403 Forbidden`
-      (likely a short-term block after an interrupted run plus an immediate restart). Start it
-      once after about 2 h, not repeatedly. Then verify the dated keys and `history/index.json`
-      land in the bucket. The globe's backward range fills in one day per run after that.
-      As of 2026-10-03 21:42Z the Machine still had `schedule: daily` but no run since the failed
-      start. If Fly resets the daily timer on update or start (unverified), the next scheduled run
-      is around 04:45Z on 2026-10-04.
-- [ ] **Review and merge globe Phase 1b** (`portfolio-site` branch `feat/satellite-globe-phase-1b`,
-      3 commits, local): category toggles, Live speed, both-objects replay with a labelled miss
-      line, click-to-inspect. See `docs/sessions/2026-10-03-globe-phase-1b.md`.
+- [ ] **Globe Phase 1c (Claude Code, in `portfolio-site`):** curated object-of-interest filter
+      (ISS, CSS), verified keyword filters by name prefix (Starlink, OneWeb, Kuiper, the two named
+      debris clouds, NAVSTAR, etc.), a real-collision-history panel (2009 Iridium/Cosmos, 2007
+      Fengyun ASAT test, both sourced), a deeper zoom floor, and nearest-neighbor distance on
+      click-to-inspect. Full scope in the 2026-10-03 "Globe Phase 1c" working-notes entry. Fresh
+      branch (e.g. `feat/satellite-globe-phase-1c`).
+- [ ] **Watch the daily schedule.** Confirmed working as of the 2026-10-03 21:46Z manual run
+      (dated snapshots + history index verified in the bucket). Still unconfirmed whether that
+      manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
+      its own around 2026-10-04 and isn't silently skipped.
 
 ## Later
 
@@ -62,8 +61,7 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
-- [x] 2026-10-03 - Globe Phase 1b implemented in `portfolio-site` (`feat/satellite-globe-phase-1b`,
-      pending review).
+- [x] 2026-10-03 - Globe Phase 1b implemented and merged in `portfolio-site` (PR #4).
       - Phase 1's replay drew both rings, but identical and overlapping, so it read as one. The
         pair now gets two colours and sizes plus a dashed, labelled miss line.
       - Verified: picking is pixel-threshold and zoom-independent, and the replay line matches

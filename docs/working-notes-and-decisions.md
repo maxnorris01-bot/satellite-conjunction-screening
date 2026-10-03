@@ -10,6 +10,72 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1c scoped: curated object/keyword filters, real-collision-history
+panel, deeper zoom, nearest-neighbor-on-select.** Follows Max reviewing Phase 1b live. Replaces
+the originally-floated free-text search bar with curated filters per Max's call - deterministic,
+explainable, no AI, and reuses the visibility-toggle mechanism already built for the type/owner
+legend in Phase 1b.
+
+**Verified against the live catalog (19,246 objects, 2026-10-03) before writing this, not
+guessed:**
+- `ISS` matches 13 separate tracked pieces (`ISS (ZARYA)`, `ISS (UNITY)`, `ISS (ZVEZDA)`, etc.) -
+  it's one station but many catalog entries.
+- `HUBBLE` substring-matches 4 objects, but the real Hubble Space Telescope (`HUBBLE SPACE
+  TELESCOPE`) isn't in this catalog at all (0 matches) - the hits are unrelated cubesats named in
+  tribute (`LEMUR-2-HUBBLE-4` and similar). **Don't offer Hubble as a filter.**
+- `TIANGONG` isn't the catalog name, but China's station is there as three modules: `CSS
+  (TIANHE)`, `CSS (WENTIAN)`, `CSS (MENGTIAN)` - same multi-piece pattern as ISS.
+- `STARSHIP` has zero matches - not in this catalog's scope (active + the three debris groups).
+  **Don't offer it.**
+- Top name-prefix counts: STARLINK 11,152, FENGYUN 1,954, COSMOS 721 (of which `COSMOS 2251 DEB`
+  specifically is 576), ONEWEB 651, KUIPER 391, QIANFAN 257, HULIANWANG 191, IRIDIUM 188 (of which
+  `IRIDIUM 33 DEB` specifically is 107), YAOGAN 169, NAVSTAR 39 (this catalog's GPS constellation -
+  literal "GPS" doesn't appear in any name).
+
+**What this phase adds:**
+- **"Objects of interest" filter: ISS and CSS (China's station) only.** Both verified present and
+  correctly named above. Selecting one should fly to / highlight all of that station's tracked
+  pieces together, not just one - Claude Code's call on the exact camera/selection behavior for a
+  multi-piece object, same kind of open decision as Phase 1b's owner-coloring cutoff.
+- **Keyword filters, by verified name prefix.** Reuse Phase 1b's per-category visibility-toggle
+  mechanism, keyed on name prefix instead of type/owner. Suggested starting set, highest-value
+  first: Starlink, OneWeb, Kuiper (the three largest active constellations), `COSMOS 2251 DEB`
+  and `FENGYUN 1C DEB` specifically (the two real historical events below, not generic
+  "Cosmos"/"Fengyun"), Iridium (active) vs. `IRIDIUM 33 DEB` kept separate, NAVSTAR. Claude Code
+  decides the exact cutoff and whether smaller constellations (Qianfan, Hulianwang, Yaogan) are
+  worth including - same kind of call as the owner-coloring "top N + other" decision in Phase 1b.
+- **Real-collision-history panel**, researched and sourced, not guessed:
+  - Feb 10, 2009, Iridium 33 / Cosmos 2251: ~780 km altitude, nearly right angles, over northern
+    Russia - the first confirmed accidental collision between two intact satellites in history.
+    598 Iridium 33 fragments and 1,603 Cosmos 2251 fragments were catalogued as of 2012; today's
+    live catalog shows 107 and 576 respectively (the rest have decayed) - tie this panel's copy
+    to the tool's own live counts for `IRIDIUM 33 DEB` / `COSMOS 2251 DEB` rather than hardcoding
+    the 2012 numbers as current.
+  - Jan 11, 2007, Fengyun-1C ASAT test: a **deliberate** Chinese missile test, not a collision -
+    word this distinctly from the 2009 event. 860 km altitude, originally >3,000 trackable
+    fragments; today's catalog shows 1,954 under the `FENGYUN` prefix.
+  - Framing: exactly one confirmed accidental satellite-satellite collision has ever happened,
+    against the thousands of heuristic near-misses this tool flags routinely - context for what
+    the risk tiers actually mean (a stated heuristic, not a collision probability, per the
+    existing page copy).
+  - Sources: [CelesTrak's own collision page](https://www.celestrak.org/events/collision/),
+    [Wikipedia: 2007 Chinese anti-satellite missile test](https://en.wikipedia.org/wiki/2007_Chinese_anti-satellite_missile_test).
+- **Deeper zoom.** Raise the camera's minimum distance limit so users can get closer than Phase
+  1's floor allows. Claude Code picks the new floor - avoid near-plane clipping or point-size/LOD
+  breakdown at the new closest zoom, don't just set it to an arbitrarily small number.
+- **Nearest-neighbor distance on click-to-inspect.** When any object is selected, compute the
+  distance from it to every other currently-tracked object at that same displayed moment and show
+  the minimum in the inspect panel (alongside name/type/owner/position already there). This is a
+  one-off calculation triggered by the click, not a per-frame cost - comparing one object against
+  ~19,246 others once is trivial, nothing like the per-frame propagation budget Phase 1's spike
+  was about. Use a fresh, non-stale propagation of all objects to the exact selected moment for
+  this specific calculation, since the frame-sliced positions used for rendering can be up to
+  ~9 frames stale for any given object.
+
+**Branch:** a fresh branch in `portfolio-site` (e.g. `feat/satellite-globe-phase-1c`), separate
+from the merged Phase 1/1b branches.
+
+
 **2026-10-03 - Globe Phase 1b built; implementation choices.** Per the Phase 1b entry below
 (`portfolio-site` `feat/satellite-globe-phase-1b`; details in
 `docs/sessions/2026-10-03-globe-phase-1b.md`):
