@@ -17,10 +17,13 @@ the active work.*
       (likely a short-term block after an interrupted run plus an immediate restart). Start it
       once after about 2 h, not repeatedly. Then verify the dated keys and `history/index.json`
       land in the bucket. The globe's backward range fills in one day per run after that.
-- [ ] **Review and merge globe Phase 1** (`portfolio-site` branch `feat/satellite-globe`, 4
-      commits, local). Decide whether Vercel preview origins should be added to the bucket's
-      CORS rule (previews can't load the globe today). See
-      `docs/sessions/2026-10-03-globe-phase-1.md`.
+- [ ] **Globe Phase 1b (Claude Code, in `portfolio-site`):** color-category toggles (hide/show
+      a legend swatch's points), a playback speed control (1x/2x/5x/10x, Live only, default
+      stays 1x), near-miss replay highlighting both objects with a labeled distance line between
+      them, and click-to-inspect on any of the 19,240 objects (name/type/owner/position panel,
+      same treatment as the near-miss panel). Full scope in the 2026-10-03 "Globe Phase 1b"
+      working-notes entry. Fresh branch (e.g. `feat/satellite-globe-phase-1b`), separate from the
+      merged Phase 1 branch.
 
 ## Later
 
@@ -60,6 +63,16 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+
+- [x] 2026-10-03 - Globe Phase 1 (`portfolio-site` PR #3, merged): textured/rotating Earth
+      (GMST-based, satellites stay in native ECI frame), all 19,240 objects live-animating with
+      `slice=10` propagation, near-miss replay/focus, point-coloring toggle (type/owner/flat),
+      and the 7-day-back/1-day-forward time slider. Orientation verified against satellite.js's
+      own coordinate conversion plus a real visual spot-check. three.js + satellite.js code-split
+      into their own 150 KB gzipped chunk; main bundle unaffected. Not yet tested: real
+      Safari/mobile hardware, and the slider's backward range against real (vs. simulated)
+      history, since the retention pipeline's first successful run hadn't landed yet. See
+      `docs/sessions/2026-10-03-globe-phase-1.md`.
 - [x] 2026-10-03 - Globe Phase 1 implemented in `portfolio-site` (`feat/satellite-globe`, pending
       review): textured GMST-rotated Earth, all 19,240 objects live with `slice=10`, near-miss
       replay, type/owner/flat colouring, and a time slider with Live. Also

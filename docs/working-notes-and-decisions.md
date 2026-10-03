@@ -10,6 +10,46 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1b scoped: color-category toggles, playback speed control,
+near-miss distance callout, click-to-inspect any object.** Follows Max reviewing Phase 1 live on
+localhost. All four are additions to the already-shipped and -verified globe (orientation,
+propagation and the core camera/data pipeline are untouched) - small, independent, and don't need
+to reopen the work that got the careful coordinate-frame verification.
+
+**What this phase adds:**
+- **Toggle color categories on/off.** Within whichever coloring mode is active (type or owner),
+  each legend swatch gets a checkbox that hides/shows that category's points. Doesn't apply to
+  flat mode (nothing to toggle there). This doubles as a cheap filter UI using data already on
+  the page - it's not the deferred "true operator filtering" (still blocked on the GCAT join),
+  since it filters on the existing `object_type`/`satcat_owner` buckets, not real
+  operator-company names.
+- **Playback speed control (1x/2x/5x/10x).** A multiplier on how fast simulated time advances
+  **during Live playback only** - scrubbing the date slider to a specific point stays a direct
+  jump to that moment, unaffected by speed. Default stays 1x, matching the 2026-10-03 "real-time
+  by default" decision; this just adds an optional way to see motion faster, it doesn't change
+  what a first-time visitor sees.
+- **Near-miss replay: highlight both objects, plus a labeled distance line.** Confirm first
+  whether Phase 1's "rings it" already marks both objects in the pair or only one (the write-up
+  was ambiguous) - fix if it's only one. Add a dotted line between the two objects at the frozen
+  TCA moment, labeled with that conjunction's `miss_distance_km` (already in the report, no new
+  data needed).
+
+- **Click-to-inspect any object, not just near-miss pairs.** Clicking any of the 19,240 points
+  opens the same kind of info panel the near-miss click already shows - name, `norad_id`,
+  `object_type`/`active_payload`, `satcat_owner`, and the object's current propagated position
+  (lat/lon/altitude) at whatever moment the globe is showing. Most objects have never been in a
+  flagged conjunction, so this panel's content is necessarily different from the near-miss one
+  (no pair, no miss distance) - same visual treatment, not the same data shape.
+  **Implementation note, not a requirement:** picking one point out of 19,240 with a raycast needs
+  a screen-space pixel threshold (e.g. nearest point within N pixels of the click), not a fixed
+  world-space distance - a world-space threshold gets easier to hit when zoomed in and nearly
+  impossible when zoomed out, which is the wrong behavior. Claude Code's call on the exact
+  approach and threshold.
+
+**Branch:** a fresh branch in `portfolio-site` (e.g. `feat/satellite-globe-phase-1b`), separate
+from the merged Phase 1 branch, per the usual small-PR discipline.
+
+
 **2026-10-03 - Globe Phase 1 built; implementation-time decisions.** Built per the Globe build
 plan below (`portfolio-site` `feat/satellite-globe`; details in
 `docs/sessions/2026-10-03-globe-phase-1.md`). Choices the plan left open:
