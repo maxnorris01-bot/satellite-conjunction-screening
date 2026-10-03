@@ -10,6 +10,17 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1 built; implementation-time decisions.** Built per the Globe build
+plan below (`portfolio-site` `feat/satellite-globe`; details in
+`docs/sessions/2026-10-03-globe-phase-1.md`). Choices the plan left open:
+- **Owner colouring is the top 3 plus Other** (US, China, CIS: 89% of objects), keyed by owner
+  code, not rank. On a scatter every colour must separate from every other, and the dataviz
+  validator fails every four-hue set against the dark globe background.
+- **Past days' near misses are summarized server-side** (`/api/satellite/summary?date=`) rather
+  than parsing a 78 MB decompressed report in the browser.
+- **Vercel preview origins aren't in the bucket's CORS rule,** so previews can't load the globe.
+  That's an open review decision.
+
 **2026-10-02 - 7-day dated snapshot retention: ADR 0011 written and implemented.** This is the
 prerequisite the Globe build plan amendment set for the time slider's backward range. Each daily
 run now also writes `objects/<date>.json.gz` and `reports/<date>.json.gz`, plus a
