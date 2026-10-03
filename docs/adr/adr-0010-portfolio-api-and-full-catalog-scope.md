@@ -1,6 +1,6 @@
 # ADR 0010: Portfolio API layer, full-catalog scope, and the objects/current.json foundation artifact
 
-**Status:** Accepted, 2026-10-02. Amended 2026-10-02 (see amendment at the end) after Claude Code's read-only scoping pass surfaced two real constraints this ADR hadn't accounted for: CelesTrak has no all-objects query, and the report/objects payloads exceed Vercel's serverless response limit at full-catalog scope.
+**Status:** Accepted, 2026-10-02. Amended 2026-10-02 (see amendment at the end) after Claude Code's read-only scoping pass surfaced two real constraints this ADR hadn't accounted for: CelesTrak has no all-objects query, and the report/objects payloads exceed Vercel's serverless response limit at full-catalog scope. Implemented 2026-10-02: bucket CORS and `GET /api/satellite/summary` (see the as-built section at the end).
 
 ## Context
 
@@ -142,7 +142,9 @@ decision — won't work at this scale.
 
 **Decision: supersede part of the API-shape decision above.** The large static artifacts (the full
 report, `objects/current.json`) are fetched **directly from the public Tigris bucket, with CORS
-enabled for those two objects** — reversing this ADR's "no bucket CORS needed" call, but only for
+enabled for those two objects** (as built, the CORS rule is bucket-wide and narrowed by origin and
+method instead, because Tigris CORS rules can't target individual keys; see "Bucket CORS and the
+summary API, as built" below) — reversing this ADR's "no bucket CORS needed" call, but only for
 these two, and only because of the size constraint, not the configuration-overhead reasoning option
 1 was originally rejected for. The Vercel function's role narrows to a small, server-computed
 `GET /api/satellite/summary` (risk-level counts, top-N near-misses with enough fields for the
@@ -222,3 +224,93 @@ billed for CPU or RAM.
 `snapshots/current/gp-iridium-NEXT.json.gz` and `satcat-iridium-NEXT.json.gz` (last modified
 2026-10-02 03:03Z). The manifest doesn't list them. Deleting them is a one-off manual cleanup that
 wasn't done this session.
+
+## Bucket CORS and the summary API, as built, 2026-10-02
+
+This closes the foundation-gate item's remainder: bucket CORS (this repo's infrastructure) and
+`GET /api/satellite/summary` (`portfolio-site` PR #2).
+
+### Bucket CORS
+
+**Tigris CORS is bucket-wide, so it can't be limited to the two files.** The amendment's
+"CORS enabled for those two objects" can't be configured as written. Every mechanism Tigris offers
+takes the same bucket-level rule, with origins, methods, headers and max-age, and no key or prefix
+filter:
+- the dashboard's bucket settings
+- the S3 `PutBucketCors` API
+- `tigris buckets set-cors`
+
+S3's own CORS format has no key or prefix filter either. Max approved the closest equivalent: a
+bucket-wide rule narrowed by origin and method. The only other objects it covers are the
+`snapshots/current/*` reproducibility files. They were already world-readable (the bucket is
+public), and CORS only decides which websites' browser scripts may read a response.
+
+**Policy applied** (read back with `GetBucketCors` afterwards; before this, the bucket had no CORS
+config):
+
+```json
+{
+  "CORSRules": [{
+    "ID": "portfolio-site-read",
+    "AllowedOrigins": [
+      "https://portfolio-site-max-norris.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:4173"
+    ],
+    "AllowedMethods": ["GET"],
+    "MaxAgeSeconds": 3600
+  }]
+}
+```
+
+`5173` is `vite` dev and `4173` is `vite preview`.
+
+**How it was applied:** `aws s3api put-bucket-cors` ran inside a throwaway
+`fly machine run --rm amazon/aws-cli` in the `satellite-conjunction-screening` app. That machine
+received the app's secrets (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`,
+`AWS_REGION`, `BUCKET_NAME`) automatically, so the credentials never left Fly. This avoids
+SSH-ing into the scheduled Machine: it's normally stopped, and starting it triggers a full
+production run. The throwaway machine ran for seconds, then removed itself. Re-run the same
+command to change the policy, since `put-bucket-cors` replaces the whole config.
+
+**Verified** with curl and real `Origin` headers:
+- Both allowed origins get `Access-Control-Allow-Origin` on `objects/current.json` and
+  `reports/current.json`.
+- Any other origin gets no CORS headers.
+- A `POST` preflight gets 403; a `GET` preflight gets 200.
+
+**Watch items:**
+- Plain `GET` responses don't send `Vary: Origin` (only preflights do), and the objects carry
+  `Cache-Control: public, max-age=300`. A shared cache could therefore serve one origin's
+  `Access-Control-Allow-Origin` to another. This hasn't caused a problem, and browsers partition
+  their caches by site, but it's the first thing to suspect if a cross-origin fetch fails
+  intermittently.
+- `portfolio-site`'s production alias is behind Vercel Deployment Protection today. If a public
+  custom domain is added, it has to be added to `AllowedOrigins`. Preview deployments
+  (`portfolio-site-<hash>-max-norris.vercel.app`) aren't allowed. Nothing reads the bucket
+  directly from the browser yet.
+
+### `GET /api/satellite/summary`
+
+Lives in `portfolio-site`'s `api/satellite/summary.ts`:
+- **Input:** fetches the 78 MB report server-side. Parsing it takes about 0.1 s and about 200 MB
+  of RSS in Node, measured.
+- **Output:** report and summary schema versions, `run_id`, `generated_at_utc`, window, threshold,
+  `objects_screened`, `conjunctions_flagged`, `by_risk_level`, `co_located_pairs`,
+  `closest_active_approach_km`, and the top `?limit=` conjunctions (default 25, max 200).
+  Conjunctions are ranked by risk tier, then miss distance, and each object is trimmed to
+  `norad_id`, `name`, `object_type`, `active_payload` and `owner`.
+- **Size:** about 11 KB at the default limit and 87 KB at the max, far under the ~4.5 MB cap.
+- **Caching:** warm instances revalidate with the bucket's ETag (a 304 skips the download), and
+  the CDN caches responses with `s-maxage=3600`.
+
+`vercel.json`'s catch-all SPA rewrite now excludes `/api/*`. On the Vercel preview deployment,
+Max checked in a logged-in browser (Deployment Protection blocks unauthenticated requests):
+- `/api/satellite/summary` returns JSON.
+- `/api/satellite/nope` returns 404.
+- The satellite page renders the live numbers.
+
+**`/api/satellite/history` was not built.** There is no history to stitch: ADR 0009's daily run
+overwrites `reports/current.json` and keeps no retention window. `/history` first needs this repo
+to publish dated reports, or at least dated summaries, with a retention policy. That's a pipeline
+change, not a `portfolio-site` one, and it's tracked in `docs/todo.md`.

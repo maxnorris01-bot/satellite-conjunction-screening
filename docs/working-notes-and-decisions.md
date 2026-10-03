@@ -10,6 +10,19 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-02 - Foundation gate closed: bucket CORS is bucket-wide (origin-narrowed), `/summary`
+shipped, `/history` deferred.**
+- **CORS:** Tigris CORS rules can't target individual keys (dashboard, S3 `PutBucketCors` and
+  `tigris buckets set-cors` all take the same bucket-level rule). Max approved a bucket-wide rule
+  allowing only `GET` from `portfolio-site`'s Vercel origin plus localhost 5173/4173. It was
+  applied from a throwaway `fly machine run --rm` so the bucket credentials never left Fly.
+- **API:** `portfolio-site`'s `GET /api/satellite/summary` is the only API so far.
+- **`/history`:** deferred, because the daily run keeps no history to serve. It needs a retention
+  change here first.
+
+Policy, verification and watch items: [ADR 0010](adr/adr-0010-portfolio-api-and-full-catalog-scope.md)'s
+"as built" section.
+
 **2026-10-02 - Full-catalog scope measured and the Fly Machine resized; `objects/current.json`
 added.** This implements ADR 0010 (with its amendment):
 - **Scope:** `config/screening.yaml` now screens CelesTrak's full published catalog, `active` plus
