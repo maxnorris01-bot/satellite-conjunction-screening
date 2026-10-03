@@ -13,11 +13,6 @@ polish, then build only the foundation a possible later visualization product wo
 scope (3D globe, owner/operator filtering, sky view, satellite POV) is intentionally NOT on this
 list yet - see that decision entry.*
 
-- [ ] **Gate decision (Cowork):** the foundation gate is done (see Completed, 2026-10-02). Decide
-      whether to keep going toward the visualization vision or bank this project and move to City
-      Livability Scoring Tool's MVP. Claude Code's read is in
-      `docs/sessions/2026-10-02-foundation-gate-cors-summary.md`.
-
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
@@ -36,10 +31,14 @@ list yet - see that decision entry.*
       a large TSV.
 
 - [ ] Add a status note to ADR 0001: SATCAT metadata now comes from CelesTrak.
-- [ ] **Deferred pending the foundation gate above:** 3D globe of all tracked objects (client-side
-      SGP4 via `satellite.js`, fed by the API layer), owner/operator filtering UI, browser-geolocation
-      sky view with per-satellite visibility/pass predictions, and a satellite-POV camera view. See
-      the 2026-09-30 working-notes entry for the full vision and sequencing.
+- [ ] **Unblocked by the 2026-10-03 gate decision (go):** 3D globe of all tracked objects
+      (client-side SGP4 via `satellite.js`, fed by `objects/current.json`), owner/operator
+      filtering UI, browser-geolocation sky view with per-satellite visibility/pass predictions,
+      and a satellite-POV camera view. See the 2026-09-30 working-notes entry for the full vision
+      and sequencing. **Hard requirement from the frame-time spike:** propagation must be spread
+      across frames (not every object every frame) from the first implementation - see the
+      2026-10-03 spike-results working-notes entry for the `slice=10` approach and numbers. Not
+      yet scoped into a concrete build plan - that's the next Cowork session on this project.
 
 ## Lower priority / opportunistic
 
@@ -56,6 +55,20 @@ list yet - see that decision entry.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+
+- [x] **Frame-time spike (Claude Code, in `portfolio-site`), run 2026-10-03:** every-object-every
+      -frame propagation fails once throttled (4x: 30.4/38.4 ms mean, p95 >110 ms; 6x: 54.9/59.3
+      ms). `slice=10` (re-propagate each object every 10th frame) passes with margin (4x: 16.8 ms
+      mean; 6x: 20.5 ms mean). Full numbers and method in the 2026-10-03 working-notes entry.
+      Spike branch `spike/globe-frame-time` in `portfolio-site`, unmerged - kept for now in case a
+      re-run is wanted.
+- [x] **Gate decision (Cowork), 2026-10-03: go.** The M5 clears the bar on its own and the
+      `slice=10` mitigation clears it even throttled, so neither fallback (shrink the catalog,
+      bank the project) is triggered. The visualization vision (3D globe, owner/operator
+      filtering, sky view, satellite POV) is real scope again. Frame-sliced propagation is now a
+      hard design requirement for all of it, not an optional optimization - see the "Later" item
+      below.
+
 - [x] 2026-10-02 - Foundation-gate item, remainder (ADR 0010's amendment):
       - Bucket CORS applied: GET only, from `portfolio-site`'s Vercel origin plus localhost
         5173/4173.

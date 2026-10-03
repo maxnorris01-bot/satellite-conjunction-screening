@@ -1,9 +1,11 @@
 # CLAUDE.md
 
 ## Session startup (read these in full before doing anything else)
-1. `Chat_Instructions.md` in the "Applied AI Portfolio Projects" Claude Project - collaboration
-   workflow (device-bridge file writes, hand off shell/git commands to Max, known gotchas). Read
-   once; it doesn't change per repo.
+1. `docs/collaboration-conventions.md` - the commit/PR convention (no AI attribution),
+   branch/merge sequence, and division-of-labor rules mirrored from the Cowork Project's
+   `Chat_Instructions.md` / `Engineering_Standards.md` (those two live only in that Claude
+   Project, not on disk, so this local copy is what a Claude Code session actually reads). Read
+   once; it doesn't change per repo unless the Cowork Project's copy changes.
 2. This file, in full.
 3. `docs/lessons-learned.md` - gaps found building real projects against this template, and
    whether each has been applied back here yet.
