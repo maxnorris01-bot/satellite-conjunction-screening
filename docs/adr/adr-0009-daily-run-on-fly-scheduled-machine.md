@@ -1,7 +1,9 @@
 # ADR 0009: Daily run on a Fly.io scheduled Machine, publishing to a public Tigris bucket, no history
 
 **Status:** Accepted, 2026-10-01. Supersedes ADR 0005's deferral: the measured runtime and memory
-it was waiting for are in ADR 0007.
+it was waiting for are in ADR 0007. **"No history" is superseded by
+[ADR 0011](adr-0011-dated-snapshot-retention.md) (2026-10-02):** the job now also keeps 7 days of
+dated objects and report snapshots alongside `current.json`.
 
 ## Context
 
