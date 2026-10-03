@@ -10,6 +10,19 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-03 - Globe Phase 1c fix round done; zoom floor confirmed working.** Per the fix-round
+entry below (`portfolio-site` `fix/satellite-globe-phase-1c-feedback`; details in
+`docs/sessions/2026-10-03-globe-phase-1c-fix-round.md`):
+- **Zoom floor:** measured at 1.1000 R on wheel, trackpad pinch and touch pinch, since
+  TrackballControls clamps every zoom path in one place. Production had deployed it (`1abb50b`,
+  globe chunk `SatelliteGlobe-Bo_5C-dv.js`). Likely a cached bundle or a focus-mode test.
+- **Selection is one state.** Object, pair and station are mutually exclusive. A pick replaces
+  the current selection and an empty click clears it, with the camera easing out of a focus
+  rather than jumping. The pick radius dropped from 10 to 6 px, since 10 px hit something on
+  about 80% of disc clicks.
+- **Filters:** the collision buttons toggle (restoring the prior view), and an always-visible
+  "Showing N of M · Show all objects" bar covers both filter entry points.
+
 **2026-10-03 - Globe Phase 1c fix round: visibility reset, nearest-neighbor line, single-select,
 zoom-floor verification.** Follows Max testing the merged Phase 1c live. Four issues, scoped for a
 follow-up branch - none touch orientation/propagation.

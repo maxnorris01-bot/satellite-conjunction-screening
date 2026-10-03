@@ -12,16 +12,15 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Globe Phase 1c fix round (Claude Code, in `portfolio-site`):** no way back to "show
-      all" after isolating an incident's debris; nearest-neighbor needs the same dashed line
-      near-miss replay has; selection must be single-select with click-empty-to-deselect plus an
-      explicit deselect button; verify the zoom-floor change actually reaches the deployed build
-      and every zoom input path. Full detail in the 2026-10-03 "Globe Phase 1c fix round"
-      working-notes entry. Fresh branch (e.g. `fix/satellite-globe-phase-1c-feedback`).
 - [ ] **Watch the daily schedule.** Confirmed working as of the 2026-10-03 21:46Z manual run
       (dated snapshots + history index verified in the bucket). Still unconfirmed whether that
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
+
+- [ ] **Review and merge the globe Phase 1c fix round** (`portfolio-site` branch
+      `fix/satellite-globe-phase-1c-feedback`, 2 commits, local): filter reset, neighbour line,
+      single-select. After deploy, hard-reload production and confirm the zoom floor (see the
+      session doc's section 4).
 
 ## Later
 
@@ -61,6 +60,13 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-03 - Globe Phase 1c fix round implemented (`portfolio-site`
+      `fix/satellite-globe-phase-1c-feedback`, pending review).
+      - Zoom floor verified at 1.10 on wheel, trackpad pinch and touch pinch, and production had
+        deployed it. The report most likely came from a cached bundle or a focus mode.
+      - The "multiple selected" report came from separate inspect/replay/station states plus a
+        10 px pick radius that rarely left empty space.
+      See `docs/sessions/2026-10-03-globe-phase-1c-fix-round.md`.
 
 - [x] 2026-10-03 - Globe Phase 1c (`portfolio-site` PR #5, merged): name filters by verified
       prefix groups with "only"/"show all" controls, ISS/Tiangong station-follow views, a sourced
