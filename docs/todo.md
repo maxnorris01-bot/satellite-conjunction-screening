@@ -17,9 +17,9 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Globe: dim all but the selected object and its live neighbour** (`portfolio-site`; scoped
-      in the 2026-10-04 "dim everything" working-notes entry). Single-object inspect only; dimmed
-      objects stay visible for neighbour search and picking.
+- [ ] **Review and merge the dimming branch** (`portfolio-site` branch
+      `feat/satellite-globe-dim-unselected`, 1 commit, local): dim all but the inspected object
+      and its live neighbour. See `docs/sessions/2026-10-04-globe-dim-unselected.md`.
 
 ## Later
 
@@ -59,6 +59,11 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Dimming of everything but the inspected object and its live neighbour
+      implemented (`portfolio-site` `feat/satellite-globe-dim-unselected`, pending review).
+      - 20% alpha, as a separate draw layer over the filter state.
+      - Exactly one bright neighbour, matched to the line, in 2,402/2,402 frames at 10x/50x.
+      See `docs/sessions/2026-10-04-globe-dim-unselected.md`.
 - [x] 2026-10-04 - Live nearest neighbour and 1x/10x/50x speeds implemented (`portfolio-site`
       `fix/satellite-globe-live-neighbor`, pending review).
       - A full scan costs 5 ms (20 ms at 4x CPU), so it uses a bounded candidate set from the
