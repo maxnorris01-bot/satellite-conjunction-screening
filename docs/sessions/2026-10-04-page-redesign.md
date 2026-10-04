@@ -148,5 +148,20 @@ re-implementing the old layout:
   1000 px, with slightly tighter horizontal spacing and a smaller label (same line box, so the
   same height). The columns stack only below 800 px, where no alignment is needed.
 
+**Collision-history tweak, before merge (fourth commit):**
+- **Intro:** wraps at full content width.
+- **Cards:** an even 10 px gap between date, title, badge, paragraph and button, with both buttons
+  aligned at the card bottoms.
+- **Paragraph rows:** 6/6 at 1440 and 1024, 8/8 at 820, 9/8 on a phone (within one).
+- **Iridium/Cosmos copy:** tightened to "...had been catalogued; 107 and 576 remain in the catalog
+  shown above", keeping the live counts.
+- **Fengyun-1C card:** gains one sentence from the cited Wikipedia article ("2007 Chinese
+  anti-satellite missile test", checked against the article's raw text), "More than half of the
+  tracked debris has a mean altitude above 850 km, so it would likely remain in orbit for decades
+  or centuries." Source line: "More than half of the tracked debris orbits the Earth with a mean
+  altitude above 850 kilometres (530 mi), so they would likely remain in orbit for decades or
+  centuries."
+- **CelesTrak's page** was unreachable (expired TLS certificate), so nothing was taken from it.
+
 The open mockup-fit questions above (tall side column, truncated dropdown, short slider) no longer
 apply, since that part of the redesign is reverted.

@@ -23,9 +23,10 @@ the active work.*
       `docs/sessions/2026-10-04-globe-conjunction-view.md`.
 
 - [ ] **Review and merge the trimmed page redesign** (`portfolio-site` branch
-      `feat/satellite-page-redesign`, 3 commits, local). Per Max's review, the new header and the
+      `feat/satellite-page-redesign`, 4 commits, local). Per Max's review, the new header and the
       Latest run + Risk breakdown row are kept with tweaks, and everything else is reverted to the
-      pre-redesign page; the risk card and notes now align with the tiles. See the follow-up in
+      pre-redesign page; the risk card and notes now align with the tiles, and the collision-history
+      section is spaced and balanced. See the follow-up in
       `docs/sessions/2026-10-04-page-redesign.md`.
 
 ## Later
