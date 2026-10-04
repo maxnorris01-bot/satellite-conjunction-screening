@@ -10,6 +10,36 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Sky view: lighter ground with a perspective grid.** Max, after trying Phase 1 on
+production: it looks great, but perspective is easy to lose (dark sky, dark ground) and it feels a
+little flat. Offered six standard remedies (lighter ground plus perspective grid; sky gradient and
+horizon haze; distance-based point size/brightness; motion trails; faint star field). Max chose
+only the first for this round. A small visual change on `portfolio-site`; the sky maths, selection
+and time handling are untouched.
+
+- **Ground.** Draw a ground surface under the observer, clearly lighter than the sky (a muted
+  slate or earth-tinted grey, not bright; the satellite points live in the sky and must stay the
+  brightest things on screen). Below-horizon objects remain hidden, so ground and points never
+  overlap.
+- **Perspective grid.** A faint grid on the ground plane aligned to north/south and east/west,
+  drawn with real perspective so the lines converge toward the horizon: this is the actual depth
+  cue, more than the colour. Fade the grid with distance toward the horizon so it does not alias
+  or shimmer, and keep it subtle. Cell size and eye height are Claude Code's call; justify them.
+- **Labels and horizon.** The N/E/S/W labels, zenith mark, horizon ring and elevation rings must
+  stay readable against both ground and sky; check text contrast (aim for at least 4.5:1) and
+  state the colours chosen. Keep the horizon edge crisp.
+- **Orientation and behaviour.** The grid and ground do not change the east-on-the-right
+  orientation (re-run the existing scripted check), drag-to-look, zoom/FOV, filters, dimming or
+  the clock. Both are decoration in the dome scene, not part of the sky geometry.
+- **Performance and mobile.** No measurable frame-time cost (60 fps at 50x with the full catalog,
+  also under 4x CPU throttle); looks right at phone width and when looking straight down.
+- **Not in this round** (offered, not chosen; kept in `todo.md` under "Later"): sky gradient and
+  horizon haze, distance-based point size/brightness, motion trails, background star field.
+
+Acceptance: before/after screenshots at desktop and phone width (looking at the horizon and
+looking down), the colours and contrast numbers stated, the scripted orientation test still
+passing, lint/typecheck/tests/build clean, no page errors.
+
 **2026-10-04 - Sky view Phase 1 built: Nominatim, velocity extrapolation, facing the equator.** Per
 the Sky entry below (`portfolio-site` `feat/satellite-sky-view`; details in
 `docs/sessions/2026-10-04-sky-view-phase-1.md`):
