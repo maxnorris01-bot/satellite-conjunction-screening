@@ -10,6 +10,20 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Top-conjunction view fixed: stale bounding spheres, not the origin.** Per the entry
+below (`portfolio-site` `fix/satellite-globe-conjunction-view`; details in
+`docs/sessions/2026-10-04-globe-conjunction-view.md`):
+- **The cause:** three.js computes a marker's bounding sphere at its first visible render, so it
+  froze at the *first* conjunction's position, not the origin. Later conjunctions elsewhere were
+  culled when that spot left the frustum.
+- **Fix:** frustum culling is off for every per-frame-moved marker.
+- **Fly-in:** a 19-selection, every-starting-state script showed the camera always ended correctly,
+  even before the fix. "Zoom doesn't work" was the missing rings seen from a distance.
+- **Cleanup:** removed a throwaway ease-out animation that the fly-in paths started and
+  immediately replaced.
+- **For future checks:** `debugState().drawn` reports markers actually rendered (via
+  `onBeforeRender`), separately from `visible`.
+
 **2026-10-04 - Globe: make the top-conjunction view reliable (rings vanish, fly-in unreliable).**
 Max, after testing the deployed dimming: selecting a top conjunction is "still a bit wonky". The
 selection rings sometimes disappear (screenshot: closest-approach panel and the distance label are
