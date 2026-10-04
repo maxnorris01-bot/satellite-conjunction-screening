@@ -17,10 +17,10 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Review and merge the globe Phase 1c fix round** (`portfolio-site` branch
-      `fix/satellite-globe-phase-1c-feedback`, 2 commits, local): filter reset, neighbour line,
-      single-select. After deploy, hard-reload production and confirm the zoom floor (see the
-      session doc's section 4).
+- [ ] **Globe: live nearest neighbour + speeds 1x/10x/50x** (`portfolio-site`; scoped in the
+      2026-10-04 working-notes entry). The neighbour was frozen at click time and went stale
+      within seconds; keep it live on a throttle, search visible objects only, and replace the
+      speed set.
 
 ## Later
 
