@@ -22,9 +22,11 @@ the active work.*
       frustum-culled, single camera animation per selection. See
       `docs/sessions/2026-10-04-globe-conjunction-view.md`.
 
-- [ ] **Project page redesign per Max's mockup** (`portfolio-site`; scoped in the 2026-10-04
-      "Project page redesign" working-notes entry). Stats beside risk, globe with a side column,
-      conjunction table becomes a dropdown, three tiles. An experiment to evaluate live.
+- [ ] **Compare the page redesign with the mockup, then merge or revert** (`portfolio-site` branch
+      `feat/satellite-page-redesign`, 1 commit, local). The mockup image wasn't available to
+      Claude Code; the session doc lists the likely mismatches (tall side column with collision
+      history, truncated closed dropdown, short slider). See
+      `docs/sessions/2026-10-04-page-redesign.md`.
 
 ## Later
 
@@ -64,6 +66,12 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Project page redesign built from the entry's description
+      (`portfolio-site` `feat/satellite-page-redesign`, pending a mockup comparison):
+      - stats beside risk, three tiles
+      - globe with a side column (conjunction dropdown plus one panel)
+      - controls, caption and filter bar under the globe
+      See `docs/sessions/2026-10-04-page-redesign.md`.
 - [x] 2026-10-04 - Top-conjunction view made reliable (`portfolio-site`
       `fix/satellite-globe-conjunction-view`, pending review).
       - Missing rings were frustum culling against a bounding sphere frozen where a marker first
