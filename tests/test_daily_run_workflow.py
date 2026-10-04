@@ -168,3 +168,26 @@ def test_transient_flyctl_failure_is_retried(tmp_path: Path) -> None:
     r = run_wait(env)
     assert r.returncode == 0, r.stdout + r.stderr
     assert "flyctl machine list failed; retrying" in r.stdout
+
+
+def test_fly_token_reaches_only_the_steps_that_call_flyctl() -> None:
+    job = yaml.safe_load(WORKFLOW.read_text())["jobs"]["run"]
+    assert "FLY_API_TOKEN" not in job.get("env", {})
+    calls_flyctl = {
+        s["name"]
+        for s in job["steps"]
+        if "run" in s and ("flyctl " in s["run"] or "wait-for-machine.sh" in s["run"])
+    }
+    has_token = {
+        s.get("name", s.get("uses")) for s in job["steps"] if "FLY_API_TOKEN" in s.get("env", {})
+    }
+    assert calls_flyctl == {"Start the Machine", "Wait for it to stop", "Check exit code"}
+    assert has_token == calls_flyctl
+
+
+def test_checkout_is_pinned_and_drops_credentials() -> None:
+    steps = yaml.safe_load(WORKFLOW.read_text())["jobs"]["run"]["steps"]
+    (checkout,) = [s for s in steps if s.get("uses", "").startswith("actions/checkout@")]
+    ref = checkout["uses"].split("@", 1)[1]
+    assert len(ref) == 40 and all(c in "0123456789abcdef" for c in ref)
+    assert checkout["with"]["persist-credentials"] is False
