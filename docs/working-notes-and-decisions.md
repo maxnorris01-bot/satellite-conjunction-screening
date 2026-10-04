@@ -10,6 +10,61 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Project page redesign: stats beside risk, globe with a side column, conjunction dropdown.**
+Max supplied a mockup (screenshot) of the Satellite Conjunction Screening page and approved the
+reading below ("try all of this ... and see how it looks"), so this is an experiment to evaluate
+live, easy to revert. Layout and presentation only: no data, propagation or pipeline changes.
+Files involved are `portfolio-site` `src/pages/SatelliteTool.tsx` / `.css` and
+`src/components/SatelliteGlobe.tsx` / `.css`.
+
+**Header.** Move the tech chips into the eyebrow row beside "Project - Applied AI & data
+engineering", and put "View on GitHub" on the right of the title on one line. Lede stays, wrapping
+to two lines.
+
+**Order and layout (desktop).**
+1. Header.
+2. One row: "Latest run" stat tiles on the left, "Risk breakdown" (a bordered card) on the right.
+3. The globe, with no "Every tracked object" heading. Legend and filters stay top-left inside the
+   canvas, as now.
+4. A right-hand column beside the globe holding the "Top conjunctions" dropdown ("Select to show
+   on Globe") on top and, under it, whichever single panel applies: selected object, closest
+   approach, station, or the collision history. The panels leave the globe canvas for this column;
+   the single-panel-at-a-time rule is unchanged.
+5. Time controls directly under the globe (Live, speed 1x/10x/50x, slider, UTC readout), then the
+   Earth-imagery caption, then the "Showing N of M - Show all objects" bar where it is now.
+6. Pipeline, unchanged, at the bottom.
+Mobile: stack in the same order (header, stats, risk, globe, controls, dropdown and panel,
+pipeline); the globe must keep a usable height and the side column becomes full-width below it.
+
+**Stat tiles: four become three.** Drop "faster screening after the KD-tree swap". Show the other
+three: objects screened, conjunctions flagged, closest approach. The shortened label "closest
+approach" is the mockup's, but the number is the closest *active-satellite* approach
+(`closest_active_approach_km`); keep that exact metric and say so in the small "Screened ... Runs
+daily on Fly.io" note under the tiles (keep that note, unobtrusive) so the shorter label isn't
+misleading.
+
+**Top conjunctions: table becomes a dropdown.** Replace the table with a select-style control in
+the side column. Each option keeps the table's information (rank, the two object names, miss
+distance, risk tier) so nothing is lost; choosing one does exactly what "Show on globe" does now
+(fly-in, frozen clock at closest approach, dimming). Keep the "Top N of X, ranked by risk tier,
+then miss distance" note near it, and keep the snapshot suffix ("- Oct 3 snapshot") when the
+slider is in the past. It must be keyboard-accessible and show the currently replayed conjunction
+as selected; clearing the selection (Back to full view, empty click, picking an object) returns it
+to the "Select to show on Globe" placeholder. A native `<select>` is acceptable if it can carry
+that information legibly; if not, a small accessible listbox.
+
+**Constraints.** No change to globe behaviour: selection model, dimming, live neighbour, speeds,
+fly-in all stay as shipped; only where their panels live changes. The globe canvas must resize
+correctly when the layout changes (check the resize path and the miss-label positioning, which are
+computed from the canvas). Keep the existing page's contrast, focus states and reduced-motion
+behaviour.
+
+Acceptance: compare against the mockup at desktop width and at a phone width with screenshots and
+state what differs; every panel type (object, closest approach, station, collision history) shows
+in the side column and nothing floats over the globe that didn't before; the dropdown selects,
+replays, deselects and syncs with the globe; three tiles; Lint/typecheck/tests/build clean, no
+page errors, 60 fps held. If something doesn't fit the mockup, say so rather than improvising.
+
 **2026-10-04 - Top-conjunction view fixed: stale bounding spheres, not the origin.** Per the entry
 below (`portfolio-site` `fix/satellite-globe-conjunction-view`; details in
 `docs/sessions/2026-10-04-globe-conjunction-view.md`):

@@ -22,6 +22,10 @@ the active work.*
       frustum-culled, single camera animation per selection. See
       `docs/sessions/2026-10-04-globe-conjunction-view.md`.
 
+- [ ] **Project page redesign per Max's mockup** (`portfolio-site`; scoped in the 2026-10-04
+      "Project page redesign" working-notes entry). Stats beside risk, globe with a side column,
+      conjunction table becomes a dropdown, three tiles. An experiment to evaluate live.
+
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
