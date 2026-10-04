@@ -17,10 +17,10 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Globe: make the top-conjunction view reliable** (`portfolio-site`; scoped in the
-      2026-10-04 "make the top-conjunction view reliable" working-notes entry). Rings and the
-      dashed line vanish (suspected frustum culling of the moving markers) and the fly-in is
-      unreliable; keep the fly-in, fix it, route it through the single-selection path.
+- [ ] **Review and merge the conjunction-view fix** (`portfolio-site` branch
+      `fix/satellite-globe-conjunction-view`, 2 commits, local): rings/line no longer
+      frustum-culled, single camera animation per selection. See
+      `docs/sessions/2026-10-04-globe-conjunction-view.md`.
 
 ## Later
 
@@ -60,6 +60,13 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Top-conjunction view made reliable (`portfolio-site`
+      `fix/satellite-globe-conjunction-view`, pending review).
+      - Missing rings were frustum culling against a bounding sphere frozen where a marker first
+        appeared.
+      - The fly-in's camera end state was already correct in 25/25 cases; with the fix, 25/25
+        also draw the rings and line.
+      See `docs/sessions/2026-10-04-globe-conjunction-view.md`.
 - [x] 2026-10-04 - Near-miss pair view now dims everything but the pair (`portfolio-site`
       `fix/satellite-globe-dim-near-miss`, pending review).
       - Surprise: the live neighbour could vanish with the clock frozen (a zero error bound plus
