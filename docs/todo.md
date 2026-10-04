@@ -27,10 +27,11 @@ the active work.*
             failure (wrong machine id, throwaway branch) goes red with a clear message; the next
             scheduled run fires on its own and adds a date.
 
-- [ ] **Globe: overhead Sky view, Phase 1** (`portfolio-site`; scoped in the 2026-10-04 "Overhead
-      Sky view scoped (Phase 1 and 1b)" working-notes entry): Globe/Sky toggle, browser location
-      plus typed place, first-person dome with compass, all objects above the horizon, shared
-      time controls. Phase 1b (click to inspect, polish) follows.
+- [ ] **Review and merge Sky view Phase 1** (`portfolio-site` branch `feat/satellite-sky-view`, 3
+      commits, local): Globe | Sky toggle, geolocation or a typed place (Nominatim), a first-person
+      dome checked against satellite.js. See `docs/sessions/2026-10-04-sky-view-phase-1.md`.
+- [ ] **Sky view Phase 1b** (selection and polish), per the 2026-10-04 Sky entry, after Phase 1
+      merges.
 
 ## Later
 
@@ -71,6 +72,13 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Sky view Phase 1 implemented (`portfolio-site` `feat/satellite-sky-view`, pending
+      review).
+      - Geometry matches satellite.js to under 0.0001 degrees in the page, and east is on the
+        right (scripted check).
+      - One WebGL context across toggles; 60 fps at 50x under 4x CPU throttle.
+      - Geocoder: Nominatim, chosen over Open-Meteo because only Nominatim resolves addresses.
+      See `docs/sessions/2026-10-04-sky-view-phase-1.md`.
 - [x] 2026-10-04 - Page redesign trimmed after review: kept the header and the Latest run + Risk
       breakdown row (GitHub button after the title, full-width two-line lede, three one-line tiles,
       risk caveat as a note under the card). Reverted the globe side column and dropdown back to
