@@ -21,6 +21,10 @@ the active work.*
       scoped in the 2026-10-04 "dimming also applies when a top conjunction is shown"
       working-notes entry). Reverses the pair-view exclusion from the first dimming scope.
 
+- [ ] **Review and merge the near-miss dimming branch** (`portfolio-site` branch
+      `fix/satellite-globe-dim-near-miss`, 2 commits, local): pair-view dimming, plus a fix for the
+      neighbour vanishing with a frozen clock. See `docs/sessions/2026-10-04-globe-dim-near-miss.md`.
+
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
@@ -59,6 +63,11 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Near-miss pair view now dims everything but the pair (`portfolio-site`
+      `fix/satellite-globe-dim-near-miss`, pending review).
+      - Surprise: the live neighbour could vanish with the clock frozen (a zero error bound plus
+        floating-point rounding emptied the candidate list); fixed with a regression test.
+      See `docs/sessions/2026-10-04-globe-dim-near-miss.md`.
 - [x] 2026-10-04 - Dimming of everything but the inspected object and its live neighbour
       implemented (`portfolio-site` `feat/satellite-globe-dim-unselected`, pending review).
       - 20% alpha, as a separate draw layer over the filter state.
