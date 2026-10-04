@@ -10,6 +10,53 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Daily run: Fly's built-in schedule is unreliable; trigger it from GitHub Actions.**
+Evidence: the machine's `schedule: daily` is intact (`fly machine status -d`), healthy (last run
+exit 0, right image), yet the scheduler's only start was 2026-10-03 04:43Z; nothing since, and by
+2026-10-04 22:41Z the bucket's `history/index.json` still listed only 2026-10-03 (about 25 hours
+after the last, manual, run). Fly's docs say the built-in schedule is approximate, anchored to
+creation, and skipped when the host lacks capacity, and their task-scheduling guide recommends it
+only where "roughly once a day" is good enough. The tool promises a daily-fresh catalog, so we need
+a trigger we can see and re-run. Max chose (from three options): a GitHub Actions cron that starts
+the existing machine; not Fly Cron Manager (extra app to run and pay for), not waiting.
+
+**Design (scoped for one `satellite-conjunction-screening` branch).**
+- `.github/workflows/daily-run.yml`: triggers on `schedule` (one daily cron, a time safely after
+  CelesTrak's twice-daily updates; pick and justify it) and `workflow_dispatch` (manual re-run).
+  Install flyctl, then `flyctl machine start 1850e47cdd43e8 -a satellite-conjunction-screening`
+  using a `FLY_API_TOKEN` repository secret. No other secrets, and nothing printed that includes
+  the token.
+- Verify, don't just fire: after starting, poll the machine until it stops (with a sane timeout
+  covering the real run time, about 30 s of pipeline plus uploads, and the older 560 s oddity),
+  fail the workflow if the exit code isn't 0, then fetch the bucket's `history/index.json` and fail
+  if its `generated_at_utc` isn't from this run. A red workflow is the alert: GitHub emails the
+  repo owner on failure. Write a short run summary (run id, exit code, snapshot date).
+- CelesTrak's undocumented 2-hour cooldown per GROUP (working notes, 2026-10-03): a manual run
+  shortly before the scheduled one will make the scheduled one fail with a 403. The workflow's
+  failure message should say so and point at the cooldown rather than look like an outage.
+- Fly's own schedule: two triggers can double-run. Work out the right way to retire it (check
+  `fly machine update --help` for how to clear `schedule`; if it can't be cleared in place, the
+  alternative is a replacement non-scheduled machine and an updated machine id in the workflow,
+  and the old one stopped/destroyed). Propose it before any Fly command; Max runs every `fly`
+  command himself, and nothing changes on the running machine until he approves.
+- Docs: a new ADR (next number after 0011) recording the evidence above, the choice, the
+  alternatives (Cron Manager, waiting), and the consequence that GitHub disables scheduled
+  workflows in a public repo after about 60 days with no repository activity (mitigation: the
+  verify step fails loudly if it ever stops; a manual dispatch re-enables it). Update the README's
+  "runs daily on Fly.io" wording if it implies the Fly schedule, and the to-do.
+
+**Credentials (Max does these; Claude Code and Cowork never see the value).** Create a Fly token
+scoped to this app (`fly tokens create deploy -a satellite-conjunction-screening`, or a narrower
+machine-management token if flyctl offers one that can start a machine) and add it as the
+`FLY_API_TOKEN` Actions secret (repo Settings, Secrets and variables, Actions, or `gh secret set
+FLY_API_TOKEN` and paste at the prompt). Never paste it in chat, commits or the workflow file.
+
+Acceptance: a manual `workflow_dispatch` run starts the machine, waits, reports exit 0 and a fresh
+snapshot date in the summary and the bucket; a deliberate failure path (for example a wrong machine
+id on a throwaway branch run, not on main) produces a red run with a clear message; the next
+scheduled run fires on its own and the bucket's history gains the next date. No pipeline code
+changes.
+
 **2026-10-04 - Page redesign trimmed: keep the top, revert the rest (Max's review).** The redesign
 branch keeps only the new header and the Latest run + Risk breakdown row, with these tweaks:
 - the GitHub button sits right after the title
