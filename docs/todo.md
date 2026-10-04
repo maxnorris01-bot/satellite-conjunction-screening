@@ -17,9 +17,9 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Review and merge the dimming branch** (`portfolio-site` branch
-      `feat/satellite-globe-dim-unselected`, 1 commit, local): dim all but the inspected object
-      and its live neighbour. See `docs/sessions/2026-10-04-globe-dim-unselected.md`.
+- [ ] **Globe: dim the rest when a top conjunction (near-miss pair) is shown** (`portfolio-site`;
+      scoped in the 2026-10-04 "dimming also applies when a top conjunction is shown"
+      working-notes entry). Reverses the pair-view exclusion from the first dimming scope.
 
 ## Later
 

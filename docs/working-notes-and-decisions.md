@@ -10,6 +10,29 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Globe: dimming also applies when a top conjunction is shown (near-miss pair view).**
+Max reported that selecting a top conjunction to show on the globe does not dim the rest. That is
+the behaviour the dimming entry scoped ("near-miss pair view keeps both objects bright and does not
+dim the rest"), so this is a scoping miss on my side, not an implementation bug: Max wants the
+same focus effect there. Reverses that one exclusion.
+
+- **Pair view dims.** When a near-miss pair is shown, everything except the two objects of the
+  pair goes to `DIM_ALPHA`; both pair objects stay at full strength with their rings, dashed
+  line and distance label as now. This reuses the same dimmed-copy mechanism (`applyDim` /
+  `dimExcept`, with the pair indices as the exempt set) so it stays separate from the filter
+  buffer: dimmed is never hidden, picking and the "Showing N of M" count are unchanged.
+- **Restore.** Leaving the pair view by any route (empty click, Deselect, picking an object,
+  starting a station view, "show debris" isolation changes) restores everything exactly; rebuild
+  the drawn colours on every pair enter/exit, not only on inspect changes.
+- **Station / group follow (ISS etc.) and debris isolation.** Left as is for now. Those are
+  group views where "everything else dim" is less obvious; don't change them in this round. Max
+  can ask if he wants them too.
+- **Acceptance.** Pick several top conjunctions: all other points dim, both pair objects bright.
+  Switch between two conjunctions and between a conjunction and an inspected object with no
+  frame where stale dimming remains; deselect restores the drawn colours value for value, also
+  under active filters and owner colouring. Replaying a historical conjunction (time slider
+  jump) must keep the dimming. Lint/typecheck/tests/build clean, no page errors, 60 fps held.
+
 **2026-10-04 - Dimming built as a separate draw layer.** Per the entry below (`portfolio-site`
 `feat/satellite-globe-dim-unselected`; details in
 `docs/sessions/2026-10-04-globe-dim-unselected.md`):
