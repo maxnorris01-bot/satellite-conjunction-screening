@@ -44,8 +44,11 @@ every missed date. We need a trigger we can see, verify and re-run. (Recorded in
     date (snapshots are keyed by date, ADR 0011).
   - Minute 17 avoids the top of the hour, when GitHub most often delays scheduled runs.
 - **Run:** install `flyctl` (pinned to 0.4.111), then `flyctl machine start` on the existing
-  Machine, using a `FLY_API_TOKEN` repository secret scoped to this app. `flyctl` reads the token
-  from the environment, so it never appears in a command or log. `concurrency: daily-run` stops a
+  Machine, using a `FLY_API_TOKEN` repository secret scoped to this app. The token is set only on
+  the three steps that call `flyctl` (start, wait, exit-code check), not at job level, so the
+  checkout and the third-party `setup-flyctl` action never see it. `flyctl` reads it from the
+  environment, so it never appears in a command or log. Both actions are pinned to commit SHAs.
+  The checkout uses `persist-credentials: false` (amended 2026-10-04). `concurrency: daily-run` stops a
   manual dispatch from overlapping the scheduled run.
 - **Verify, don't just fire:**
   1. **Before starting:** read `history/index.json`. If the last publish was under 2 hours ago,
