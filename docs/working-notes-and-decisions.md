@@ -19,8 +19,9 @@ branch keeps only the new header and the Latest run + Risk breakdown row, with t
 
 The globe side column, the panels moved out of the canvas and the conjunction dropdown are
 reverted, by restoring the pre-redesign files rather than rebuilding them; the globe chunk's
-content hash matches the pre-redesign build. Details: the follow-up section of
-`docs/sessions/2026-10-04-page-redesign.md`.
+content hash matches the pre-redesign build. Before merge, the risk card and both notes were aligned with the tiles
+through a shared four-row subgrid, holding at 1440/1024/820 px; the columns stack below 800 px.
+Details: the follow-up section of `docs/sessions/2026-10-04-page-redesign.md`.
 
 **2026-10-04 - Page redesign built without the mockup image.** Per the entry below (`portfolio-site`
 `feat/satellite-page-redesign`; details in `docs/sessions/2026-10-04-page-redesign.md`). The mockup

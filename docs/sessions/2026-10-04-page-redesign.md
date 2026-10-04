@@ -135,5 +135,18 @@ re-implementing the old layout:
 - **Checks:** `npm run lint`, `npx tsc -b` and `npm run build` are clean. `npm test` passes 30/30.
 - **Screenshots:** desktop, two tablet widths and phone.
 
+**Alignment tweak, before merge (third commit):**
+- **Shared rows.** The Risk breakdown card now matches the Latest run tiles' height, and the two
+  notes start at the same vertical level. This is done structurally: the overview row is a
+  four-row subgrid (title, error, tiles/card, note) that both columns share. No pixel heights are
+  hard-coded.
+- **Card condensed.** Tighter padding, bar gaps and row line-height, with the bars centred, so
+  there's no dead space under them. Tile height is unchanged.
+- **Measured equal heights and note tops** at 1440 (114.6 px), 1024 (108.7 px), 900, 820 and
+  801 px (105.8 px). Equal space sits above and below the bars, and nothing overflows.
+- **Tablet fit.** To stay side by side down to 801 px, the tiles get more of the row below
+  1000 px, with slightly tighter horizontal spacing and a smaller label (same line box, so the
+  same height). The columns stack only below 800 px, where no alignment is needed.
+
 The open mockup-fit questions above (tall side column, truncated dropdown, short slider) no longer
 apply, since that part of the redesign is reverted.
