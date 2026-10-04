@@ -29,9 +29,9 @@ the active work.*
 
 - [ ] **Sky view Phase 1b** (selection and polish), per the 2026-10-04 Sky entry, (Phase 1 is merged and live).
 
-- [ ] **Sky view: lighter ground with a perspective grid** (`portfolio-site`; scoped in the
-      2026-10-04 "Sky view: lighter ground with a perspective grid" working-notes entry). Small
-      visual tweak to add depth. Phase 1b (click to inspect, polish) still pending.
+- [ ] **Review and merge the Sky ground grid** (`portfolio-site` branch `feat/satellite-sky-ground`,
+      1 commit, local): lighter slate ground with a fading perspective grid, horizon kept crisp,
+      look-down enabled. See `docs/sessions/2026-10-04-sky-ground.md`.
 
 ## Later
 
@@ -76,6 +76,13 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Sky view ground and perspective grid implemented (`portfolio-site`
+      `feat/satellite-sky-ground`, pending review).
+      - Ground `#26303c` against sky `#05070d`.
+      - Labels at least 5.9:1 on either.
+      - Grid cells 0.6 eye-heights, fading 3-18 eye-heights.
+      - 60 fps at 50x under 4x CPU throttle.
+      See `docs/sessions/2026-10-04-sky-ground.md`.
 - [x] 2026-10-04 - Sky view Phase 1 implemented (`portfolio-site` `feat/satellite-sky-view`, pending
       review).
       - Geometry matches satellite.js to under 0.0001 degrees in the page, and east is on the
