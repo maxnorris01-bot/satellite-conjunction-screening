@@ -10,6 +10,18 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Sky view Phase 1 built: Nominatim, velocity extrapolation, facing the equator.** Per
+the Sky entry below (`portfolio-site` `feat/satellite-sky-view`; details in
+`docs/sessions/2026-10-04-sky-view-phase-1.md`):
+- **Geocoder: OpenStreetMap Nominatim.** Both candidates are free, key-less and CORS-enabled, but
+  only Nominatim resolves addresses. Its policy is met with one request per submitted query, at
+  most one per second, an in-memory cache and visible attribution.
+- **Dome positions** come from the sliced propagation plus velocity times each slice's staleness.
+  Without the velocity step, points would jump by degrees every 10 frames at 50x.
+- **Initial look:** faces the equator, with the horizon near the bottom of the view.
+- **The panel folds** to a one-line summary once a location is set, so the dome is visible on a
+  phone.
+
 **2026-10-04 - Globe: overhead "Sky" view scoped (Phase 1 and 1b).** The first of the three
 features deferred in the Phase 1c entry to get its own scoping. Max's decisions (asked directly):
 location by browser geolocation **plus** a typed place; show **everything above the horizon**
