@@ -168,3 +168,38 @@ failed run and the verified cause.
 
 **Next:** after merge, Max re-runs the workflow (`gh workflow run daily-run.yml`), minding the
 2-hour cooldown from the failed run's download.
+
+## Follow-up (2026-10-04, branch `fix/pin-checkout`): pin checkout, drop its credentials, scope the Fly token
+
+**`actions/checkout` pinned to `11d5960a326750d5838078e36cf38b85af677262` (v4.4.0).**
+- Looked up from the action's repo: `git ls-remote` shows the floating `v4` tag and `v4.4.0`
+  (released 2026-07-20) on that same commit. Both are lightweight tags (`gh api
+  .../git/ref/tags/v4.4.0` -> type `commit`), so there's no annotated-tag object to dereference.
+- That's exactly what `@v4` ran, now immutable. Trailing comment: `# v4.4.0`.
+- v4.4.0 still declares `using: node20`. Newer majors exist (the latest is v7.0.1), but moving
+  majors is a separate, deliberate change and wasn't done here.
+
+**`persist-credentials: false` on the checkout.** Nothing later in the job pushes or fetches, so
+the job's `GITHUB_TOKEN` no longer stays in `.git/config` for the later steps.
+
+**`FLY_API_TOKEN` moved from job level to the steps that use it.** Before this, it was in the
+job's `env`, so every step had it, including the checkout and the third-party `setup-flyctl`
+action, neither of which needs it. Only three steps call `flyctl`:
+- "Start the Machine"
+- "Wait for it to stop" (through `wait-for-machine.sh`)
+- "Check exit code" (`machine list` and `logs`)
+
+The cooldown check and the bucket check only `curl` the public bucket, and installing `flyctl`
+needs no token. So it now sits in each of those three steps' `env` and nowhere else. Nothing
+requires it at job level.
+
+**Checks.**
+- actionlint reports 0 errors with the shellcheck rule active.
+- Two new tests in `tests/test_daily_run_workflow.py` read the workflow YAML:
+  - the token is absent at job level, and present on exactly the steps that call `flyctl`, which
+    must be those three;
+  - the checkout is pinned to a 40-hex-character SHA with `persist-credentials: false`.
+- `make lint`, `make typecheck` and `make test` (47) are clean.
+
+ADR 0012's "Run" bullet now says the token is per-step, the actions are SHA-pinned and the checkout
+drops its credentials.
