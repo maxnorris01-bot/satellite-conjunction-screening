@@ -22,11 +22,10 @@ the active work.*
       frustum-culled, single camera animation per selection. See
       `docs/sessions/2026-10-04-globe-conjunction-view.md`.
 
-- [ ] **Compare the page redesign with the mockup, then merge or revert** (`portfolio-site` branch
-      `feat/satellite-page-redesign`, 1 commit, local). The mockup image wasn't available to
-      Claude Code; the session doc lists the likely mismatches (tall side column with collision
-      history, truncated closed dropdown, short slider). See
-      `docs/sessions/2026-10-04-page-redesign.md`.
+- [ ] **Review and merge the trimmed page redesign** (`portfolio-site` branch
+      `feat/satellite-page-redesign`, 2 commits, local). Per Max's review, the new header and the
+      Latest run + Risk breakdown row are kept with tweaks, and everything else is reverted to the
+      pre-redesign page. See the follow-up in `docs/sessions/2026-10-04-page-redesign.md`.
 
 ## Later
 
@@ -66,6 +65,10 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Page redesign trimmed after review: kept the header and the Latest run + Risk
+      breakdown row (GitHub button after the title, full-width two-line lede, three one-line tiles,
+      risk caveat as a note under the card). Reverted the globe side column and dropdown back to
+      the pre-redesign layout.
 - [x] 2026-10-04 - Project page redesign built from the entry's description
       (`portfolio-site` `feat/satellite-page-redesign`, pending a mockup comparison):
       - stats beside risk, three tiles

@@ -90,3 +90,50 @@ These are flagged rather than improvised.
 cd ../portfolio-site && git log --oneline main..feat/satellite-page-redesign && npm run dev
 # compare against the mockup; after review: git push && gh pr create --fill
 ```
+
+## Follow-up after review: keep the top, revert the rest
+
+Max reviewed the branch and kept only the top portion (header, Latest run and Risk breakdown), with
+tweaks. A second commit on the same branch (`feat/satellite-page-redesign`, now 2 commits, still
+local) does that.
+
+**Kept, with tweaks:**
+- **Title row:** "View on GitHub" follows the title with a normal gap (24 px), not pushed to the
+  right edge. It wraps below the title on narrower screens (it does at 820 px and on a phone).
+- **Lede:** it uses the full page width instead of the old 48rem header cap, one sentence per line.
+  On desktop (1440 px and 1024 px) the first sentence sits on one row.
+- **Tiles:** three, labelled "objects screened", "conjunctions" (was "conjunctions flagged") and
+  "closest approach". Every value and label fits one line at 1440, 1024, 820 and 390 px.
+- **Note under the tiles:** kept, including "Closest approach is the nearest pass involving an
+  active satellite".
+- **Risk breakdown:** the card holds only the three bars. The caveat ("N high-risk conjunctions in
+  this run. Risk tiers are a stated heuristic, not a true probability of collision.", same
+  wording) is now a plain muted note below the card.
+
+**Reverted to the pre-redesign page.** These files were restored from `main` rather than
+re-implementing the old layout:
+- **Globe component and its CSS:** restored whole. The panels (selected object, closest approach,
+  station, collision history) are back inside the canvas with their dark styling. The time
+  controls and the "Showing N of M" bar are back in their original places.
+- **Page files:** restored as the base, with only the kept top portion re-applied. The globe
+  section, with its "Every tracked object" heading, sits below the overview row. The Top
+  conjunctions table is back, with its "Show on globe" buttons, note and past-snapshot suffix.
+  There's no dropdown or side column, and Pipeline is unchanged.
+- **Still dropped:** the `kdTreeSpeedup` data field, since the tiles stay at three.
+- **README:** keeps the separate correction of the playback speeds to 1/10/50x.
+- **Proof the globe revert is exact:** against `main`, the globe component files have no diff, and
+  the built globe chunk has the same content hash as the pre-redesign build
+  (`SatelliteGlobe-DAZLrNFJ.js`).
+
+**Verified** in headed Chromium:
+- **Page:** headings run Latest run, Risk breakdown, Every tracked object, Top conjunctions,
+  Pipeline. The overview row sits above the globe section. No horizontal overflow at any width.
+- **Table replay:** replaying a conjunction from the table, on desktop and phone, scrolls the globe
+  into view, flies to the pair with the rings and line drawn, and shows the closest-approach panel
+  inside the canvas, with the table row selected.
+- **Errors:** none on the page.
+- **Checks:** `npm run lint`, `npx tsc -b` and `npm run build` are clean. `npm test` passes 30/30.
+- **Screenshots:** desktop, two tablet widths and phone.
+
+The open mockup-fit questions above (tall side column, truncated dropdown, short slider) no longer
+apply, since that part of the redesign is reverted.
