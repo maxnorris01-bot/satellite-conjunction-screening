@@ -17,13 +17,10 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Globe: dim the rest when a top conjunction (near-miss pair) is shown** (`portfolio-site`;
-      scoped in the 2026-10-04 "dimming also applies when a top conjunction is shown"
-      working-notes entry). Reverses the pair-view exclusion from the first dimming scope.
-
-- [ ] **Review and merge the near-miss dimming branch** (`portfolio-site` branch
-      `fix/satellite-globe-dim-near-miss`, 2 commits, local): pair-view dimming, plus a fix for the
-      neighbour vanishing with a frozen clock. See `docs/sessions/2026-10-04-globe-dim-near-miss.md`.
+- [ ] **Globe: make the top-conjunction view reliable** (`portfolio-site`; scoped in the
+      2026-10-04 "make the top-conjunction view reliable" working-notes entry). Rings and the
+      dashed line vanish (suspected frustum culling of the moving markers) and the fly-in is
+      unreliable; keep the fly-in, fix it, route it through the single-selection path.
 
 ## Later
 

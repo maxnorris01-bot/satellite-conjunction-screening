@@ -10,6 +10,56 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Globe: make the top-conjunction view reliable (rings vanish, fly-in unreliable).**
+Max, after testing the deployed dimming: selecting a top conjunction is "still a bit wonky". The
+selection rings sometimes disappear (screenshot: closest-approach panel and the distance label are
+shown, but no rings and no dashed line, only one faint bright dot where the pair is), and the
+zoom/fly-in doesn't always work. Manual selection of a single object works as intended. Camera
+decision (Max, asked directly): keep the fly-in to the pair, but fix it. Scoped for one
+`portfolio-site` branch.
+
+**Likely cause of the missing rings (verify first, don't assume).** The label is a DOM element
+placed by projection, so it survives; the rings (`ringA`, `ringB`) and the dashed `linkLine` are
+three.js objects whose geometry bounding sphere was computed once at creation, when their single
+vertex was at the origin. Their positions are updated every frame afterwards but the bounding
+sphere is never recomputed, so three.js frustum-culls them whenever the world origin is outside the
+camera frustum. That is exactly the pair view, where the camera is aimed at the pair rather than
+at Earth's centre, and it is never the case in manual inspect, where the camera stays centred on
+Earth (which is why manual selection "works"). The main points geometry already avoids this with an
+explicit large bounding sphere (`setCatalog`). Reproduce first with the dev `debugState()` hook
+(rings `visible` true but not drawn), then fix by disabling frustum culling on every marker that is
+moved by position updates: `ringA`, `ringB`, `ringInspect`, `ringGroup` and `linkLine`. If the
+repro shows a different cause, say so and fix that instead.
+
+**Fly-in reliability.** Treat "zoom sometimes doesn't work" as its own investigation, with a script
+that selects many conjunctions in sequence and from every starting state (free roam, an inspected
+object, a station view, another conjunction, a conjunction on a different day's snapshot, the
+same conjunction clicked twice), then asserts via `debugState()` that the camera ended where it
+should. Suspects visible in the code: `focusPair` calls `clearSelection`, which can start a
+`releaseToFreeRoam` animation, then immediately starts a second animation (two animations racing,
+and `camAnimDone`/limit resets being overwritten); picking the same conjunction twice does nothing
+because the effect compares the focus object; and the camera limits (`FOCUS_MIN_DISTANCE` vs
+`FREE_MIN_DISTANCE`) being left in the wrong state after interrupted animations. Whatever the
+cause, the rule is: every selection change ends in a consistent state (limits, target, rings,
+dimming, clock) however it was interrupted.
+
+**Behaviour to keep and to enforce.**
+- Fly-in still happens, and always completes. It should end at a distance where both rings and the
+  dashed line are visibly drawn (most flagged misses are far under a pixel apart, so the rings,
+  not the dots, are the readout), not so close that the pair is clipped, and not stuck at a
+  distance where the pair is a lone dot.
+- Treat a conjunction as just another single selection, like a manual pick: one selection at a
+  time, picking anything replaces it, an empty click or Deselect clears it, and the camera eases
+  out rather than jumping (all already true in the Phase 1c fix round; keep the conjunction path
+  going through the same code, not a parallel one).
+- Dimming (just shipped) must hold throughout: pair bright, rest at `DIM_ALPHA`.
+
+Acceptance: 20+ conjunction selections in mixed orders and from every starting state, with zero
+cases of missing rings/line while the label is shown, the camera always at the intended end
+state, and manual inspect unchanged. A pixel-level or `debugState()` check that the rings are
+actually drawn (not just `visible`) at the end of each fly-in, including at a camera angle where
+Earth's centre is out of frame. Lint/typecheck/tests/build clean, no page errors, 60 fps held.
+
 **2026-10-04 - Pair-view dimming built; frozen-clock neighbour bug fixed.** Per the entry below
 (`portfolio-site` `fix/satellite-globe-dim-near-miss`; details in
 `docs/sessions/2026-10-04-globe-dim-near-miss.md`):
