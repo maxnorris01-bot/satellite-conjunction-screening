@@ -10,6 +10,19 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Live nearest neighbour built: bounded candidates, no periodic full scan.** Per the
+entry below (`portfolio-site` `fix/satellite-globe-live-neighbor`; details in
+`docs/sessions/2026-10-04-globe-live-neighbor.md`):
+- **Measured:** an exact full-catalog scan is 5.2 ms on the M5 and 19.6 ms at 4x CPU, too heavy
+  for the every-sim-second refresh 50x needs.
+- **Chosen:** candidates from the frame-sliced render positions with a proven error bound
+  (11 km/s x slice staleness, keep within min + 4 x bound), then exact propagation of only those
+  (2-38 objects). After a big time jump it waits a few frames for the slices instead of scanning.
+- **Verified:** 180/180 samples within the throttle allowance against brute force across
+  1x/10x/50x, with 60 fps at 50x even under 4x CPU throttling.
+- **Visible-only search** means the nearest changes with filters (deliberate, per the entry).
+- **Live at 50x** now pauses at the end of the ~24 h forward range.
+
 **2026-10-04 - Globe: live nearest neighbour, and playback speeds 1x/10x/50x.** Max saw cases
 where an object sat visibly next to the selected one while the dashed line went elsewhere. Checked
 independently against the live 19,246-object catalog (`satellite.js`, brute force, 25 random
