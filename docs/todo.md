@@ -12,22 +12,11 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Watch the daily schedule.** Confirmed working as of the 2026-10-03 21:46Z manual run
-      (dated snapshots + history index verified in the bucket). Still unconfirmed whether that
-      manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
-      its own around 2026-10-04 and isn't silently skipped.
-
-- [ ] **Review and merge the conjunction-view fix** (`portfolio-site` branch
-      `fix/satellite-globe-conjunction-view`, 2 commits, local): rings/line no longer
-      frustum-culled, single camera animation per selection. See
-      `docs/sessions/2026-10-04-globe-conjunction-view.md`.
-
-- [ ] **Review and merge the trimmed page redesign** (`portfolio-site` branch
-      `feat/satellite-page-redesign`, 4 commits, local). Per Max's review, the new header and the
-      Latest run + Risk breakdown row are kept with tweaks, and everything else is reverted to the
-      pre-redesign page; the risk card and notes now align with the tiles, and the collision-history
-      section is spaced and balanced. See the follow-up in
-      `docs/sessions/2026-10-04-page-redesign.md`.
+- [ ] **Make the daily run dependable: GitHub Actions trigger** (`satellite-conjunction-screening`;
+      scoped in the 2026-10-04 "Daily run: Fly's built-in schedule is unreliable" working-notes
+      entry). The Fly schedule is intact but didn't fire (last run 2026-10-03 21:46Z, manual).
+      Max creates the Fly token and the `FLY_API_TOKEN` secret himself; first run via manual
+      dispatch.
 
 ## Later
 
