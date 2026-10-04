@@ -38,12 +38,18 @@ env:
 jobs:
   run:
     runs-on: ubuntu-latest
-    # Pipeline is ~110 s on Fly; the wait allows 15 min for a slow boot or the unexplained 560 s
-    # first run seen once locally (working notes' open items).
+    # Pipeline is ~110 s on Fly; the wait polls for up to 15 min to cover a slow boot or the
+    # unexplained 560 s first run seen once locally (working notes' open items).
     timeout-minutes: 25
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
+      # First, before any step writes files: checkout cleans the workspace. Only the wait script
+      # is needed.
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/scripts
+
       # Pinned to a commit, not a branch. No release fits: the latest, v1.5 (fc53c09, 2024-02-02),
       # still runs on node20, and upstream moved the action to node24 only on master, unreleased.
       - uses: superfly/flyctl-actions/setup-flyctl@ed8efb33836e8b2096c7fd3ba1c8afe303ebbff1 # master 2026-04-08 (unreleased; after v1.5, node24)
@@ -69,8 +75,10 @@ jobs:
           date -u +%Y-%m-%dT%H:%M:%SZ > start_iso
           flyctl machine start "$FLY_MACHINE_ID" -a "$FLY_APP"
 
+      # Not `flyctl machine wait`: each wait request is capped at 60 s client-side and flyctl doesn't
+      # retry the deadline_exceeded, so it gave up after 60 s on the first real run (ADR 0012).
       - name: Wait for it to stop
-        run: flyctl machine wait "$FLY_MACHINE_ID" -a "$FLY_APP" --state stopped --wait-timeout 15m
+        run: START_MS=$(cat start_ms) DEADLINE_S=900 .github/scripts/wait-for-machine.sh
 
       - name: Check exit code
         run: |
