@@ -27,11 +27,11 @@ the active work.*
             failure (wrong machine id, throwaway branch) goes red with a clear message; the next
             scheduled run fires on its own and adds a date.
 
-- [ ] **Review and merge Sky view Phase 1** (`portfolio-site` branch `feat/satellite-sky-view`, 3
-      commits, local): Globe | Sky toggle, geolocation or a typed place (Nominatim), a first-person
-      dome checked against satellite.js. See `docs/sessions/2026-10-04-sky-view-phase-1.md`.
-- [ ] **Sky view Phase 1b** (selection and polish), per the 2026-10-04 Sky entry, after Phase 1
-      merges.
+- [ ] **Sky view Phase 1b** (selection and polish), per the 2026-10-04 Sky entry, (Phase 1 is merged and live).
+
+- [ ] **Sky view: lighter ground with a perspective grid** (`portfolio-site`; scoped in the
+      2026-10-04 "Sky view: lighter ground with a perspective grid" working-notes entry). Small
+      visual tweak to add depth. Phase 1b (click to inspect, polish) still pending.
 
 ## Later
 
@@ -56,6 +56,10 @@ the active work.*
       and naked-eye visibility (the basic Sky view is scoped, see above), and the satellite-POV
       camera view.
       Each needs its own Cowork scoping session once Phase 1 is live and reviewed.
+
+- [ ] Sky view depth ideas offered but not chosen (2026-10-04): sky gradient and horizon haze,
+      distance-based point size/brightness, short motion trails, a faint background star field.
+      Revisit if the sky view still feels flat after the lighter ground.
 
 ## Lower priority / opportunistic
 
