@@ -44,7 +44,9 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      # Pinned to a commit, not a branch. No release fits: the latest, v1.5 (fc53c09, 2024-02-02),
+      # still runs on node20, and upstream moved the action to node24 only on master, unreleased.
+      - uses: superfly/flyctl-actions/setup-flyctl@ed8efb33836e8b2096c7fd3ba1c8afe303ebbff1 # master 2026-04-08 (unreleased; after v1.5, node24)
         with:
           version: 0.4.111
 
