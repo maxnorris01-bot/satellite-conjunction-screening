@@ -10,6 +10,42 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Globe: live nearest neighbour, and playback speeds 1x/10x/50x.** Max saw cases
+where an object sat visibly next to the selected one while the dashed line went elsewhere. Checked
+independently against the live 19,246-object catalog (`satellite.js`, brute force, 25 random
+objects): `nearestTo` is correct *at the click moment*. The bug is that the neighbour is chosen
+once and frozen, and orbits separate at several km/s. The pick was no longer the nearest after
+10 s in 11 of 25 cases, 60 s in 21 of 25, 300 s in 23 of 25; at +60 s the line was often
+400-1,000 km long while the true nearest was ~100 km. Scoped for one branch on `portfolio-site`;
+none of it touches orientation or the frame-sliced render propagation.
+
+**1. Keep the nearest neighbour live.** While an object is inspected, recompute the nearest
+neighbour on a throttle instead of only on click, and move the dashed line and distance label to
+the new neighbour when it changes. It must follow the *displayed* time: real-time throttle in
+Live (about once per second at 1x, and no slower in sim terms at higher speeds, so at 50x it
+refreshes by sim time, not just wall time), and re-run on every scrub or step in historical/paused
+modes. Measure the cost of one full-catalog scan first (it is one propagation per object); if it
+cannot run about once a second without hurting frame time, use a candidate-set approach (keep the
+closest few hundred objects from a periodic full scan and re-rank only those between scans), and
+say which was chosen and why. Remove the "Refresh" link and the "found at the moment you clicked"
+note; the panel should say the neighbour is live.
+
+**2. Hidden objects.** The search currently counts objects hidden by filters, so the line can end
+at an invisible dot. Decision: the neighbour search considers only currently visible objects, so
+the line always ends on something on screen. If no visible neighbour exists, show nothing rather
+than a far one. (If this reads badly in testing - e.g. "nearest" changing as filters change - note
+it; it is deliberate.)
+
+**3. Playback speeds become 1x, 10x, 50x** (was 1x, 2x, 5x, 10x): change `SPEEDS` in
+`globe/clock.ts` and anything that assumes the old set (default, labels, tests, the offset label
+in `SatelliteGlobe.tsx`). Check that 50x does not break the neighbour refresh above, the near-miss
+and station follow views, or the Live/time-slider offset display. No change to the slice=10
+propagation rule.
+
+Acceptance: pick several random objects, play at 1x/10x/50x for a minute, and confirm by script
+that the displayed neighbour matches an independent brute force at the displayed time (allowing for
+the throttle), with no page errors and lint/typecheck/tests/build clean.
+
 **2026-10-03 - Globe Phase 1c fix round done; zoom floor confirmed working.** Per the fix-round
 entry below (`portfolio-site` `fix/satellite-globe-phase-1c-feedback`; details in
 `docs/sessions/2026-10-03-globe-phase-1c-fix-round.md`):
