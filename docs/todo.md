@@ -17,10 +17,9 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Globe: live nearest neighbour + speeds 1x/10x/50x** (`portfolio-site`; scoped in the
-      2026-10-04 working-notes entry). The neighbour was frozen at click time and went stale
-      within seconds; keep it live on a throttle, search visible objects only, and replace the
-      speed set.
+- [ ] **Review and merge the live-neighbour branch** (`portfolio-site` branch
+      `fix/satellite-globe-live-neighbor`, 2 commits, local): live, visible-only nearest
+      neighbour, 1x/10x/50x speeds. See `docs/sessions/2026-10-04-globe-live-neighbor.md`.
 
 ## Later
 
@@ -60,6 +59,12 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Live nearest neighbour and 1x/10x/50x speeds implemented (`portfolio-site`
+      `fix/satellite-globe-live-neighbor`, pending review).
+      - A full scan costs 5 ms (20 ms at 4x CPU), so it uses a bounded candidate set from the
+        render positions (2-38 objects).
+      - Matched brute force within the throttle allowance in 180/180 samples across 1x/10x/50x.
+      See `docs/sessions/2026-10-04-globe-live-neighbor.md`.
 - [x] 2026-10-03 - Globe Phase 1c fix round implemented (`portfolio-site`
       `fix/satellite-globe-phase-1c-feedback`, pending review).
       - Zoom floor verified at 1.10 on wheel, trackpad pinch and touch pinch, and production had
