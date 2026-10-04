@@ -12,6 +12,8 @@ Fly's built-in schedule is unreliable; trigger it from GitHub Actions".
      time to re-run. That avoids spending a download that would 403.
   2. `flyctl machine start 1850e47cdd43e8`.
   3. `flyctl machine wait --state stopped` for up to 15 minutes (the job timeout is 25).
+     **Wrong, fixed in a follow-up below:** each wait request is capped at 60 s client-side and
+     `flyctl` doesn't retry the timeout, so this gave up after 60 s on the first real run.
   4. **Exit code** from the Machine's exit event after this run's start (`flyctl machine list
      --json`). Fly omits `exit_code` when it's 0, so a present event without a code counts as
      success. A non-zero exit fails, and if the run's failure line in `fly logs` shows a 403 or
@@ -111,3 +113,58 @@ it in the comment.
 **Checks:** `actionlint` 1.7.12 reports 0 errors. I confirmed the shellcheck rule ran: with
 `shellcheck` on the PATH, only the pyflakes rule is disabled. `make lint`, `make typecheck` and
 `make test` (39) are clean. No Python changed.
+
+## Follow-up (2026-10-04, branch `fix/daily-run-wait-loop`): replace `flyctl machine wait` with a polling loop
+
+**What failed.** The first real run, GitHub Actions 37242110531, failed in "Wait for it to stop".
+Its log: started waiting at 23:00:08Z, and at 23:01:08Z `Error: machine 1850e47cdd43e8 did not
+reach "stopped" within 15m0s: ... deadline_exceeded: machine failed to reach desired state,
+stopped, currently started`. That's exactly 60 s, with the Machine still running its job.
+
+**Cause, verified in source** (no Fly commands run):
+- `fly-go` v0.11.2, which `flyctl` v0.4.111 uses, clamps each Machines API wait request to 60 s:
+  `WithWaitTimeout` sets `max(1s, min(timeout, proxyTimeoutThreshold))` with
+  `proxyTimeoutThreshold = 60 * time.Second` (`flaps/flaps_machines_wait.go`:19, 38).
+- `flyctl machine wait` makes up to 3 attempts, but `isRetryableWaitError` only retries 429, 5xx,
+  "currently replaced" and network-error strings. `deadline_exceeded` isn't retried, so the command
+  returns after 60 s whatever `--wait-timeout` says.
+- Fly's Machines API docs give the wait endpoint's `timeout` a default of 60 s and no stated
+  maximum, so the hard cap is client-side.
+
+My earlier claim in this session ("loops until the whole timeout is used") came from reading the
+retry loop without checking the retry predicate or the per-request clamp. It was wrong.
+
+**Fix.**
+- `.github/scripts/wait-for-machine.sh` (new, executable) polls `flyctl machine list --json` every
+  10 s, with an overall deadline of 900 s (`DEADLINE_S`).
+  - It returns once the Machine is `stopped` *and* has an exit event timestamped after this run's
+    `start_ms`. That guards against reading the previous run's `stopped` state before the start
+    takes effect.
+  - A failed poll is logged as a warning and retried.
+  - At the deadline it fails with `::error title=Machine did not stop::` naming the last state and
+    what to check.
+- The workflow calls the script for "Wait for it to stop". That needed `actions/checkout`
+  (sparse, `.github/scripts` only), placed as the **first** step: checkout cleans the workspace,
+  and the first draft put it after the step that writes `start_ms`, which would have deleted it.
+- The exit-code and bucket-check steps are unchanged.
+
+**Tests.** `tests/test_daily_run_workflow.py` (6 tests, part of `make test` and CI) runs the real
+script, and the real "Check exit code" step read from the workflow YAML, against a fake `flyctl`
+serving scripted `machine list --json` responses:
+- still running then stopped OK (exit-code step reports 0)
+- stopped with exit 1 (wait finishes, exit-code step fails "Run failed")
+- exit 1 with a 403 in the logs (reported as the CelesTrak cooldown)
+- never stops (fails at the deadline with the message)
+- a stale stop from the previous run (keeps waiting, then times out)
+- a transient `flyctl` failure (retried)
+
+Removing the stale-stop guard on purpose makes 2 of them fail; restored afterwards.
+
+**Checks.** actionlint reports 0 errors with the shellcheck rule active, and `shellcheck` passes
+the script. `make lint`, `make typecheck` and `make test` (45) are clean.
+
+**ADR 0012** is updated: its Decision describes the polling wait, and an amendment records the
+failed run and the verified cause.
+
+**Next:** after merge, Max re-runs the workflow (`gh workflow run daily-run.yml`), minding the
+2-hour cooldown from the failed run's download.

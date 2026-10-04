@@ -51,9 +51,13 @@ every missed date. We need a trigger we can see, verify and re-run. (Recorded in
   1. **Before starting:** read `history/index.json`. If the last publish was under 2 hours ago,
      fail with an explanation of CelesTrak's cooldown and when to re-run, rather than spend a
      doomed download that would 403.
-  2. **Wait** for the Machine to stop (`flyctl machine wait --state stopped`, up to 15 minutes; the
-     job's timeout is 25 minutes). A Fly run takes about 2 minutes, and the margin covers a slow
-     boot or a repeat of the unexplained 560 s first run in the working notes.
+  2. **Wait** for the Machine to stop, for up to 15 minutes (the job's timeout is 25 minutes). A Fly
+     run takes about 2 minutes, and the margin covers a slow boot or a repeat of the unexplained
+     560 s first run in the working notes. The wait polls `flyctl machine list --json` every 10 s
+     (`.github/scripts/wait-for-machine.sh`, amended 2026-10-04; see below). It counts the run as
+     finished only when the Machine is `stopped` *and* has an exit event from after this run's
+     start, so the previous run's `stopped` state can't end the wait early. A failed poll is
+     retried. At the deadline it fails with the Machine's last state and what to check.
   3. **Check the exit code** from the Machine's exit event after this run's start
      (`flyctl machine list --json`). Fly omits `exit_code` when it's 0, so a present exit event
      without a code counts as success, and a missing exit event fails. A non-zero exit fails. If
@@ -97,3 +101,27 @@ every missed date. We need a trigger we can see, verify and re-run. (Recorded in
   stores it. Rotating it means replacing the secret.
 - **No pipeline code changes.** `app.publish`, the Machine size and the bucket layout are
   untouched.
+
+## Amendment, 2026-10-04: the wait is a polling loop, not `flyctl machine wait`
+
+The first real run (GitHub Actions run 37242110531) failed in its wait step. `flyctl machine wait
+1850e47cdd43e8 --state stopped --wait-timeout 15m` started at 23:00:08Z and gave up at 23:01:08Z,
+exactly 60 s later, with `deadline_exceeded: machine failed to reach desired state, stopped,
+currently started`. The Machine was still running its job.
+
+**Cause, verified in source** (`flyctl` v0.4.111 and the `fly-go` v0.11.2 it vendors):
+- `fly-go`'s `WithWaitTimeout` clamps every Machines API wait request to
+  `min(timeout, proxyTimeoutThreshold)`, where `proxyTimeoutThreshold = 60 * time.Second`
+  (`flaps/flaps_machines_wait.go`, lines 19 and 38). So `--wait-timeout 15m` becomes one request
+  of at most 60 s. The Machines API docs give the wait endpoint's `timeout` a default of 60 s and
+  state no higher maximum.
+- `flyctl machine wait` (`internal/command/machine/wait.go`) makes up to 3 attempts, but only
+  retries errors its `isRetryableWaitError` accepts: HTTP 429, 5xx, "currently replaced" and a
+  list of network-error strings. A `deadline_exceeded` with the Machine still `started` isn't one
+  of them, so it returns after the first 60 s request.
+
+The original version of this ADR assumed `--wait-timeout` set the overall wait. It doesn't. The
+wait is now the polling loop described in the Decision above. The exit-code and bucket checks are
+unchanged. `tests/test_daily_run_workflow.py` exercises the loop and the exit-code step against a
+fake `flyctl` for these cases: still running then stopped OK, stopped with exit 1, a 403 cooldown,
+never stops, a stale stop from the previous run, and a transient `flyctl` failure.
