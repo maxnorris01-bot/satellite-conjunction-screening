@@ -10,6 +10,17 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Pair-view dimming built; frozen-clock neighbour bug fixed.** Per the entry below
+(`portfolio-site` `fix/satellite-globe-dim-near-miss`; details in
+`docs/sessions/2026-10-04-globe-dim-near-miss.md`):
+- **Pair view:** the pair's two objects are the exempt set in the same drawn-copy dimming layer.
+  Every exit already rebuilds from the filter state, so restores are exact.
+- **A filter change during a pair view** re-dims rather than leaving the view (a judgement call;
+  the scoping entry listed "show debris" changes among the exits).
+- **Bug fixed:** with the clock frozen the neighbour error bound is 0, and rebuilding the
+  candidate limit as `sqrt(min)^2` could round below `min` and drop the nearest, so the inspected
+  object showed no neighbour. The limit is now floored at `min`, with a regression test.
+
 **2026-10-04 - Globe: dimming also applies when a top conjunction is shown (near-miss pair view).**
 Max reported that selecting a top conjunction to show on the globe does not dim the rest. That is
 the behaviour the dimming entry scoped ("near-miss pair view keeps both objects bright and does not
