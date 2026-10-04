@@ -10,6 +10,36 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Globe: dim everything except the selected object and its live neighbour.** Max's
+request after the live-neighbour round. When one object is inspected, every other object goes
+semi-transparent; the selected object and its nearest neighbour stay at full opacity. When the
+neighbour changes (it now does, live, especially at 10x/50x), the new one brightens and gets the
+dashed line and distance label, and the old one dims. Scoped for one `portfolio-site` branch;
+orientation and the frame-sliced propagation are untouched.
+
+- **Scope of the dimming.** Single-object inspect only. The near-miss pair view keeps both objects
+  bright and does not dim the rest; station follow is unchanged. Deselecting (empty click, the
+  Deselect button, or picking a pair/station) restores everything.
+- **Dimmed is not hidden.** Dimmed objects stay eligible as the nearest neighbour and stay
+  pickable. Watch the existing convention: the neighbour search, picking and the "Showing N of M"
+  count treat `rgba` alpha > 0 as "visible" (`engine.ts`). Dim alpha must stay above zero and must
+  not be confused with filter-hidden (alpha 0); keep dimming as a separate multiplier layered on
+  the filter/colour alpha so un-dimming restores the exact prior state, and keep the visible count
+  and neighbour search keyed to the filter state, not the dim state.
+- **Neighbour handoff.** On each live refresh, if the neighbour index changes, un-dim the new one
+  and re-dim the old one in the same update as the line moves. No flicker where both or neither
+  are bright. The neighbour exemption also applies to the first neighbour found on selection.
+- **Dim level.** Start around 20% opacity of the object's normal alpha, tune by eye. The two bright
+  objects must stand out clearly against a dense shell, and dimmed points should still read as a
+  faint backdrop, not vanish. Name the final value as a constant.
+- **Cost.** Dimming only needs the alpha buffer rewritten on selection change and on a neighbour
+  change (not every frame); confirm 60 fps holds at 50x with an object selected, as in the last
+  round.
+- **Acceptance.** Select an object: all others dim, it and its neighbour stay bright. At 10x/50x,
+  watch the neighbour change and confirm exactly one bright neighbour at a time, matched to the
+  line. Deselect and confirm everything returns to normal, including under active filters and
+  colour modes. Lint/typecheck/tests/build clean, no page errors.
+
 **2026-10-04 - Live nearest neighbour built: bounded candidates, no periodic full scan.** Per the
 entry below (`portfolio-site` `fix/satellite-globe-live-neighbor`; details in
 `docs/sessions/2026-10-04-globe-live-neighbor.md`):

@@ -17,9 +17,9 @@ the active work.*
       manual start/update reset Fly's internal "daily" timer - check that a run actually fires on
       its own around 2026-10-04 and isn't silently skipped.
 
-- [ ] **Review and merge the live-neighbour branch** (`portfolio-site` branch
-      `fix/satellite-globe-live-neighbor`, 2 commits, local): live, visible-only nearest
-      neighbour, 1x/10x/50x speeds. See `docs/sessions/2026-10-04-globe-live-neighbor.md`.
+- [ ] **Globe: dim all but the selected object and its live neighbour** (`portfolio-site`; scoped
+      in the 2026-10-04 "dim everything" working-notes entry). Single-object inspect only; dimmed
+      objects stay visible for neighbour search and picking.
 
 ## Later
 
