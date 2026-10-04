@@ -17,6 +17,15 @@ the active work.*
       entry). The Fly schedule is intact but didn't fire (last run 2026-10-03 21:46Z, manual).
       Max creates the Fly token and the `FLY_API_TOKEN` secret himself; first run via manual
       dispatch.
+      - [x] 2026-10-04: workflow, ADR 0012, Makefile (`--schedule` removed, `fly-unschedule`
+            added) and README on `feat/daily-run-github-actions`. Linted (actionlint + shellcheck).
+      - [ ] Max: `fly tokens create deploy -a satellite-conjunction-screening` and
+            `gh secret set FLY_API_TOKEN`.
+      - [ ] Max: `make fly-unschedule FLY_MACHINE_ID=1850e47cdd43e8`, then confirm with
+            `fly machine status 1850e47cdd43e8 -d` that `schedule` is gone (fallback in ADR 0012).
+      - [ ] Acceptance: a manual dispatch goes green with a fresh snapshot date; a deliberate
+            failure (wrong machine id, throwaway branch) goes red with a clear message; the next
+            scheduled run fires on its own and adds a date.
 
 ## Later
 
