@@ -3,7 +3,9 @@
 **Status:** Accepted, 2026-10-01. Supersedes ADR 0005's deferral: the measured runtime and memory
 it was waiting for are in ADR 0007. **"No history" is superseded by
 [ADR 0011](adr-0011-dated-snapshot-retention.md) (2026-10-02):** the job now also keeps 7 days of
-dated objects and report snapshots alongside `current.json`.
+dated objects and report snapshots alongside `current.json`. **The trigger is superseded by
+[ADR 0012](adr-0012-daily-run-triggered-by-github-actions.md) (2026-10-04):** a GitHub Actions cron
+starts the Machine, because Fly's built-in schedule skipped days.
 
 ## Context
 

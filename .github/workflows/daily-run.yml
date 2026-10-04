@@ -1,0 +1,121 @@
+# Daily screening run (ADR 0012): start the existing Fly Machine once a day, wait for it to finish,
+# and fail loudly unless it exited 0 and the bucket's history index was rewritten by this run.
+# Replaces Fly's built-in `schedule: daily`, which proved unreliable (see ADR 0012).
+#
+# A red run is the alert: GitHub emails the repo owner when a workflow fails. The only secret is
+# FLY_API_TOKEN (a Fly token scoped to this app); flyctl reads it from the environment, so it
+# never appears in a command line or in the log.
+name: daily-run
+
+on:
+  schedule:
+    # 10:17 UTC (03:17 PDT / 02:17 PST). CelesTrak publishes no fixed update times: it checks for
+    # new GP data every 2 hours and allows one download per GROUP per update (a repeat gets a 403),
+    # so the time can't be keyed to an update. What matters is staying clear of other downloads
+    # of the same groups: manual runs happen during US Pacific working hours, and this is the
+    # middle of the Pacific night. It's also far from 00:00 UTC, so GitHub's usual scheduling
+    # delays can't push a run onto the wrong UTC date (snapshots are keyed by date, ADR 0011).
+    # Minute 17 avoids the top-of-hour load where GitHub most often delays or drops cron runs.
+    - cron: "17 10 * * *"
+  workflow_dispatch:
+
+# One run at a time: a manual dispatch overlapping the scheduled run would double-download and
+# hit CelesTrak's per-update limit.
+concurrency:
+  group: daily-run
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  FLY_APP: satellite-conjunction-screening
+  FLY_MACHINE_ID: 1850e47cdd43e8
+  INDEX_URL: https://satellite-conjunction-screening.fly.storage.tigris.dev/history/index.json
+  # CelesTrak allows one download per GROUP per 2-hour update window.
+  COOLDOWN_S: "7200"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    # Pipeline is ~110 s on Fly; the wait allows 15 min for a slow boot or the unexplained 560 s
+    # first run seen once locally (working notes' open items).
+    timeout-minutes: 25
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: 0.4.111
+
+      - name: Check CelesTrak cooldown
+        run: |
+          set -euo pipefail
+          index=$(curl -fsS -H 'Cache-Control: no-cache' "$INDEX_URL?t=$(date +%s)")
+          last=$(jq -r '.generated_at_utc' <<<"$index")
+          age=$(( $(date -u +%s) - $(date -u -d "$last" +%s) ))
+          echo "Last publish: $last (${age}s ago)"
+          if [ "$age" -lt "$COOLDOWN_S" ]; then
+            echo "::error title=CelesTrak cooldown::The last run published ${age}s ago ($last). CelesTrak allows one download per group per 2-hour update, so starting now would fail with HTTP 403. This is the cooldown, not an outage: re-run this workflow after $(date -u -d "@$(( $(date -u -d "$last" +%s) + COOLDOWN_S ))" +%H:%MZ)."
+            exit 1
+          fi
+
+      - name: Start the Machine
+        run: |
+          set -euo pipefail
+          date -u +%s%3N > start_ms
+          date -u +%Y-%m-%dT%H:%M:%SZ > start_iso
+          flyctl machine start "$FLY_MACHINE_ID" -a "$FLY_APP"
+
+      - name: Wait for it to stop
+        run: flyctl machine wait "$FLY_MACHINE_ID" -a "$FLY_APP" --state stopped --wait-timeout 15m
+
+      - name: Check exit code
+        run: |
+          set -euo pipefail
+          start_ms=$(cat start_ms)
+          # exit_code is omitted from the JSON when it's 0 (omitempty), so a present exit event
+          # with no code means success.
+          code=$(flyctl machine list -a "$FLY_APP" --json | jq -r --arg id "$FLY_MACHINE_ID" --argjson t "$start_ms" '
+            [.[] | select(.id == $id) | .events[]? | select(.type == "exit" and .timestamp >= $t)]
+            | sort_by(.timestamp) | last
+            | if . == null then "none"
+              else (.request.exit_event.exit_code // .request.monitor_event.exit_event.exit_code // 0 | tostring)
+              end')
+          echo "$code" > exit_code
+          echo "Machine exit code: $code"
+          if [ "$code" = "none" ]; then
+            echo "::error title=No exit event::The Machine stopped but reported no exit event after this run started; check fly logs -a $FLY_APP."
+            exit 1
+          fi
+          if [ "$code" != "0" ]; then
+            if flyctl logs -a "$FLY_APP" --no-tail 2>/dev/null | grep '"event": "failed"' | tail -1 | grep -q -E '403|has not updated since your last successful download'; then
+              echo "::error title=CelesTrak cooldown (403)::The run failed with HTTP 403 from CelesTrak, which allows one download per group per 2-hour update. Another download of the same groups happened within the last 2 hours (usually a manual run). This is the cooldown, not an outage: re-run this workflow 2 hours after that download."
+            else
+              echo "::error title=Run failed::The Machine exited with code $code. See fly logs -a $FLY_APP for the run's one-line failure JSON."
+            fi
+            exit 1
+          fi
+
+      - name: Verify the bucket was updated by this run
+        run: |
+          set -euo pipefail
+          index=$(curl -fsS -H 'Cache-Control: no-cache' "$INDEX_URL?t=$(date +%s)")
+          generated=$(jq -r '.generated_at_utc' <<<"$index")
+          start_iso=$(cat start_iso)
+          echo "history/index.json generated_at_utc: $generated (run started $start_iso)"
+          if [ "$(date -u -d "$generated" +%s)" -lt "$(date -u -d "$start_iso" +%s)" ]; then
+            echo "::error title=Stale history index::The Machine exited 0 but history/index.json is from $generated, before this run started ($start_iso). The publish may have failed after the pipeline, or the retention step logged a retention_error."
+            exit 1
+          fi
+          {
+            echo "### Daily run published"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Run id | \`$(jq -r '.latest_run_id' <<<"$index")\` |"
+            echo "| Machine exit code | $(cat exit_code) |"
+            echo "| Snapshot date | $(jq -r '.dates[0].date' <<<"$index") |"
+            echo "| Dates retained | $(jq -r '[.dates[].date] | join(", ")' <<<"$index") |"
+            echo "| Index generated | $generated |"
+          } >> "$GITHUB_STEP_SUMMARY"

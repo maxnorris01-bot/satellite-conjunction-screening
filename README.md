@@ -181,8 +181,12 @@ memory, run id) to `runs/trace.jsonl`.
 
 ## Daily run
 
-A Fly.io scheduled Machine runs `python -m app.publish` about once a day. Fly's schedule is
-approximate, with no fixed time of day. Each run screens the full-catalog scope (about 19,000
+A GitHub Actions workflow ([`daily-run.yml`](.github/workflows/daily-run.yml)) starts a Fly.io
+Machine once a day at 10:17 UTC, and the Machine runs `python -m app.publish`. The workflow also
+verifies the run: it fails if the Machine's exit code isn't 0, or if the bucket's
+`history/index.json` wasn't rewritten by this run. A red run is the alert. Fly's own built-in
+schedule was retired because it skipped days
+([ADR 0012](docs/adr/adr-0012-daily-run-triggered-by-github-actions.md)). Each run screens the full-catalog scope (about 19,000
 objects) with fresh CelesTrak data and overwrites these objects in a public Tigris bucket:
 
 | Object | Contents |
@@ -213,17 +217,23 @@ make publish-local
 fly apps create satellite-conjunction-screening
 fly storage create -a satellite-conjunction-screening -n satellite-conjunction-screening --public
 make fly-build                 # remote build, pushes registry.fly.io/satellite-conjunction-screening:<commit>
-make fly-machine-create        # scheduled Machine: daily, no restart, shared-cpu-4x 8 GB, sjc; runs once now
+make fly-machine-create        # Machine: no restart, shared-cpu-4x 8 GB, sjc; runs once now
 fly logs -a satellite-conjunction-screening
+fly tokens create deploy -a satellite-conjunction-screening   # then: gh secret set FLY_API_TOKEN
 ```
+
+The daily trigger needs that token stored as the `FLY_API_TOKEN` Actions secret (paste it at the
+`gh secret set` prompt; never into a file or chat). Run the workflow by hand from the Actions tab,
+or with `gh workflow run daily-run.yml`. It refuses to start within 2 hours of the last publish,
+because CelesTrak allows one download per group per update and a repeat gets HTTP 403.
 
 `fly storage create` sets `BUCKET_NAME` and the S3 credentials as app secrets. With a public
 bucket, the report is served at `https://<bucket>.fly.storage.tigris.dev/reports/current.json`
 (confirmed 2026-10-01; the raw CelesTrak snapshot is at `snapshots/current/manifest.json` and
 `snapshots/current/*.json.gz`). **After code changes:** `make fly-build`, then
 `make fly-update FLY_MACHINE_ID=<id>` (`fly machine list` shows the id). The update doesn't start a
-stopped Machine, so run `fly machine start <id>` to publish immediately rather than at the next
-scheduled run. Right after a build, the update can fail with `MANIFEST_UNKNOWN` while the registry
+stopped Machine, so dispatch the workflow (or `fly machine start <id>`) to publish immediately
+rather than waiting for the next daily run. Right after a build, the update can fail with `MANIFEST_UNKNOWN` while the registry
 catches up; retrying a few seconds later works.
 
 ## Evaluation
