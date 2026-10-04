@@ -10,6 +10,30 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Page redesign trimmed: keep the top, revert the rest (Max's review).** The redesign
+branch keeps only the new header and the Latest run + Risk breakdown row, with these tweaks:
+- the GitHub button sits right after the title
+- the lede is full width, one sentence per line
+- the tiles read "objects screened" / "conjunctions" / "closest approach"
+- the risk caveat moves out of the card into a muted note
+
+The globe side column, the panels moved out of the canvas and the conjunction dropdown are
+reverted, by restoring the pre-redesign files rather than rebuilding them; the globe chunk's
+content hash matches the pre-redesign build. Before merge, the risk card and both notes were aligned with the tiles
+through a shared four-row subgrid, holding at 1440/1024/820 px; the columns stack below 800 px.
+Details: the follow-up section of `docs/sessions/2026-10-04-page-redesign.md`.
+
+**2026-10-04 - Page redesign built without the mockup image.** Per the entry below (`portfolio-site`
+`feat/satellite-page-redesign`; details in `docs/sessions/2026-10-04-page-redesign.md`). The mockup
+wasn't in either repo, so the layout follows the entry's text and still needs a visual comparison.
+- **Dropdown:** a native `<select>` (each option: rank, both objects, miss, tier).
+- **Panels:** moved to the side column with light-token styling.
+- **Open fit questions:**
+  - With collision history (the default panel), the side column runs about 270 px taller than the
+    globe column.
+  - The closed select truncates long options.
+  - The slider is short beside Live and the speed buttons.
+
 **2026-10-04 - Project page redesign: stats beside risk, globe with a side column, conjunction dropdown.**
 Max supplied a mockup (screenshot) of the Satellite Conjunction Screening page and approved the
 reading below ("try all of this ... and see how it looks"), so this is an experiment to evaluate
