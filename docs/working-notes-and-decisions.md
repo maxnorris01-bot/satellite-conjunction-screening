@@ -10,6 +10,18 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Dimming built as a separate draw layer.** Per the entry below (`portfolio-site`
+`feat/satellite-globe-dim-unselected`; details in
+`docs/sessions/2026-10-04-globe-dim-unselected.md`):
+- **Dim level:** `DIM_ALPHA = 0.2`.
+- **Two buffers:** the engine draws a copy of the filter rgba with dimming applied and leaves the
+  filter rgba as the source of truth for visibility, so picking, the neighbour search and counts
+  ignore dimming, and deselect restores exactly.
+- **Rendering:** points had to switch from `alphaTest 0.5` to blending (alphaTest 0.01,
+  transparent, no depth writes) so a 20% point shows instead of being discarded.
+- **Handoff:** the new neighbour brightens in the same frame as the line moves (verified on
+  every frame at 10x/50x).
+
 **2026-10-04 - Globe: dim everything except the selected object and its live neighbour.** Max's
 request after the live-neighbour round. When one object is inspected, every other object goes
 semi-transparent; the selected object and its nearest neighbour stay at full opacity. When the
