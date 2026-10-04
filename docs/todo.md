@@ -27,6 +27,11 @@ the active work.*
             failure (wrong machine id, throwaway branch) goes red with a clear message; the next
             scheduled run fires on its own and adds a date.
 
+- [ ] **Globe: overhead Sky view, Phase 1** (`portfolio-site`; scoped in the 2026-10-04 "Overhead
+      Sky view scoped (Phase 1 and 1b)" working-notes entry): Globe/Sky toggle, browser location
+      plus typed place, first-person dome with compass, all objects above the horizon, shared
+      time controls. Phase 1b (click to inspect, polish) follows.
+
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
@@ -46,8 +51,9 @@ the active work.*
 
 - [ ] Add a status note to ADR 0001: SATCAT metadata now comes from CelesTrak.
 - [ ] **Deferred to later phases** (see the same working-notes entry for why): true operator
-      filtering (blocked on the GCAT join, its own to-do item below), browser-geolocation sky
-      view with per-satellite visibility/pass predictions, and the satellite-POV camera view.
+      filtering (blocked on the GCAT join, its own to-do item below), sky-view pass predictions
+      and naked-eye visibility (the basic Sky view is scoped, see above), and the satellite-POV
+      camera view.
       Each needs its own Cowork scoping session once Phase 1 is live and reviewed.
 
 ## Lower priority / opportunistic

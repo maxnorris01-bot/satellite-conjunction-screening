@@ -10,6 +10,71 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Globe: overhead "Sky" view scoped (Phase 1 and 1b).** The first of the three
+features deferred in the Phase 1c entry to get its own scoping. Max's decisions (asked directly):
+location by browser geolocation **plus** a typed place; show **everything above the horizon**
+(reusing the globe's colours and filters); live as a **Globe / Sky toggle** on the existing globe
+(same time slider, speeds, filters); a **first-person dome with compass**, not a flat chart.
+Two phases, as with the globe, each its own `portfolio-site` branch. The operator filter and the
+satellite's-eye view stay deferred and unscoped.
+
+**Phase 1: location, dome, time.**
+- *Toggle and shared state.* A "Globe | Sky" control on the globe panel. One engine and one WebGL
+  context: switching swaps the camera and a few overlays; nothing is rebuilt and the catalog is not
+  reloaded. The clock (Live, 1x/10x/50x, slider, historical-day snapshots), the filters, the colour
+  modes and legend all carry over unchanged. Globe behaviour is untouched.
+- *Observer.* "Use my location" (browser geolocation; permission is the browser's; handle
+  denied, unavailable and timeout with a plain message and the typed fallback) and a place box
+  (city or address). Typed text needs a geocoder. Pick a free, key-less, CORS-friendly one, check
+  its terms and CORS yourself before choosing (candidates: Open-Meteo's geocoding API,
+  OpenStreetMap Nominatim with its usage policy), and say which and why. Calls go from the
+  browser, one per submitted query (no per-keystroke calls). Show the resolved place name and
+  coordinates so a wrong match is obvious. Privacy: the geolocated coordinates never leave the
+  browser, are not stored (no localStorage by default) and are not logged; the typed text goes to
+  the geocoder only. Say so in a short note next to the controls. Default altitude 0 (sea level);
+  no elevation lookup.
+- *Geometry.* Observer geodetic position, rotated with Earth: convert each object's inertial
+  position to the observer's local east/north/up frame using the same GMST the globe already
+  uses, then azimuth (0 = north, clockwise) and elevation. Do it as vector arithmetic on the
+  positions the slice propagation already produces (about 1/10 of the catalog per frame), not as
+  19,000 `satellite.js` look-angle calls per frame. Only objects with elevation above 0 degrees
+  are drawn; hidden objects (filters) stay hidden. Show "N above your horizon".
+- *Rendering.* A dome view from the observer: an inside-the-sphere camera, points placed on the
+  dome by azimuth/elevation, a horizon ring and N/E/S/W labels, plus faint elevation rings (30,
+  60 degrees) and a zenith mark. **Handedness trap:** looking up with your face to the north, east
+  is on your RIGHT (a flat sky chart has east on the left, a common mistake); the dome must be
+  right for a person standing there. Drag to look around (azimuth and elevation, elevation clamped
+  to the sky), wheel/pinch changes field of view (about 30 to 100 degrees), touch works. Points
+  are drawn with the same dimming and colour machinery as the globe. Initial look: facing the
+  direction of the highest object or due south, level to the horizon; pick and justify.
+- *Time and motion.* The same clock drives it; at 10x/50x the points visibly cross the sky; Live
+  shows true motion. Historical days use that day's snapshot, as the globe does.
+- *Empty and error states.* No location yet: show the controls over a dark empty dome with a one
+  line prompt. Geolocation denied or geocoder failing: say what happened and offer the other
+  route.
+- *Not in Phase 1.* Pass predictions, naked-eye visibility (sunlit, twilight, magnitude), a
+  satellite-based or gyroscope "point your phone" mode, elevation-aware observers, and any nearest
+  neighbour line in the sky view. Do not add them.
+
+**Phase 1b: selection and polish.** Click a point to inspect it: the same single-selection model
+as the globe (replace, empty click or a Deselect button clears), the others dimmed and the
+selected object kept bright, and a panel that adds azimuth, elevation, range (km) and altitude to
+the existing fields. Re-check zoom/FOV limits and touch, a label for the selected object in the
+dome, a "Reset view" button, accessibility (keyboard-operable toggle and controls, labels on the
+location inputs, reduced-motion respected), and the empty/low-count messaging. The filter and
+legend counts stay catalog counts; the above-horizon count is shown separately.
+
+**Acceptance (Phase 1).** Independent check of the geometry: for a handful of real objects at a
+fixed time and at least three observer locations (northern, southern hemisphere, near a pole),
+compare the dome's azimuth/elevation with an independent computation (for example `satellite.js`'s
+own look-angle function used only in the test) within about 0.1 degrees. A synthetic check: an
+observer placed directly under a chosen object sees it at elevation near 90, and an object just
+north of the observer has azimuth near 0. Verify the east-on-the-right orientation with a
+scripted case, not by eye. Switching Globe/Sky repeatedly: no new WebGL context, no leaked
+listeners, state kept, selection cleared sensibly. Performance: 60 fps at 50x with a full catalog
+(also under 4x CPU throttle). Lint/typecheck/tests/build clean, no page errors, screenshots at
+desktop and phone width.
+
 **2026-10-04 - Daily run: Fly's built-in schedule is unreliable; trigger it from GitHub Actions.**
 Evidence: the machine's `schedule: daily` is intact (`fly machine status -d`), healthy (last run
 exit 0, right image), yet the scheduler's only start was 2026-10-03 04:43Z; nothing since, and by
