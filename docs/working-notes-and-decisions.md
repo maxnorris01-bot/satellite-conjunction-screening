@@ -10,6 +10,22 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Sky Phase 1b built: page owns the view mode; selection survives the toggle.** Per
+the entry below (`portfolio-site` `feat/satellite-sky-1b`; details in
+`docs/sessions/2026-10-04-sky-1b.md`):
+- **State design:** the page (`SatelliteTool.tsx`) owns Globe/Sky and renders the toggle in the
+  section heading row; `SatelliteGlobe` takes it as a `viewMode` prop. The page already owns the
+  conjunction replay, so "Show on globe" sets Globe and entering Sky ends the replay in one place.
+- **Selection survives the toggle** (same object, each view's ring and dimming). In Sky only the
+  selected object stays bright; on the globe, the selected object and its live neighbour.
+- **Pair and station views end on entering Sky** (both are globe camera modes). The camera is
+  released where it is, never flown home, and an inspected object is kept.
+- **Phone panel:** in Sky on a phone the selected-object panel folds to two lines (name,
+  az/el) with Details for the rest and Deselect. When the ring would be under the bottom-docked
+  panels, the side column moves up under the legend, only if that uncovers the ring, with
+  hysteresis (`phoneSideDock`, tested). Chosen over moving the view, because a click or a time
+  step must never change the Sky look. Not handled: a ring under the legend itself.
+
 **2026-10-04 - Sky view: toggle moves to the section header; selection in Sky (Phase 1b).**
 Max, after trying the ground and dome grid ("this looks great"), asked for two changes: (1) the
 Globe | Sky toggle should sit outside the viewer, above it at the top right, level with the
