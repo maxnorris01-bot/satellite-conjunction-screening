@@ -29,9 +29,9 @@ the active work.*
 
 - [ ] **Sky view Phase 1b** (selection and polish), per the 2026-10-04 Sky entry, (Phase 1 is merged and live).
 
-- [ ] **Review and merge the Sky ground grid** (`portfolio-site` branch `feat/satellite-sky-ground`,
-      1 commit, local): lighter slate ground with a fading perspective grid, horizon kept crisp,
-      look-down enabled. See `docs/sessions/2026-10-04-sky-ground.md`.
+- [ ] **Review and merge the Sky ground and dome grid** (`portfolio-site` branch
+      `feat/satellite-sky-ground`, 2 commits, local): lighter slate ground, a curved dome grid
+      with degree labels and a Grid toggle, a very faint floor grid, look-down enabled. See `docs/sessions/2026-10-04-sky-ground.md`.
 
 ## Later
 

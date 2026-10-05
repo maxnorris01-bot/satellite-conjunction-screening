@@ -19,6 +19,12 @@ below (`portfolio-site` `feat/satellite-sky-ground`; details in `docs/sessions/2
   horizon).
 - **Labels:** at least 5.9:1 against either surface.
 - **Pitch:** the look can now reach -89 degrees, so the ground is visible.
+- **Follow-up: a curved dome grid replaces the floor grid as the main cue.**
+  - Rings every 15 degrees and azimuth lines every 30, which fade above 70 degrees.
+  - It sits behind the points on a slightly larger sphere.
+  - It has degree labels and a Grid toggle.
+  - The floor grid stays very faint (14%), because without it the ground looked flat at the
+    horizon.
 
 **2026-10-04 - Sky view: lighter ground with a perspective grid.** Max, after trying Phase 1 on
 production: it looks great, but perspective is easy to lose (dark sky, dark ground) and it feels a

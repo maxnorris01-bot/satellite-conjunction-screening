@@ -62,6 +62,45 @@ All in `portfolio-site`, headed Chromium on the M5, live data.
 - **Errors:** none on the page.
 - **Checks:** `npm run lint`, `npx tsc -b` and `npm run build` are clean. `npm test` passes 35/35.
 
+## Follow-up: a curved dome grid (second commit)
+
+Max liked the lighter ground but wanted a curved grid on the dome itself instead of the floor grid.
+
+- **Dome grid** in the old floor grid's blue-grey, `#6c7a8d`:
+  - Elevation rings every 15°, at 28% opacity. The horizon stays separate and crisp.
+  - Azimuth lines every 30° from the horizon to the zenith, at 25%, with N/E/S/W at 42%.
+  - The azimuth lines fade out between 70° and 84° elevation, leaving a clean disc overhead
+    rather than a clump.
+  - **No z-fighting:** the grid sits on a sphere just outside the points' sphere and draws before
+    them. Seen from the centre, that puts it behind the points.
+- **Labels:**
+  - Azimuth degrees along the horizon at the 30° steps (30°, 60°, 120° and so on), with N/E/S/W
+    unchanged.
+  - The 30°/60° elevation labels sit on both the north and south meridians, so they're visible in
+    the default south-facing (or north-facing) view.
+  - **Colour:** the existing ring-label colour, `#a3acbd`: 8.8:1 on the sky and 5.9:1 on the ground.
+  - **No mirroring:** all labels are placed with `skyDirection`. A scripted check facing north found
+    30° right of N and 330° left; facing south, 150° left of S and 210° right.
+- **Floor grid: kept, very faint (14% alpha, down from 35%).** Screenshots were compared with no
+  floor grid, with the full floor grid, and with the faint one. Without any floor grid, the ground
+  reads as a flat slab at the horizon. The full one competes with the dome grid. The faint one keeps
+  a little receding depth under the dome grid without drawing the eye.
+- **Grid toggle:** a labelled checkbox in the Your sky panel's title row, on by default and in both
+  the expanded and folded panel. It works by keyboard (Space toggles it) and hides the dome grid and
+  its degree labels. N/E/S/W, the zenith mark, the horizon and the faint floor grid stay.
+- **Unchanged:** sky maths, drag/zoom/FOV, filters, dimming and time handling. The scripted
+  orientation test in `tests/sky.test.ts` passes (35/35).
+- **Verified:**
+  - **Screenshots:** before/after at desktop and phone width, at the horizon, looking up at the
+    zenith, and at narrow (30°) and wide (100°) fields of view.
+  - **Frame time:** at 50x with the full catalog, 16.7 ms mean (p95 about 18.4) at both 1x and 4x
+    CPU throttling.
+  - **Errors:** none on the page.
+  - **Checks:** lint, typecheck, tests and build are clean.
+- **Noted:** from London the geostationary belt sits at about 30° elevation, so in the default
+  south view the "30°" label sits among that row of points. It's still legible, and the overlap is
+  latitude-dependent.
+
 ## Not in this round
 
 Kept in `todo.md` under Later, per the entry: sky gradient and horizon haze, distance-based point
