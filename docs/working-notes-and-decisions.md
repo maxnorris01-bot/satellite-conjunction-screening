@@ -10,6 +10,22 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Sky ground built: slate ground, radially projected perspective grid.** Per the entry
+below (`portfolio-site` `feat/satellite-sky-ground`; details in `docs/sessions/2026-10-04-sky-ground.md`):
+- **Colours:** ground `#26303c` (1.51:1 against the sky, far darker than the points).
+- **Grid:** a ground plane one eye-height down, its points projected radially onto the inside of
+  the ground hemisphere, which gives true perspective without a second occluder. Cells are 0.6
+  eye-heights and lines fade from 3 to 18 eye-heights out (6 to 30 left a bright band under the
+  horizon).
+- **Labels:** at least 5.9:1 against either surface.
+- **Pitch:** the look can now reach -89 degrees, so the ground is visible.
+- **Follow-up: a curved dome grid replaces the floor grid as the main cue.**
+  - Rings every 15 degrees and azimuth lines every 30, which fade above 70 degrees.
+  - It sits behind the points on a slightly larger sphere.
+  - It has degree labels and a Grid toggle.
+  - The floor grid stays very faint (14%), because without it the ground looked flat at the
+    horizon.
+
 **2026-10-04 - Sky view: lighter ground with a perspective grid.** Max, after trying Phase 1 on
 production: it looks great, but perspective is easy to lose (dark sky, dark ground) and it feels a
 little flat. Offered six standard remedies (lighter ground plus perspective grid; sky gradient and
