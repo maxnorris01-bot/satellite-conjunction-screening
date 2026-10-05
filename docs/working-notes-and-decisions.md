@@ -10,6 +10,63 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-04 - Sky view: toggle moves to the section header; selection in Sky (Phase 1b).**
+Max, after trying the ground and dome grid ("this looks great"), asked for two changes: (1) the
+Globe | Sky toggle should sit outside the viewer, above it at the top right, level with the
+"Every tracked object" heading; (2) in Sky view he still wants to select satellites. Item 2 is the
+click-to-inspect part of the Phase 1b scope in the Sky entry above, so this entry covers both and
+the rest of Phase 1b. One `portfolio-site` branch; globe behaviour and the sky geometry are
+untouched.
+
+**1. Toggle in the section header.**
+- Move the Globe | Sky segmented control out of the legend panel into the section's heading row
+  (the `<h2>` "Every tracked object" in `SatelliteTool.tsx`): right-aligned, on the same line as
+  the heading at desktop widths; on phones keep it on that row if it fits, otherwise wrap it under
+  the heading, right-aligned. The globe's own code currently owns the mode state, so share it
+  (lift the state to the page, or pass it through props/a slot). Pick the simplest design and say
+  which. Keep the existing control's behaviour, keyboard operation and accessible name; it must
+  stay reachable by keyboard and screen reader and be visible in both modes.
+- Nothing about the toggle changes inside the viewer beyond its removal from the legend panel
+  (the legend still holds the colour modes, filters and stations; the "Your sky" panel stays).
+
+**2. Selecting satellites in Sky view (the click-to-inspect part of Phase 1b).**
+- Click or tap a point in the dome to inspect it, with the same single-selection model as the globe:
+  one selection at a time, a new pick replaces the old, a click on empty sky or the Deselect button
+  clears it, and picking only considers objects that are above the horizon and visible (not
+  filtered out). Reuse the existing pick code with the sky camera's projection; use the same pick
+  radius (about 6 px mouse, 16 px touch) and the same click-vs-drag threshold so dragging to look
+  around never selects.
+- Selected object: ring on it in the dome, a small label with its name next to it, and the
+  existing dimming (everything else drawn at `DIM_ALPHA`, the selected one at full strength). The
+  inspect panel shows the existing fields plus **azimuth, elevation, range (km from you) and
+  altitude**, live as time runs. If the selected object drops below the horizon while selected,
+  keep it selected, hide the ring and label, and say "below your horizon" in the panel.
+- Selection across the toggle: a selection survives switching Globe <-> Sky (same object, ring and
+  dimming drawn in each view); today switching clears it, change that. The live nearest-neighbour
+  line stays globe-only; in Sky the panel hides the nearest-neighbour row. Selecting or switching
+  never moves the globe camera unexpectedly. "Show on globe" in the conjunction table still
+  switches to the globe, as now.
+- Clicking in Sky must not change the Sky view direction or field of view.
+
+**3. The rest of Phase 1b.** A "Reset view" button for the dome (back to the initial facing,
+pitch and field of view); touch polish (tap selects, drag looks around, pinch changes field of
+view, no accidental selection at the end of a drag); accessibility (the new header toggle and the
+location controls operable by keyboard, labels on the inputs, reduced-motion respected for any
+animation); and the empty and low-count messaging (no location yet, nothing above the horizon
+under the current filters). The filter and legend counts stay catalog counts; the above-horizon
+count is shown separately, as now.
+
+**Acceptance.** Scripted pick test: for several objects at a fixed time and at least two
+observer locations, project the object's azimuth/elevation to the screen and confirm that
+clicking there selects that object, and that clicking empty sky clears the selection; panel
+azimuth/elevation match an independent calculation (satellite.js's look-angle function, test
+only) within about 0.1 degrees. Toggle Globe <-> Sky 10 times with a selection: same object
+selected throughout, dimming correct in both views, no new WebGL context or leaked listeners. The
+existing scripted east-on-the-right orientation check still passes. The globe's selection, live
+neighbour and dimming tests are unchanged and pass. Header toggle: screenshots at desktop and
+phone width in both modes, keyboard operable. 60 fps at 50x with the full catalog and a selection
+in Sky, also under 4x CPU throttle. Lint/typecheck/tests/build clean, no page errors.
+
 **2026-10-04 - Sky ground built: slate ground, radially projected perspective grid.** Per the entry
 below (`portfolio-site` `feat/satellite-sky-ground`; details in `docs/sessions/2026-10-04-sky-ground.md`):
 - **Colours:** ground `#26303c` (1.51:1 against the sky, far darker than the points).

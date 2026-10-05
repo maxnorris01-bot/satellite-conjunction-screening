@@ -27,11 +27,10 @@ the active work.*
             failure (wrong machine id, throwaway branch) goes red with a clear message; the next
             scheduled run fires on its own and adds a date.
 
-- [ ] **Sky view Phase 1b** (selection and polish), per the 2026-10-04 Sky entry, (Phase 1 is merged and live).
-
-- [ ] **Review and merge the Sky ground and dome grid** (`portfolio-site` branch
-      `feat/satellite-sky-ground`, 2 commits, local): lighter slate ground, a curved dome grid
-      with degree labels and a Grid toggle, a very faint floor grid, look-down enabled. See `docs/sessions/2026-10-04-sky-ground.md`.
+- [ ] **Sky view: header toggle and selection in Sky (Phase 1b)** (`portfolio-site`; scoped in the
+      2026-10-04 "toggle moves to the section header; selection in Sky" working-notes entry). Move
+      the Globe | Sky toggle to the section heading row, click-to-inspect in the dome with az/el/range
+      in the panel, selection kept across the toggle, plus Reset view and touch/accessibility polish.
 
 ## Later
 
