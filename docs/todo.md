@@ -27,11 +27,6 @@ the active work.*
             failure (wrong machine id, throwaway branch) goes red with a clear message; the next
             scheduled run fires on its own and adds a date.
 
-- [ ] **Sky view: header toggle and selection in Sky (Phase 1b)** (`portfolio-site`; scoped in the
-      2026-10-04 "toggle moves to the section header; selection in Sky" working-notes entry). Move
-      the Globe | Sky toggle to the section heading row, click-to-inspect in the dome with az/el/range
-      in the panel, selection kept across the toggle, plus Reset view and touch/accessibility polish.
-
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
@@ -60,6 +55,10 @@ the active work.*
       distance-based point size/brightness, short motion trails, a faint background star field.
       Revisit if the sky view still feels flat after the lighter ground.
 
+- [ ] Sky on phones: a selected ring that ends up under the legend (top ~28% of the stage) stays
+      covered; the side column only moves off the bottom stack. A foldable legend in Sky on phones
+      would fix it, if it matters in use (2026-10-04, Phase 1b session doc).
+
 ## Lower priority / opportunistic
 
 - [ ] Delete the stale `snapshots/current/{gp,satcat}-iridium-NEXT.json.gz` from the bucket (left
@@ -75,6 +74,14 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-04 - Sky view Phase 1b implemented (`portfolio-site` `feat/satellite-sky-1b`, pending
+      review).
+      - Globe | Sky toggle in the section heading row; the page owns the mode.
+      - Click/tap to select in the dome: 8/8 scripted picks at two observers, az/el matches
+        satellite.js to the displayed 0.1 degrees; the selection survives the toggle.
+      - Phones: two-line selected-object panel with Details; the side column moves off the ring.
+      - 60 fps at 50x with a selection under 4x CPU throttle.
+      See `docs/sessions/2026-10-04-sky-1b.md`.
 - [x] 2026-10-04 - Sky view ground and perspective grid implemented (`portfolio-site`
       `feat/satellite-sky-ground`, pending review).
       - Ground `#26303c` against sky `#05070d`.
