@@ -10,6 +10,42 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-06 - Orbit line built; satellite age paused on where the launch year comes from.**
+Future features 1 and 2 (`portfolio-site` `feat/orbit-line-and-age`; details in
+`docs/sessions/2026-10-06-orbit-line-and-age.md`).
+- **Orbit line: the object's own track over one period, centred on "now".** The loop is 360
+  SGP4 samples from half a period before the displayed moment to half a period after. So the
+  object is exactly on its line, and the closing chord sits on the far side. SGP4's perturbations
+  keep the ends from meeting: 15-34 km on the orbits tested, under 0.5% of the radius.
+  - **Recompute threshold: half a period.** Inside that span the object is on its own sampled
+    track. Past it, the object is on the next revolution, which J2 has shifted by up to about
+    30 km for the ISS. A resample takes 0.1-0.2 ms, so play, slider jumps and 50x all simply
+    resample at the edge.
+- **Colour: pale periwinkle `#b0a8ff`, not white or plain pale blue.** White is the neighbour
+  line and pair ring. Pale blues came within a colour-blind distance of 0-5 (OKLab x100) of the
+  cyan station ring and close to the Sky horizon line. `#b0a8ff` is at least 13 from every
+  colour in use (at least 8 under colour-blind simulation), with 9.5:1 contrast on the sky. Its
+  nearest neighbour, the cyan ring, only shows in station views, which end on selection. No red.
+- **Width: 2 px lines (three.js `Line2`).** Plain WebGL lines are one device pixel and vanished
+  over the globe's point shell. They add 29 kB (7.8 kB gzip) to the lazily loaded globe chunk.
+- **Sky: built, a small change.** The same samples are projected onto the dome each frame, just
+  behind the points, and the existing ground hemisphere hides the part below the horizon.
+- **Satellite age: paused, not built.** `objects/current.json` has no designator field, so per
+  the brief nothing was changed in this repo. Two ways forward, for Max to pick:
+  - **(a) Add it to the objects file** (pipeline): one additive field, no schema bump.
+    - Change: `"international_designator": obj.object_id` in
+      `src/app/reporting/objects_builder.py`, plus the key and a `1998-067A` assertion in
+      `tests/test_objects_builder.py`.
+    - Clean and explicit, but it only appears from the next run. The 7 days of retained dated
+      snapshots would show "Unknown" until they age out.
+  - **(b) Parse TLE line 1, columns 10-17** (site only).
+    - The pipeline already writes `OBJECT_ID` there through `omm.initialize` and the TLE export,
+      as `YYNNNA` (two-digit year: 57-99 means 19xx, 00-56 means 20xx).
+    - All 19,239 objects in the 2026-10-06 file parse, launch years 1964-2026, and it works for
+      every retained snapshot.
+    - Costs: a two-digit year (unambiguous until 2057) and an implicit field rather than a named
+      one.
+
 **2026-10-06 - Future features brainstormed and ordered; not scoped or committed to.** Seven ideas
 went into `docs/todo.md` under Later, "Future features (brainstorm, ordered)", in this order:
 1. Orbit line for the selected satellite.
