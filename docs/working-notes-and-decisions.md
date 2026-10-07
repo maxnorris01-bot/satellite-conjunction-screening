@@ -10,6 +10,41 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-07 - Age colour mode built: snapshot-dated, strict designator parsing, multi-hue ramp.**
+`portfolio-site` `feat/age-color-mode`; details in `docs/sessions/2026-10-07-age-color-mode.md`.
+- **Reference date: the displayed snapshot's run date (`generated_at_utc`)**, not the playing
+  clock or today. It's the date the snapshot describes, colours don't change as time plays, and
+  each retained day on the slider is measured against its own date. Age is the year difference
+  only, so an object can sit one bucket off at the edges (noted in the code and the legend).
+- **Buckets:** under 2 is 0-1 calendar years, "2 to 10" is 2-10 inclusive, and over 10 is 11 or
+  more. A launch year after the snapshot's is Unknown.
+- **Parsing is strict:** exactly `YYYY-NNNA` (1-3 piece letters), a year from 1957 and a launch
+  number from 001. Anything else is Unknown, including padded strings, rather than guessed at.
+  The pipeline never pads, so strictness costs nothing today.
+- **The legend always lists all four buckets**, unlike the other modes, which hide empty
+  categories. That way an older snapshot reads as "0 / 0 / 0 / Unknown 19,246" rather than
+  silently losing rows. The note explaining Unknown shows only while Unknown objects exist: "Older
+  snapshots lack launch data." when the file has no designator field, otherwise "no valid launch
+  designator".
+- **Colours: an ordered multi-hue ramp, blue -> green -> yellow-lime** (`#5f75c1`, `#05c992`,
+  `#d4f73e`), viridis-style: hue and lightness both change at each step. Unknown is a warm grey,
+  `#8f8978`.
+  - **It replaced a one-hue teal ramp before push** (`#258e6a`, `#58ba93`, `#9de3c4`). That ramp
+    stepped in lightness only, and in review the three buckets looked too alike on the globe. Its
+    worst neighbouring pair was OKLab 13.5 (x100) under colour-blind simulation; the new ramp's
+    worst pair is 19.1, and 22.9 under normal vision.
+  - **Constraints, measured with the dataviz validator's model** (Machado 2009 protan, deutan and
+    tritan): at least 3:1 on the sky and the Sky ground; at least 11.2 from the orbit line
+    `#b0a8ff`; at least 8.2 from the rings and neighbour line under every simulation.
+  - **Unknown's margin:** 15.4 from every bucket under normal vision (the validator's hard floor),
+    at least 10.8 under simulation, and 3.83:1 on the ground. The first grey, `#5c6370`, was
+    2.21:1.
+  - **Trade-off:** no ramp found in the search got further than about 11 from the orbit line
+    while keeping the other floors. In practice a selection dims everything else to 0.2, so the
+    solid line stands well apart from the dots.
+- **Found while testing, not fixed:** the time slider's arrow keys don't move it while the
+  clock runs (to-do, lower priority).
+
 **2026-10-06 - `international_designator` added to `objects/current.json` (satellite age, option
 (a)).**
 - **The field:** each object now carries `"international_designator": obj.object_id`, e.g.
