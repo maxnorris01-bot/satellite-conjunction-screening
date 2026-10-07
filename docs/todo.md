@@ -31,9 +31,10 @@ the active work.*
 
 - [ ] Add a status note to ADR 0001: SATCAT metadata now comes from CelesTrak.
 - [ ] **Deferred to later phases** (see the same working-notes entry for why): true operator
-      filtering (blocked on the GCAT join, its own to-do item below), sky-view pass predictions
-      and naked-eye visibility (the basic Sky view is scoped, see above), and the satellite-POV
-      camera view.
+      filtering (blocked on the GCAT join, its own to-do item above), sky-view pass predictions
+      and naked-eye visibility (the basic Sky view is scoped, see above; the darkness/sunlit test
+      it needs is part of future feature 3 below), and the satellite-POV camera view (merged into
+      future feature 4 below).
       Each needs its own Cowork scoping session once Phase 1 is live and reviewed.
 
 - [ ] Sky view depth ideas offered but not chosen (2026-10-04): sky gradient and horizon haze,
@@ -43,6 +44,46 @@ the active work.*
 - [ ] Sky on phones: a selected ring that ends up under the legend (top ~28% of the stage) stays
       covered; the side column only moves off the bottom stack. A foldable legend in Sky on phones
       would fix it, if it matters in use (2026-10-04, Phase 1b session doc).
+
+### Future features (brainstorm, ordered)
+
+Brainstormed and ordered 2026-10-06, **not scoped or committed to** (see that day's working-notes
+entry). Each needs its own scoping before any build.
+
+1. [ ] **Orbit line for the selected satellite.** Propagate one orbital period from its own SGP4
+       elements and draw it as a loop in the existing ECI frame (a fixed ellipse there). Check the
+       color against the existing risk and neighbor-line colors before using red.
+2. [ ] **Satellite age.** Launch year comes free from the international designator (e.g.
+       `1998-067A`) already in the GP data. A new color-by mode next to the existing ones, plus a
+       launch-year range filter. Exact launch dates would need the GCAT join (item above).
+3. [ ] **Day/night on the globe, matching the displayed time.** Low-precision solar position,
+       Earth shaded by sun angle, a night-lights texture blended in (NASA Black Marble, public
+       domain; a compressed 2-4K version to keep page weight down). Knock-on uses:
+       - Sky brightness at dusk and dawn.
+       - A "sunlit vs in Earth's shadow" satellite state (an exact calculation).
+       - "Visible from your location tonight" logic (observer in darkness, satellite sunlit). This
+         is the test the deferred naked-eye visibility item above needs.
+4. [ ] **Satellite's-eye view (POV) and space view, as one feature** with look-direction modes:
+       down at Earth, forward along the track, outward at space. The camera sits at the satellite,
+       oriented from its velocity vector; zoom is field of view. Build after day/night (3) and a
+       star field (already listed under the Sky depth ideas above), since it benefits from both.
+       This is the deferred satellite-POV view above, merged here.
+5. [ ] **Longer conjunction screening window** (about a week), with miss distance and an explicit
+       uncertainty note.
+       - **Constraint:** predictions from public TLE/GP elements lose roughly a kilometer or more
+         per day, so months-or-years-out collision predictions aren't meaningful, and real
+         collisions are very rare. Don't promise "will collide" claims.
+       - Probabilities would need covariance data from Space-Track, which needs its own ADR
+         (a revision to ADR 0001). The Space-Track item above is the related, separate decision.
+6. [ ] **Featured satellites.** A curated set of roughly 20-50 well-known objects (ISS, Hubble,
+       a GPS satellite, a Starlink and similar) rendered with NASA public-domain 3D models,
+       self-hosted with attribution. Not feasible for the whole catalog (most objects are debris
+       or unnamed). No runtime hotlinking of web images (licensing and reliability).
+7. [ ] **Sky view terrain horizon.** Build a horizon profile from free elevation data for the
+       user's location, so terrain hides the sky and any satellite below the skyline. Large; last
+       in the order.
+       - **Explicitly not doing:** CCTV or webcam feeds (privacy, legality, reliability), or
+         photoreal 3D tiles (paid API key, restrictive terms, key exposure in client code).
 
 ## Lower priority / opportunistic
 
