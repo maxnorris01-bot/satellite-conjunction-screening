@@ -14,13 +14,6 @@ the active work.*
 
 ## Later
 
-- [ ] **Daily-run workflow runner upkeep** (`.github/workflows/daily-run.yml`):
-      - Bump `actions/checkout` past the Node 20 deprecation (it's pinned to v4.4.0, which still
-        declares `using: node20`; newer majors exist). Re-pin to a full SHA with the release in
-        the trailing comment, as now.
-      - Consider pinning `runs-on: ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on
-        2026-10-19, so the runner image doesn't change underneath the job unannounced.
-
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
       run overwrites `reports/current.json` and keeps no history (ADR 0009), so there's nothing
       to stitch. Needs dated reports or dated small summaries published with a retention window,
@@ -66,6 +59,13 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-06 - Daily-run workflow runner upkeep (`chore/daily-run-runner-upkeep`):
+      - `runs-on` pinned to `ubuntu-24.04` ahead of `ubuntu-latest` moving to Ubuntu 26 on
+        2026-10-19.
+      - `actions/checkout` bumped from v4.4.0 (node20) to v7.0.1 (node24), pinned to
+        `3d3c42e5aac5ba805825da76410c181273ba90b1`, verified against the tag.
+      - Token scoping, `persist-credentials: false` and the concurrency group unchanged.
+      - Confirmation is one manual run after merge.
 - [x] 2026-10-06 - Daily run on GitHub Actions confirmed end to end: manual run green, cooldown
       pre-check fails red and early, scheduled runs 37362248668 and 37498410006 succeeded
       unattended and added dates to `history/index.json`. Scheduled starts landed around

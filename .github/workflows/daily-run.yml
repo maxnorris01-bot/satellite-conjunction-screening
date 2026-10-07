@@ -37,7 +37,9 @@ env:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
+    # Pinned, not ubuntu-latest, which moves to Ubuntu 26 on 2026-10-19: change the image on
+    # purpose, not by surprise.
+    runs-on: ubuntu-24.04
     # Pipeline is ~110 s on Fly; the wait polls for up to 15 min to cover a slow boot or the
     # unexplained 560 s first run seen once locally (working notes' open items).
     timeout-minutes: 25
@@ -47,7 +49,7 @@ jobs:
     steps:
       # First, before any step writes files: checkout cleans the workspace. Only the wait script
       # is needed.
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (node24)
         with:
           sparse-checkout: .github/scripts
           # Nothing here pushes or fetches again, so don't leave the job's GITHUB_TOKEN in

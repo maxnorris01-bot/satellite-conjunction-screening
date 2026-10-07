@@ -203,3 +203,25 @@ requires it at job level.
 
 ADR 0012's "Run" bullet now says the token is per-step, the actions are SHA-pinned and the checkout
 drops its credentials.
+
+## Follow-up (2026-10-06, branch `chore/daily-run-runner-upkeep`): pin the runner image, move checkout to Node 24
+
+- `runs-on: ubuntu-latest` -> `ubuntu-24.04`, ahead of `ubuntu-latest` moving to Ubuntu 26 on
+  2026-10-19.
+- `actions/checkout` v4.4.0 (`11d5960`, node20) -> **v7.0.1**,
+  `3d3c42e5aac5ba805825da76410c181273ba90b1` (node24).
+  - Looked up with `git ls-remote --tags` and plain `curl` of the GitHub API and raw files (no
+    `gh`, per Max). v7.0.1 is the latest stable release (2026-07-20), and it and `v7` are
+    lightweight tags on that commit.
+  - `action.yml` at the SHA declares `using: node24` and still has `sparse-checkout` and
+    `persist-credentials`.
+  - The v5/v6/v7 release notes' breaking changes don't apply to a schedule/dispatch job with
+    credentials off.
+- Unchanged: token on the three `flyctl` steps only, `persist-credentials: false`, the
+  `daily-run` concurrency group.
+- **Checks:**
+  - `tests/test_daily_run_workflow.py`: 9 passed, including the new `test_runner_image_is_pinned`.
+  - `make lint` and `make typecheck` clean.
+  - actionlint: 0 errors, with the shellcheck rule active.
+- **Not verified yet:** a real run on the new runner and checkout. Max triggers one manual run
+  after merge, if CelesTrak's 2-hour cooldown allows.
