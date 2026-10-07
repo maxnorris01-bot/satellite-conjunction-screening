@@ -41,10 +41,6 @@ the active work.*
       distance-based point size/brightness, short motion trails, a faint background star field.
       Revisit if the sky view still feels flat after the lighter ground.
 
-- [ ] Sky on phones: a selected ring that ends up under the legend (top ~28% of the stage) stays
-      covered; the side column only moves off the bottom stack. A foldable legend in Sky on phones
-      would fix it, if it matters in use (2026-10-04, Phase 1b session doc).
-
 ### Future features (brainstorm, ordered)
 
 Brainstormed and ordered 2026-10-06, **not scoped or committed to** (see that day's working-notes
@@ -100,6 +96,14 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-06 - Sky polish (`portfolio-site` `fix/sky-polish`, pending review):
+      - Screen readers hear only selection changes ("Selected …", "Deselected") and a new
+        location; the live az/el/range and above-horizon count are no longer in live regions.
+      - Sky on phones: the legend folds to one line, folded by default (was: a selected ring under
+        the legend stayed covered, 2026-10-04).
+      - The 30°/60° labels move off the geostationary row when it runs along their ring (London,
+        Berlin: 30°; around 25° latitude: 60°).
+      See the 2026-10-06 "Sky polish" working-notes entry.
 - [x] 2026-10-06 - Daily-run workflow runner upkeep (`chore/daily-run-runner-upkeep`):
       - `runs-on` pinned to `ubuntu-24.04` ahead of `ubuntu-latest` moving to Ubuntu 26 on
         2026-10-19.

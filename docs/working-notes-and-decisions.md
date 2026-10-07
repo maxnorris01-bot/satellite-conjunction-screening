@@ -31,6 +31,26 @@ Overlaps were merged rather than duplicated:
 - The deferred naked-eye visibility points to item 3's darkness/sunlit test.
 - Item 4's star field is the one already listed under the Sky depth ideas.
 
+**2026-10-06 - Sky polish: announce selections only, fold the phone legend, keep ring labels off the
+geostationary row.** `portfolio-site` `fix/sky-polish`, one commit:
+- **Screen readers:** one always-present live region announces a new selection's name,
+  "Deselected" or a newly chosen location, and nothing else. The selected-object and Your sky
+  panels stopped being live regions, because their numbers change as time plays. The panel is a
+  labelled region ("Selected object"), so the numbers stay readable on request. This applies in
+  both views, since the panel is shared; the Globe-only station and closest-approach panels hold
+  static text and are unchanged.
+- **Phone legend:** in Sky on a phone it folds to "Colours and filters" (plus "· N hidden" when
+  filters are on). It's folded by default, with an `aria-expanded` toggle. Desktop and Globe are
+  unchanged. This closes the "ring under the legend" gap from Phase 1b.
+- **Ring labels:** the geostationary belt crosses the equator-facing meridian at
+  atan2(cos φ − R/r, sin |φ|). It runs level there, so it lies along the 30° ring near 51° latitude
+  and the 60° ring near 25°, not only at low latitudes. When the belt is within 14 px of a label,
+  the label moves to the far side of its ring; the 14 px is converted to degrees with the field
+  of view, so it holds at any zoom. In checks at Greenwich, Berlin, Miami and Stanley, belt points
+  under the label went from 1-13 to 0. At a 100° field of view, 2 inclined objects off the row
+  remain. The formula is tested against the Sky view's own observer geometry
+  (`tests/layout.test.ts`).
+
 **2026-10-06 - Daily-run runner pinned to `ubuntu-24.04`; `actions/checkout` bumped to v7.0.1.**
 - **Runner:** `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19, so the job is pinned to
   `ubuntu-24.04` and the image changes only on purpose.
