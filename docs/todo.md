@@ -12,6 +12,18 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
+- [ ] **Redeploy the daily-run image so `objects/current.json` gains `international_designator`**
+      (after `feat/objects-international-designator` merges). Merging doesn't change the daily
+      run: GitHub Actions starts a Fly Machine from an already-deployed image.
+      1. From up-to-date `main`: `make fly-build`, then
+         `make fly-update FLY_MACHINE_ID=1850e47cdd43e8`. This changes only the image; no
+         schedule is added (ADR 0012).
+      2. Verify with `gh workflow run daily-run.yml` (blocked for 2 h after the last publish), or
+         let the next scheduled run do it. Its cron is 10:17 UTC, but runs have started around
+         16:45 UTC.
+      3. Check that `objects/current.json` has `"international_designator": "1998-067A"` for
+         NORAD 25544. Commands are in `docs/sessions/2026-10-06-objects-international-designator.md`.
+
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
@@ -51,11 +63,14 @@ entry). Each needs its own scoping before any build.
 2. [ ] **Satellite age.** Launch year comes from the international designator (e.g.
        `1998-067A`). A new color-by mode next to the existing ones, plus a launch-year range
        filter. Exact launch dates would need the GCAT join (item above).
-       - **Waiting on Max's decision (2026-10-06):** the designator is in the raw GP data and in
-         the report's object records, but **not** in `objects/current.json`, which the site
-         loads. Either add it there (one additive field in `objects_builder.py`), or parse it
-         from TLE line 1, which already carries it for every object. Details and the trade-off
-         are in that day's "Orbit line built; satellite age paused" working-notes entry.
+       - **Decided (2026-10-06): option (a), add it to `objects/current.json`.** Pipeline side done
+         on `feat/objects-international-designator`: `international_designator` (e.g.
+         `1998-067A`, null if blank), no schema bump. It reaches the bucket only after the image
+         is redeployed (Up next).
+       - **Site must treat a missing key as the "Unknown" age bucket.** Objects files written
+         before the redeploy don't have the key at all, and that includes retained dated
+         snapshots (`objects/<date>.json.gz`, up to 7 days, ADR 0011), which the time slider can
+         load. They age out about a week after the first run with the field.
 3. [ ] **Day/night on the globe, matching the displayed time.** Low-precision solar position,
        Earth shaded by sun angle, a night-lights texture blended in (NASA Black Marble, public
        domain; a compressed 2-4K version to keep page weight down). Knock-on uses:

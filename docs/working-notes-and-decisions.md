@@ -10,6 +10,26 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-06 - `international_designator` added to `objects/current.json` (satellite age, option
+(a)).**
+- **The field:** each object now carries `"international_designator": obj.object_id`, e.g.
+  `"1998-067A"`. It's the same value the report's object records already have under the same
+  name. It's null if the source value is blank, though CelesTrak records without `OBJECT_ID` are
+  already rejected at parse time.
+- **No schema bump:** it's additive, so `schema_version` stays 1 under the report/objects rule.
+- **Checked on the frozen snapshot:** all 2,048 records have a well-formed `YYYY-NNNA..`
+  designator with no nulls. Launch years are 1999 for the Fengyun-1C debris and 2017-2023 for
+  Iridium NEXT.
+- **It isn't live until the image is redeployed.** GitHub Actions starts the Fly Machine from a
+  deployed image, so merging alone changes nothing. Redeploy is `make fly-build` then
+  `make fly-update FLY_MACHINE_ID=1850e47cdd43e8`, which changes only the image (the Machine
+  stays unscheduled, ADR 0012). The sequence is in the to-do list.
+- **Older files lack the key until they age out.** `objects/current.json` before the redeploy, and
+  the retained dated snapshots `objects/<date>.json.gz` (up to 7 days, ADR 0011), have no
+  `international_designator` key at all. The site must treat a missing key, like a null, as the
+  "Unknown" age bucket. Dated snapshots get it from the first run after the redeploy, and the
+  last old one ages out about 7 days later.
+
 **2026-10-06 - Orbit line built; satellite age paused on where the launch year comes from.**
 Future features 1 and 2 (`portfolio-site` `feat/orbit-line-and-age`; details in
 `docs/sessions/2026-10-06-orbit-line-and-age.md`).

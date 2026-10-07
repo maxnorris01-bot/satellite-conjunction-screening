@@ -194,7 +194,7 @@ objects) with fresh CelesTrak data and overwrites these objects in a public Tigr
 | `reports/current.json` | The report, same format as `make screen`'s (~78 MB at full-catalog scope) |
 | `objects/<date>.json.gz`, `reports/<date>.json.gz` | Dated copies of the two above for the globe's time slider, gzipped (`Content-Encoding: gzip`; report ~5.3 MB compressed). Kept for 7 days, pruned every run ([ADR 0011](docs/adr/adr-0011-dated-snapshot-retention.md)) |
 | `history/index.json` | Which dates have both a dated objects and a dated report key, newest first |
-| `objects/current.json` | Every screened object, flat and propagation-ready: `norad_id`, `name`, TLE lines, epoch, `satcat_owner`, `object_type`, `active_payload`, `source_groups` ([ADR 0010](docs/adr/adr-0010-portfolio-api-and-full-catalog-scope.md)). Served gzipped (`Content-Encoding: gzip`, ~1.4 MB) |
+| `objects/current.json` | Every screened object, flat and propagation-ready: `norad_id`, `name`, `international_designator` (e.g. `1998-067A`; absent in files written before 2026-10-06), TLE lines, epoch, `satcat_owner`, `object_type`, `active_payload`, `source_groups` ([ADR 0010](docs/adr/adr-0010-portfolio-api-and-full-catalog-scope.md)). Served gzipped (`Content-Encoding: gzip`, ~1.4 MB) |
 | `snapshots/current/{gp,satcat}-<group>.json.gz` | The exact CelesTrak responses behind it, in the regression test's snapshot format |
 | `snapshots/current/manifest.json` | The run id and snapshot file list, to check against the report's `run_id` |
 

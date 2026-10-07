@@ -64,7 +64,8 @@ own infrastructure consequences accounted for below.
 - **A new published artifact, `objects/current.json`**: a flat, propagation-ready list of every
   screened object — `norad_id`, `name`, `tle_line1`, `tle_line2`, `element_epoch_utc`,
   `satcat_owner`, `object_type`, `active_payload`, `source_groups` — plus its own `schema_version`,
-  `run_id`, and `generated_at_utc`. Published by `app.publish` alongside the existing report and
+  `run_id`, and `generated_at_utc`. (2026-10-06: `international_designator` added, additively, with
+  no schema bump; see that day's working-notes entry.) Published by `app.publish` alongside the existing report and
   snapshot objects. Stored gzip-compressed and served with `Content-Encoding: gzip` and
   `Content-Type: application/json` (clarified 2026-10-02), since full-catalog scope makes this file
   several MB, not the sub-1MB it would be at the current default scope. This is deliberately
