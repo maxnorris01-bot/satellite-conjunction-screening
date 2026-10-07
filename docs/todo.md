@@ -12,22 +12,14 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
-- [ ] **Make the daily run dependable: GitHub Actions trigger** (`satellite-conjunction-screening`;
-      scoped in the 2026-10-04 "Daily run: Fly's built-in schedule is unreliable" working-notes
-      entry). The Fly schedule is intact but didn't fire (last run 2026-10-03 21:46Z, manual).
-      Max creates the Fly token and the `FLY_API_TOKEN` secret himself; first run via manual
-      dispatch.
-      - [x] 2026-10-04: workflow, ADR 0012, Makefile (`--schedule` removed, `fly-unschedule`
-            added) and README on `feat/daily-run-github-actions`. Linted (actionlint + shellcheck).
-      - [ ] Max: `fly tokens create deploy -a satellite-conjunction-screening` and
-            `gh secret set FLY_API_TOKEN`.
-      - [ ] Max: `make fly-unschedule FLY_MACHINE_ID=1850e47cdd43e8`, then confirm with
-            `fly machine status 1850e47cdd43e8 -d` that `schedule` is gone (fallback in ADR 0012).
-      - [ ] Acceptance: a manual dispatch goes green with a fresh snapshot date; a deliberate
-            failure (wrong machine id, throwaway branch) goes red with a clear message; the next
-            scheduled run fires on its own and adds a date.
-
 ## Later
+
+- [ ] **Daily-run workflow runner upkeep** (`.github/workflows/daily-run.yml`):
+      - Bump `actions/checkout` past the Node 20 deprecation (it's pinned to v4.4.0, which still
+        declares `using: node20`; newer majors exist). Re-pin to a full SHA with the release in
+        the trailing comment, as now.
+      - Consider pinning `runs-on: ubuntu-24.04` before `ubuntu-latest` moves to Ubuntu 26 on
+        2026-10-19, so the runner image doesn't change underneath the job unannounced.
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
       run overwrites `reports/current.json` and keeps no history (ADR 0009), so there's nothing
@@ -74,6 +66,11 @@ the active work.*
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-06 - Daily run on GitHub Actions confirmed end to end: manual run green, cooldown
+      pre-check fails red and early, scheduled runs 37362248668 and 37498410006 succeeded
+      unattended and added dates to `history/index.json`. Scheduled starts landed around
+      16:45 UTC, not 10:17 (GitHub best-effort cron). The wrong-machine-id failure case was
+      deliberately not tested. See the 2026-10-06 working-notes entry.
 - [x] 2026-10-04 - Sky view Phase 1b implemented (`portfolio-site` `feat/satellite-sky-1b`, pending
       review).
       - Globe | Sky toggle in the section heading row; the page owns the mode.

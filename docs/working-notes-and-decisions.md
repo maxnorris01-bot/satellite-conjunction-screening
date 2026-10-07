@@ -10,6 +10,20 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-06 - Daily run on GitHub Actions confirmed end to end.** The ADR 0012 trigger (with its
+2026-10-04 wait-loop, SHA-pin and token-scoping follow-ups) is working in production:
+- **Manual run:** a `workflow_dispatch` run went green.
+- **Cooldown pre-check:** verified to fail red and early, before starting the Machine, when run
+  inside CelesTrak's 2-hour window.
+- **Unattended scheduled runs:** two succeeded on their own, runs **37362248668** and
+  **37498410006**. Each added a new date to the bucket's `history/index.json`.
+- **Scheduled start times:** observed several hours after the 10:17 UTC cron, at about 16:45 UTC.
+  That's consistent with GitHub's best-effort scheduling (ADR 0012 already notes the cron can
+  start late), and it's still well clear of 00:00 UTC, so snapshot dates aren't affected. Worth
+  remembering when checking whether today's run has happened yet.
+- **Not tested, deliberately:** the wrong-machine-id failure case (a throwaway branch dispatched
+  with a bad `FLY_MACHINE_ID`).
+
 **2026-10-04 - Sky Phase 1b built: page owns the view mode; selection survives the toggle.** Per
 the entry below (`portfolio-site` `feat/satellite-sky-1b`; details in
 `docs/sessions/2026-10-04-sky-1b.md`):
