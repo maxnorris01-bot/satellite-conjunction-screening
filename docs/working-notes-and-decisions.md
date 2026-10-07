@@ -10,6 +10,27 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-06 - Future features brainstormed and ordered; not scoped or committed to.** Seven ideas
+went into `docs/todo.md` under Later, "Future features (brainstorm, ordered)", in this order:
+1. Orbit line for the selected satellite.
+2. Satellite age (launch year from the international designator).
+3. Day/night on the globe.
+4. Satellite's-eye and space view as one feature.
+5. A longer (~1 week) screening window with an uncertainty note.
+6. Curated featured satellites with NASA 3D models.
+7. A terrain horizon for the Sky view.
+
+**The order is a sequence, not a commitment.** Each item needs its own scoping first. Two
+constraints are recorded so they aren't relitigated:
+- **No "will collide" claims from public TLE/GP data.** It loses roughly a kilometer or more of
+  accuracy per day, and real probabilities need Space-Track covariance and an ADR 0001 revision.
+- **No CCTV or webcam feeds, and no paid photoreal 3D tiles,** for the horizon.
+
+Overlaps were merged rather than duplicated:
+- The existing deferred satellite-POV view is now item 4.
+- The deferred naked-eye visibility points to item 3's darkness/sunlit test.
+- Item 4's star field is the one already listed under the Sky depth ideas.
+
 **2026-10-06 - Daily-run runner pinned to `ubuntu-24.04`; `actions/checkout` bumped to v7.0.1.**
 - **Runner:** `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19, so the job is pinned to
   `ubuntu-24.04` and the image changes only on purpose.
