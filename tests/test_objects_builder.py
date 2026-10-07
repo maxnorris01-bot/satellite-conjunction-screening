@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+import pytest
 from sgp4.api import Satrec
 
+from app.data.celestrak_client import parse_gp_records
 from app.reporting.objects_builder import OBJECTS_SCHEMA_VERSION, build_objects, object_entry
-from conftest import ISS_GP, gp_record, objects_from
+from conftest import ISS_EPOCH, ISS_GP, gp_record, objects_from
 
 
 def test_entry_fields_and_tle_round_trip() -> None:
@@ -17,6 +19,7 @@ def test_entry_fields_and_tle_round_trip() -> None:
     assert set(e) == {
         "norad_id",
         "name",
+        "international_designator",
         "tle_line1",
         "tle_line2",
         "element_epoch_utc",
@@ -26,6 +29,7 @@ def test_entry_fields_and_tle_round_trip() -> None:
         "source_groups",
     }
     assert e["norad_id"] == 25544 and e["name"] == "ISS (ZARYA)"
+    assert e["international_designator"] == "1998-067A"
     assert e["element_epoch_utc"] == "2026-09-27T04:10:50.460096Z"
     assert e["satcat_owner"] == {"code": "ISS", "name": "International Space Station"}
     assert e["active_payload"] is True and e["source_groups"] == ["stations"]
@@ -55,3 +59,20 @@ def test_document_envelope() -> None:
     assert doc["schema_version"] == OBJECTS_SCHEMA_VERSION == 1
     assert doc["run_id"] == "r1" and doc["object_count"] == 2
     assert [o["norad_id"] for o in doc["objects"]] == [25544, 88888]
+
+
+@pytest.mark.parametrize("raw", ["", "   "])
+def test_blank_designator_is_null_not_a_crash(raw: str) -> None:
+    (obj,) = objects_from([gp_record()])
+    assert object_entry(replace(obj, object_id=raw))["international_designator"] is None
+
+
+def test_records_missing_object_id_never_reach_the_builder() -> None:
+    # OBJECT_ID is a required GP field: a record without it (or with it empty) is reported as a
+    # parse failure upstream, so the builder never sees an object with no designator attribute.
+    for record in (
+        {k: v for k, v in gp_record().items() if k != "OBJECT_ID"},
+        gp_record(OBJECT_ID=""),
+    ):
+        objs, failures = parse_gp_records([record], group="g", fetched_at=ISS_EPOCH)
+        assert objs == [] and len(failures) == 1
