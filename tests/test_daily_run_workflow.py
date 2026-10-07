@@ -191,3 +191,8 @@ def test_checkout_is_pinned_and_drops_credentials() -> None:
     ref = checkout["uses"].split("@", 1)[1]
     assert len(ref) == 40 and all(c in "0123456789abcdef" for c in ref)
     assert checkout["with"]["persist-credentials"] is False
+
+
+def test_runner_image_is_pinned() -> None:
+    job = yaml.safe_load(WORKFLOW.read_text())["jobs"]["run"]
+    assert job["runs-on"] == "ubuntu-24.04"
