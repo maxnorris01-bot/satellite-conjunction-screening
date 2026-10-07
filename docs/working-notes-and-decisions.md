@@ -10,6 +10,23 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-06 - Daily-run runner pinned to `ubuntu-24.04`; `actions/checkout` bumped to v7.0.1.**
+- **Runner:** `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19, so the job is pinned to
+  `ubuntu-24.04` and the image changes only on purpose.
+- **Checkout:** v4.4.0 still ran on Node 20. v7.0.1 is the newest release (latest stable,
+  2026-07-20) and runs on Node 24. It's pinned to `3d3c42e5aac5ba805825da76410c181273ba90b1`.
+  - Verified with `git ls-remote`: `v7.0.1` and the floating `v7` are lightweight tags on that
+    commit (unlike v6.0.3, which is annotated and dereferences elsewhere).
+  - Verified in `action.yml` at that SHA: `using: node24`, with `sparse-checkout` and
+    `persist-credentials` still supported.
+  - The v5-v7 release notes' breaking changes don't apply here: Node 24 needs runner >= 2.327.1,
+    which GitHub-hosted runners have; v6 moved where persisted credentials are stored, but we
+    don't persist them; v7 blocks fork-PR checkout under `pull_request_target`/`workflow_run`,
+    which this workflow doesn't use.
+- Everything else (token scoping, `persist-credentials: false`, concurrency) is unchanged. A test
+  now also requires the pinned runner image.
+- Pending: one manual run after merge.
+
 **2026-10-06 - Daily run on GitHub Actions confirmed end to end.** The ADR 0012 trigger (with its
 2026-10-04 wait-loop, SHA-pin and token-scoping follow-ups) is working in production:
 - **Manual run:** a `workflow_dispatch` run went green.
