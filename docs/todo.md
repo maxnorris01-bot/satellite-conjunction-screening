@@ -46,12 +46,16 @@ the active work.*
 Brainstormed and ordered 2026-10-06, **not scoped or committed to** (see that day's working-notes
 entry). Each needs its own scoping before any build.
 
-1. [ ] **Orbit line for the selected satellite.** Propagate one orbital period from its own SGP4
-       elements and draw it as a loop in the existing ECI frame (a fixed ellipse there). Check the
-       color against the existing risk and neighbor-line colors before using red.
-2. [ ] **Satellite age.** Launch year comes free from the international designator (e.g.
-       `1998-067A`) already in the GP data. A new color-by mode next to the existing ones, plus a
-       launch-year range filter. Exact launch dates would need the GCAT join (item above).
+1. [x] **Orbit line for the selected satellite.** Done 2026-10-06, Globe and Sky; see Completed.
+       (The number is kept so the references to items 3 and 4 below still hold.)
+2. [ ] **Satellite age.** Launch year comes from the international designator (e.g.
+       `1998-067A`). A new color-by mode next to the existing ones, plus a launch-year range
+       filter. Exact launch dates would need the GCAT join (item above).
+       - **Waiting on Max's decision (2026-10-06):** the designator is in the raw GP data and in
+         the report's object records, but **not** in `objects/current.json`, which the site
+         loads. Either add it there (one additive field in `objects_builder.py`), or parse it
+         from TLE line 1, which already carries it for every object. Details and the trade-off
+         are in that day's "Orbit line built; satellite age paused" working-notes entry.
 3. [ ] **Day/night on the globe, matching the displayed time.** Low-precision solar position,
        Earth shaded by sun angle, a night-lights texture blended in (NASA Black Marble, public
        domain; a compressed 2-4K version to keep page weight down). Knock-on uses:
@@ -96,6 +100,14 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-06 - Orbit line for the selected satellite (`portfolio-site`
+      `feat/orbit-line-and-age`, pending review).
+      - One period of the object's own SGP4 track (360 samples), closed loop, centred on the
+        moment it was sampled; resampled once the displayed time is half a period away.
+      - Pale periwinkle `#b0a8ff`, 2 px wide lines; not dimmed, not frustum-culled, no effect on
+        picking. Also in Sky, where the ground hides the part below the horizon.
+      - On screen the object sits 0 px from its line; 60 fps at 50x under 4x CPU throttle.
+      See `docs/sessions/2026-10-06-orbit-line-and-age.md`.
 - [x] 2026-10-06 - Sky polish (`portfolio-site` `fix/sky-polish`, pending review):
       - Screen readers hear only selection changes ("Selected …", "Deselected") and a new
         location; the live az/el/range and above-horizon count are no longer in live regions.
