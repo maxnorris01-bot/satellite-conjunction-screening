@@ -98,6 +98,12 @@ entry). Each needs its own scoping before any build.
 
 ## Lower priority / opportunistic
 
+- [ ] **Shared colours: green vs grey are weak for colour-blind viewers** (2026-10-07). Rocket
+      body / "Over 10 years" `#199e70` vs the shared grey `#8b8f98` is 13.5 normal and 5.1 deutan
+      (OKLab x100). A lighter grey (about `#a3a5a7`) fixes that pair but comes within 5.8 of the
+      orbit line, so it needs a choice. It's rarely visible in Age (Unknown and the known buckets
+      seldom coexist) but affects Type mode.
+
 - [ ] **Time slider: arrow keys don't move it while the clock runs** (found 2026-10-07 in
       `portfolio-site`). Its value is the live, unrounded time and its step is 1 minute, so
       Chromium snaps each key press back to the current minute and the thumb never gets anywhere;
@@ -117,6 +123,10 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-07 - Orbit lines for pair and station views (`portfolio-site` `feat/age-color-mode`,
+      pending review). The conjunctions and Stations lists now draw orbits: both loops for a pair,
+      sampled around the closest approach; the station's loop for a station.
+      See `docs/sessions/2026-10-07-age-color-mode.md`.
 - [x] 2026-10-07 - Satellite Age colour mode (`portfolio-site` `feat/age-color-mode`, pending
       review).
       - Buckets: under 2 / 2 to 10 / over 10 years, plus Unknown. The launch year is parsed from
@@ -124,7 +134,7 @@ entry). Each needs its own scoping before any build.
         Unknown.
       - Age is the snapshot's run year minus the launch year (±1 year at the edges, noted in the
         legend).
-      - Colours: an ordered multi-hue ramp (blue, green, yellow-lime) plus a warm grey for Unknown.
+      - Colours: the shared category colours (first three) and the shared grey for Unknown.
       - Today (2026-10-07): 7,530 / 8,332 / 3,452 / 0. Oldest retained (2026-10-03): 0 / 0 / 0 /
         19,246.
       See `docs/sessions/2026-10-07-age-color-mode.md`.

@@ -3,10 +3,12 @@
 Future feature 2 from the 2026-10-06 brainstorm list in `docs/todo.md`. It builds on the
 pipeline change from 2026-10-06, which added `international_designator` to `objects/current.json`.
 
-- **Code:** in `portfolio-site`, on branch `feat/age-color-mode`. One commit, local only and not
-  pushed:
-  - `1139801` feat: add an Age color mode from the launch designator (amended before push with
-    the revised palette)
+- **Code:** in `portfolio-site`, on branch `feat/age-color-mode`. The first commit is pushed (not
+  yet merged); the two after it are local:
+  - `1139801` feat: add an Age color mode from the launch designator
+  - `7ece7c9` fix: color Age buckets with the shared category colors
+  - `31e58e8` fix: draw orbit lines for pair and station views too (see "Orbit lines for list
+    selections" below)
 - **Not in this commit:** the launch-year range filter, now a follow-up in `docs/todo.md` under
   the Age item. No pipeline code changed.
 
@@ -40,66 +42,56 @@ pipeline change from 2026-10-06, which added `international_designator` to `obje
   - **The Unknown note** appears only while Unknown objects exist. It reads "Older snapshots lack
     launch data." when the file has no designator field at all, otherwise "Unknown: no valid launch
     designator."
-- **Colours: an ordered multi-hue ramp** (viridis-style: hue and lightness both change at each
-  step), blue -> green -> yellow-lime from newest to oldest, plus a warm grey for Unknown.
+- **Colours: the shared category colours.** The three buckets use the first three colours of the
+  set Type and Owner already share, in order, and Unknown uses the shared grey. Age adds no colours
+  of its own.
 
   | Bucket | Colour | On the sky `#05070d` | On the Sky ground `#26303c` |
   |---|---|---|---|
-  | Under 2 years | `#5f75c1` | 4.60:1 | 3.06:1 |
-  | 2 to 10 years | `#05c992` | 9.38:1 | 6.23:1 |
-  | Over 10 years | `#d4f73e` | 16.47:1 | 10.94:1 |
-  | Unknown | `#8f8978` | 5.77:1 | 3.83:1 |
+  | Under 2 years | `#3987e5` (series 1, blue) | 5.53:1 | 3.67:1 |
+  | 2 to 10 years | `#d95926` (series 2, orange) | 5.19:1 | 3.44:1 |
+  | Over 10 years | `#199e70` (series 3, green) | 5.91:1 | 3.93:1 |
+  | Unknown | `#8b8f98` (shared grey) | 6.22:1 | 4.13:1 |
 
-### Why the palette changed before push
+### How the colours got here
 
-The first version used a one-hue teal ramp (`#258e6a`, `#58ba93`, `#9de3c4`) with a darker grey
-for Unknown (`#5c6370`). It stepped in lightness only, and in review the three buckets were too
-alike at a glance on the globe and in Sky. It was replaced before anything was pushed.
+1. **One-hue teal ramp** (`#258e6a`, `#58ba93`, `#9de3c4`): stepped in lightness only, and the
+   three buckets looked too alike.
+2. **Multi-hue ordered ramp** (`#5f75c1`, `#05c992`, `#d4f73e`, warm grey `#8f8978`): clearly
+   distinct and validated, but Max found it looked off next to the other modes in use.
+3. **Now: the shared category colours.** The ordered ramp was dropped by choice. Age reads like the
+   other modes, and its order comes from the legend's labels rather than from the colours.
 
-### How it was chosen
+### Separation (validator model, OKLab x100: Machado 2009 simulation)
 
-- **Search:** a small search over viridis-style triples in OKLCH. Every candidate had to meet:
-  - 3:1 on both surfaces;
-  - at least 15 between buckets under normal vision and under every simulation;
-  - at least 10 from the orbit line;
-  - at least 8 (the validator's colour-blind target) from each ring and line colour.
-- **Scoring:** the winner had the largest worst-case separation between buckets.
-- **Model:** the dataviz validator's, OKLab distance x100 with Machado 2009 protan, deutan and
-  tritan simulation. The "before" figures are recomputed with the same model; the first session's
-  quick check used a different simulation.
+| Pair | Normal | Protan | Deutan | Tritan |
+|---|---|---|---|---|
+| Under 2 vs 2 to 10 | 31.8 | 26.8 | 28.6 | 32.4 |
+| 2 to 10 vs over 10 | 26.5 | 12.6 | 9.4 | 32.4 |
+| Under 2 vs over 10 | 20.9 | 19.7 | 19.6 | **4.0** |
+| Over 10 vs Unknown | **13.5** | **6.6** | **5.1** | 10.3 |
+| Under 2 vs Unknown | 15.0 | 13.3 | 15.9 | 10.0 |
+| 2 to 10 vs Unknown | 18.5 | 15.9 | 13.7 | 22.6 |
+| Buckets vs orbit line `#b0a8ff` (min) | 17.3 | 12.3 | 16.6 | 15.2 |
+| Unknown vs orbit line | 16.4 | 15.8 | 15.3 | 12.1 |
 
-### Minimum colour distance, before and after
-
-(OKLab x100; higher is more separable.)
-
-| Pair | Version | Normal | Protan | Deutan | Tritan |
-|---|---|---|---|---|---|
-| Between the 3 buckets (min) | before | 14.0 | 13.5 | 14.0 | 13.5 |
-| | after | **22.9** | **19.1** | **23.0** | **19.2** |
-| Buckets vs Unknown | before | 14.0 | 12.5 | 9.3 | 12.1 |
-| | after | **15.4** | **14.6** | **10.8** | **11.2** |
-| Buckets vs orbit line | before | 20.2 | 15.8 | 14.5 | 10.5 |
-| | after | 19.5 | 17.4 | 14.9 | 11.2 |
-| Unknown vs orbit line | before | 29.2 | 28.6 | 28.2 | 27.1 |
-| | after | 20.4 | 20.3 | 19.3 | 14.5 |
-| Closest ring/line colour, all four age colours | before | 10.0 | 6.0 | 10.2 | 5.6 |
-| | after | 14.5 | 8.2 | 8.5 | 8.2 |
-
-- **Biggest gains:** between the buckets, up 9 to 9.6 in every column. Contrast is now at least
-  3:1 for all four colours on the ground, where the first grey was 2.21:1. The closest overlay
-  rises from 5.6 to 8.2; before, the cyan station ring under tritan and the selection ring under
-  protan were the near misses.
-- **Small losses:** Unknown vs the orbit line drops from 27-29 to 14.5-20.4, still well clear.
-  Buckets vs the orbit line is about level (worst 11.2, tritan): no candidate in the search got
-  past about 11 there without breaking another floor. In practice the line only appears with a
-  selection, which dims every other dot to 0.2, and the screenshots show it standing well apart.
-- **Validator, run as categorical with all pairs, on both surfaces:**
-  - Pass: colour-blind separation (worst 10.8), the normal-vision floor (worst 15.4) and contrast.
-  - Fail, by design: the lightness band (an ordered ramp spans lightness on purpose; the guide
-    says sequential ramps fail that check) and the chroma floor (it flags Unknown for being grey,
-    which is intended).
-- **Rendering:** the dots render a little paler than their legend swatches, because the point
-  sprite has a light rim. That's the same in every colour mode.
+- **The three buckets on their own pass every validator check** on both surfaces: colour-blind
+  separation (worst 9.4, deutan), the normal-vision floor (worst 20.9) and contrast.
+- **They're well clear of the orbit line.**
+- **Weak spots.** All three are already in Type mode, which uses the same four colours.
+  1. **Over 10 (green) vs Unknown (grey):** below the normal-vision floor of 15, and under the
+     colour-blind target of 8 for protan and deutan. With Unknown included the validator fails
+     there. In practice the two rarely share the screen: today's snapshot has no Unknowns, and older
+     snapshots are entirely Unknown. **Smallest fix (not applied):** a lighter shared grey around
+     `#a3a5a7` clears the green (16.2 normal, 8.5 protan/deutan), but it comes within 5.8 of the
+     orbit line. So it isn't a free change: it means choosing between the grey/green pair and the
+     grey/orbit pair, and it would change Type and Owner too.
+  2. **Under 2 (blue) vs over 10 (green) under tritan:** 4.0. The validator reports tritan but
+     doesn't gate on it (tritanopia is very rare). Fixing it would mean changing the shared green
+     for every mode. Not applied.
+  3. **2 to 10 (orange) vs the selection ring `#e85d3f`:** about 3.5 under every vision type. The
+     ring is drawn around the point, not as a point, so shape still tells them apart. Debris has
+     this already.
 
 ## Verification
 
@@ -139,24 +131,83 @@ bucket.
   - On the oldest snapshot only the Unknown note shows; the precision line is hidden, like the
     counts.
   - Screenshots: Globe and Sky, today and oldest.
-- **Revised palette, seen on screen** (desktop Globe and Sky, phone Globe and Sky, legend visible):
-  - **All buckets on:** blue, aqua-green and yellow-lime are distinct at a glance in the globe's
-    shell and in the dome.
-  - **Each bucket alone** (the other three unchecked): on the globe, exactly 7,530 blue, 8,332
-    aqua-green or 3,452 yellow-lime points, each reading as one clean colour. The same held in Sky
-    and on the phone.
-  - **Oldest snapshot:** an all-warm-grey globe.
-  - **With MTG-S1 selected:** the periwinkle orbit line stands apart from the dimmed dots.
 - **Errors:** none on the page.
 - **Checks:**
   - `npm run lint`, `npx tsc -b` and `npm run build` are clean. The build's only warning is Vite's
     existing chunk-size note.
-  - `npm test` passes 56/56, including 8 new Age tests: valid, malformed, missing, null, non-string
+  - `npm test` passes 59/59, including 8 Age tests: valid, malformed, missing, null, non-string
     and whitespace designators; the bucket edges at 2 and 10 years (and 11) plus future years; a
     snapshot without the key (all Unknown, the right note, Unknown still filterable); the four rows
-    always listed; no note when nothing is Unknown; and the ramp's order (newest darkest, luminance
-    rising step by step).
+    always listed; no note when nothing is Unknown; and Age reusing Type mode's colours in order.
 - **Evals:** none run. No pipeline code changed.
+
+## Orbit lines for list selections (`31e58e8`)
+
+**Reported:** selecting from the conjunctions list or the Stations list (ISS, Tiangong) drew no
+orbit line; clicking a point did.
+
+**Reproduced at localhost:5173:**
+
+| Path | What it opens | Inspected object | Orbit before the fix |
+|---|---|---|---|
+| Click a point | inspect | the object | drawn |
+| Conjunctions list, "Show on globe" | near-miss pair view | none | none |
+| Stations list, ISS or Tiangong | station view | none | none |
+
+**Root cause: by design, not a hidden bug.** The orbit line followed only the inspected object, and
+the pair and station views deliberately clear it under the one-selection model. That is the
+"pair and station views remove the orbit line" behaviour recorded on 2026-10-06.
+
+I looked for a second path to the same object:
+- clicking one of the pair's objects while the pair view shows inspects it and draws its orbit;
+- clicking a docked ISS module in the station view selects the ISS and draws its orbit.
+
+So there was no further bug. (One early test click missed only because the camera was still
+flying in.)
+
+**Change:**
+- **One rule picks what gets a line** (`orbitTargets` in `src/globe/orbit.ts`):
+  - the inspected object, without its neighbour;
+  - both objects of a near-miss pair;
+  - a station's first piece, which is the station itself (its other pieces are docked and share the
+    orbit).
+- **The engine keeps up to two orbit slots.** Each has a globe line and a Sky line, is sampled
+  around the displayed moment (the closest approach for a pair, which the replay jumps to), and is
+  resampled when the clock moves more than half its own period away.
+- **A pair's two loops are drawn alike:** same colour, same 2 px width. The pair is symmetric, so
+  a thinner line would imply a ranking that isn't there. Each loop is told apart by the ring its
+  object sits in (white or gold), and the two loops cross at the closest-approach point.
+- **The pair and station panels gain the orbit key** ("Both orbits, one full period each", "Its
+  orbit, one full period").
+- **Rules unchanged:**
+  - dimming never touches the lines, and they're never frustum-culled;
+  - they aren't in the pick buffers. Rechecked: a click on a line 59 px from any object cleared the
+    selection like an empty click;
+  - one selection at a time.
+
+**Verified** (desktop 1440 px and phone 390 px). The distance from each object to its own line was
+measured on screen:
+- **Click-picked object:** one loop, 0 px. Only it and its neighbour stay bright.
+- **Conjunction from the list:** two loops, both centred exactly on the closest-approach moment and
+  both 0 px from their objects. Only the pair stays bright. Moving the clock 52 minutes (over half
+  of their 94-minute period) resampled both loops, still 0 px.
+- **ISS from the Stations list:** one loop through the station, 0 px.
+- **Transitions:**
+  - object to pair: 1 loop becomes 2;
+  - pair to station: 2 become the station's 1;
+  - station to object: the object's loop;
+  - Deselect from an object, and Back to full view from a pair or a station: no lines.
+- **Globe/Sky toggle:**
+  - An inspected object keeps its loop both ways, drawn on the dome in Sky (0 px).
+  - Pair and station views end on entering Sky (the Sky 1b decision), so their lines go too.
+  - The Stations list isn't shown in Sky.
+  - "Show on globe" from Sky returns to Globe with both pair loops.
+- **Phone:** all three paths draw their loops; the picked object's loop is also drawn in Sky.
+- **Errors:** none on the page.
+- **Tests:** 3 new, in `tests/orbit.test.ts`:
+  - which objects get lines for an object, a pair and a station;
+  - a pair's loops sampled around the closest approach pass through both objects;
+  - each loop refreshes on its own period.
 
 ## Flag for review
 
@@ -164,6 +215,8 @@ bucket.
   this branch. The slider's value is the live, unrounded time with a 1-minute step, so Chromium
   snaps each arrow press back to the current minute and the thumb never moves; Home/End did nothing
   on macOS. Mouse and touch work. Not fixed here; it's in `docs/todo.md` under Lower priority.
+- **Green vs grey in Age (and Type).** They're weak for deutan/protan viewers. The smallest fix
+  trades against the orbit line (see Separation above), so it's left as a choice.
 - **Year-only precision.** Objects launched in the boundary years (2024 and 2016, against a 2026
   snapshot) can be one bucket off, which the legend notes. Exact launch dates would need the GCAT
   join.
@@ -172,6 +225,5 @@ bucket.
 
 ```bash
 cd ../portfolio-site && git log --oneline main..feat/age-color-mode && npm run dev
-# after review (Max): git push -u origin feat/age-color-mode && gh pr create --fill
-# docs: cd ../satellite-conjunction-screening && git push -u origin docs/age-color-mode && gh pr create --fill
+# both branches already have upstreams: git push (portfolio-site), then in this repo: git push
 ```
