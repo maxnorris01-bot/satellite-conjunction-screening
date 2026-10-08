@@ -10,6 +10,35 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-07 - Day/night: globe shading plus Sky twilight; eclipse, visible-tonight and sun/moon
+stay follow-ups.** `portfolio-site` `feat/day-night`, two commits; details in
+`docs/sessions/2026-10-07-day-night.md`.
+- **Scope:** commit 1 shades the globe by day and night; commit 2 adds Sky twilight. The
+  satellite eclipse state, "visible tonight" and a Sky sun/moon extension are follow-ups in
+  `docs/todo.md`. They will reuse the sun module.
+- **Sun position:** reuse satellite.js's `sunPos` (Vallado's low-precision formula) rather than add
+  one. It comes out within 0.012 degrees of astronomy-engine across 2026. astronomy-engine is a
+  test-only devDependency and isn't shipped.
+- **Lighting in world space:** the Sun is fixed in the inertial frame and the Earth mesh already
+  turns by GMST, so the shader lights the surface with the Sun's direction directly; nothing
+  rotates the light by hand.
+- **Globe look, in solar elevation:**
+  - the day side is unchanged;
+  - a soft band from +3 to -12 degrees (about civil plus nautical twilight) marks the terminator;
+  - the night side keeps 8% of the day texture.
+- **City lights:** NASA Black Marble 2016 lights, with the map's faint land base masked out,
+  because adding the whole map made the night side look overcast grey.
+- **Switch:** Day/night, default on; off is pixel-identical to the old look (1 pixel in 2.4 million
+  differed).
+- **Sky:**
+  - the twilight boundaries are -0.833, -6, -12 and -18 degrees;
+  - the day sky is capped at `#223956`, the brightest blue at which every point colour, ring and
+    line keeps 3:1 and the labels 4.5:1;
+  - the dawn/dusk glow is held to the same cap, which is why it reads mauve rather than orange.
+- **Legibility caveat:** rings and lines have no dark rim. They drop to 1.0-2.1:1 over the
+  brightest city-light cores, and over bright cloud and desert by day as before. The proposed fix,
+  a 1 px dark outline, is a to-do.
+
 **2026-10-07 - Orbit lines also for pair and station views.** `portfolio-site`
 `feat/age-color-mode` `31e58e8`; details in `docs/sessions/2026-10-07-age-color-mode.md`.
 - **Why none were drawn:** selecting from the conjunctions or Stations lists drew no orbit,
