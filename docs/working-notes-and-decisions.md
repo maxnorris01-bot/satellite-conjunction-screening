@@ -10,6 +10,54 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-07 - Orbit lines also for pair and station views.** `portfolio-site`
+`feat/age-color-mode` `31e58e8`; details in `docs/sessions/2026-10-07-age-color-mode.md`.
+- **Why none were drawn:** selecting from the conjunctions or Stations lists drew no orbit,
+  because the line followed only the inspected object and those views clear it by design. No other
+  bug: picking an object any other way draws its line.
+- **One rule now picks the lines** (`orbitTargets`): the inspected object; both objects of a
+  near-miss pair; or the station itself (its docked pieces share the orbit). There are at most two
+  slots, each sampled around the displayed moment (the closest approach for a pair) and resampled
+  on its own half-period.
+- **A pair's loops are drawn alike** (same colour, same width). The pair is symmetric, and each
+  loop is told apart by its object's white or gold ring.
+- **Unchanged:** dimming, culling and picking rules, and pair and station views still end on
+  entering Sky.
+
+**2026-10-07 - Age colour mode built: snapshot-dated, strict designator parsing, shared category colours.**
+`portfolio-site` `feat/age-color-mode`; details in `docs/sessions/2026-10-07-age-color-mode.md`.
+- **Reference date: the displayed snapshot's run date (`generated_at_utc`)**, not the playing
+  clock or today. It's the date the snapshot describes, colours don't change as time plays, and
+  each retained day on the slider is measured against its own date. Age is the year difference
+  only, so an object can sit one bucket off at the edges (noted in the code and the legend).
+- **Buckets:** under 2 is 0-1 calendar years, "2 to 10" is 2-10 inclusive, and over 10 is 11 or
+  more. A launch year after the snapshot's is Unknown.
+- **Parsing is strict:** exactly `YYYY-NNNA` (1-3 piece letters), a year from 1957 and a launch
+  number from 001. Anything else is Unknown, including padded strings, rather than guessed at.
+  The pipeline never pads, so strictness costs nothing today.
+- **The legend always lists all four buckets**, unlike the other modes, which hide empty
+  categories. That way an older snapshot reads as "0 / 0 / 0 / Unknown 19,246" rather than
+  silently losing rows. The note explaining Unknown shows only while Unknown objects exist: "Older
+  snapshots lack launch data." when the file has no designator field, otherwise "no valid launch
+  designator".
+- **Colours: reuse the shared category colours; the ordered ramp was dropped by choice.**
+  - **The colours:** under 2, 2 to 10 and over 10 years take the first three colours of the set
+    Type and Owner share (`#3987e5`, `#d95926`, `#199e70`), in order, and Unknown takes the shared
+    grey `#8b8f98`. No Age-specific colours.
+  - **History:** a one-hue teal ramp looked too alike. A validated multi-hue ordered ramp (blue,
+    green, yellow-lime) was distinct but looked off next to the other modes in use, so Max chose
+    consistency over an ordered colour scale. The order now comes from the legend's labels.
+  - **Validator:** the three buckets pass every check on both surfaces (worst colour-blind pair
+    9.4, worst normal-vision pair 20.9), and stay at least 12.3 from the orbit line.
+  - **Weak spots, all shared with Type mode:**
+    - over 10 (green) vs Unknown (grey): 13.5 normal, 5.1 deutan;
+    - blue vs green under tritan: 4.0;
+    - orange vs the selection ring: about 3.5, though the ring is a ring, not a point.
+  - **Smallest grey-only fix:** a lighter shared grey (`#a3a5a7`) clears the green but sits 5.8
+    from the orbit line, so it's a trade-off and wasn't applied.
+- **Found while testing, not fixed:** the time slider's arrow keys don't move it while the
+  clock runs (to-do, lower priority).
+
 **2026-10-06 - `international_designator` added to `objects/current.json` (satellite age, option
 (a)).**
 - **The field:** each object now carries `"international_designator": obj.object_id`, e.g.

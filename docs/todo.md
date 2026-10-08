@@ -60,17 +60,13 @@ entry). Each needs its own scoping before any build.
 
 1. [x] **Orbit line for the selected satellite.** Done 2026-10-06, Globe and Sky; see Completed.
        (The number is kept so the references to items 3 and 4 below still hold.)
-2. [ ] **Satellite age.** Launch year comes from the international designator (e.g.
-       `1998-067A`). A new color-by mode next to the existing ones, plus a launch-year range
-       filter. Exact launch dates would need the GCAT join (item above).
-       - **Decided (2026-10-06): option (a), add it to `objects/current.json`.** Pipeline side done
-         on `feat/objects-international-designator`: `international_designator` (e.g.
-         `1998-067A`, null if blank), no schema bump. It reaches the bucket only after the image
-         is redeployed (Up next).
-       - **Site must treat a missing key as the "Unknown" age bucket.** Objects files written
-         before the redeploy don't have the key at all, and that includes retained dated
-         snapshots (`objects/<date>.json.gz`, up to 7 days, ADR 0011), which the time slider can
-         load. They age out about a week after the first run with the field.
+2. [x] **Satellite age.** Age colour mode done 2026-10-07; see Completed. (The number is kept
+       so the references to items 3 and 4 still hold.)
+       - [ ] **Follow-up: a launch-year range filter** (part of the original idea, left out of the
+             Age commit on purpose). Possible shape: a two-handle year range in the legend under
+             the Age buckets, hiding objects outside it through the existing filter path, with
+             Unknown objects hidden or shown by their own checkbox. Exact launch dates would
+             still need the GCAT join (item above).
 3. [ ] **Day/night on the globe, matching the displayed time.** Low-precision solar position,
        Earth shaded by sun angle, a night-lights texture blended in (NASA Black Marble, public
        domain; a compressed 2-4K version to keep page weight down). Knock-on uses:
@@ -102,6 +98,18 @@ entry). Each needs its own scoping before any build.
 
 ## Lower priority / opportunistic
 
+- [ ] **Shared colours: green vs grey are weak for colour-blind viewers** (2026-10-07). Rocket
+      body / "Over 10 years" `#199e70` vs the shared grey `#8b8f98` is 13.5 normal and 5.1 deutan
+      (OKLab x100). A lighter grey (about `#a3a5a7`) fixes that pair but comes within 5.8 of the
+      orbit line, so it needs a choice. It's rarely visible in Age (Unknown and the known buckets
+      seldom coexist) but affects Type mode.
+
+- [ ] **Time slider: arrow keys don't move it while the clock runs** (found 2026-10-07 in
+      `portfolio-site`). Its value is the live, unrounded time and its step is 1 minute, so
+      Chromium snaps each key press back to the current minute and the thumb never gets anywhere;
+      Home/End did nothing on macOS. Mouse and touch work. Likely fix: give it a step-aligned
+      value, or handle the keys itself (e.g. -/+ 10 minutes, Home/End to the range ends).
+
 - [ ] Delete the stale `snapshots/current/{gp,satcat}-iridium-NEXT.json.gz` from the bucket (left
       over from the MVP scope; the manifest doesn't list them, see ADR 0010).
 
@@ -115,6 +123,21 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-07 - Orbit lines for pair and station views (`portfolio-site` `feat/age-color-mode`,
+      pending review). The conjunctions and Stations lists now draw orbits: both loops for a pair,
+      sampled around the closest approach; the station's loop for a station.
+      See `docs/sessions/2026-10-07-age-color-mode.md`.
+- [x] 2026-10-07 - Satellite Age colour mode (`portfolio-site` `feat/age-color-mode`, pending
+      review).
+      - Buckets: under 2 / 2 to 10 / over 10 years, plus Unknown. The launch year is parsed from
+        `international_designator` (`YYYY-NNNA` only); missing, null or malformed values are
+        Unknown.
+      - Age is the snapshot's run year minus the launch year (±1 year at the edges, noted in the
+        legend).
+      - Colours: the shared category colours (first three) and the shared grey for Unknown.
+      - Today (2026-10-07): 7,530 / 8,332 / 3,452 / 0. Oldest retained (2026-10-03): 0 / 0 / 0 /
+        19,246.
+      See `docs/sessions/2026-10-07-age-color-mode.md`.
 - [x] 2026-10-06 - Orbit line for the selected satellite (`portfolio-site`
       `feat/orbit-line-and-age`, pending review).
       - One period of the object's own SGP4 track (360 samples), closed loop, centred on the
