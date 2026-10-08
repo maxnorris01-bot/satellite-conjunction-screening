@@ -67,13 +67,14 @@ entry). Each needs its own scoping before any build.
              the Age buckets, hiding objects outside it through the existing filter path, with
              Unknown objects hidden or shown by their own checkbox. Exact launch dates would
              still need the GCAT join (item above).
-3. [ ] **Day/night on the globe, matching the displayed time.** Low-precision solar position,
-       Earth shaded by sun angle, a night-lights texture blended in (NASA Black Marble, public
-       domain; a compressed 2-4K version to keep page weight down). Knock-on uses:
-       - Sky brightness at dusk and dawn.
-       - A "sunlit vs in Earth's shadow" satellite state (an exact calculation).
-       - "Visible from your location tonight" logic (observer in darkness, satellite sunlit). This
-         is the test the deferred naked-eye visibility item above needs.
+3. [x] **Day/night on the globe, matching the displayed time.** Done 2026-10-07 (globe shading
+       with city lights, plus Sky twilight and a sun marker); see Completed. Follow-ups, not built,
+       all to reuse `sunDirectionEci` / `sunElevationDeg` in `portfolio-site` `src/globe/sun.ts`:
+       - [ ] A "sunlit vs in Earth's shadow" satellite state (an exact calculation).
+       - [ ] "Visible from your location tonight" logic (observer in darkness, satellite sunlit).
+             This is the test the deferred naked-eye visibility item above needs.
+       - [ ] Sky sun/moon extension: the Moon (position and phase) on the Sky dome alongside the
+             Sun, and possibly the Sun/Moon on the globe view.
 4. [ ] **Satellite's-eye view (POV) and space view, as one feature** with look-direction modes:
        down at Earth, forward along the track, outward at space. The camera sits at the satellite,
        oriented from its velocity vector; zoom is field of view. Build after day/night (3) and a
@@ -97,6 +98,11 @@ entry). Each needs its own scoping before any build.
          photoreal 3D tiles (paid API key, restrictive terms, key exposure in client code).
 
 ## Lower priority / opportunistic
+
+- [ ] **Dark outline on rings and lines** (2026-10-07). With no dark rim, rings and lines (white
+      neighbour line and pair ring, gold ring, cyan ring, orbit line) are 1.0-2.1:1 against the
+      brightest city-light cores on the night side, and also against bright clouds and desert on
+      the day side (as before day/night). A 1 px dark outline, like the points' rim, would fix both.
 
 - [ ] **Shared colours: green vs grey are weak for colour-blind viewers** (2026-10-07). Rocket
       body / "Over 10 years" `#199e70` vs the shared grey `#8b8f98` is 13.5 normal and 5.1 deutan
@@ -123,6 +129,15 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-07 - Day/night (`portfolio-site` `feat/day-night`, pending review), two commits:
+      - **Globe:** shaded by the Sun at the displayed time, with a soft +3 to -12 degree twilight
+        band, NASA Black Marble 2016 city lights at night, and a Day/night switch (default on).
+      - **Sky:** a twilight sky (night, astronomical, nautical, civil, day) with a horizon glow
+        and a sun marker; the phase and sun elevation in the Your sky panel. The day sky is capped
+        so dots stay legible.
+      - **Accuracy:** the sun module (satellite.js `sunPos`) is within 0.012 degrees of
+        astronomy-engine over 2026.
+      See `docs/sessions/2026-10-07-day-night.md`.
 - [x] 2026-10-07 - Orbit lines for pair and station views (`portfolio-site` `feat/age-color-mode`,
       pending review). The conjunctions and Stations lists now draw orbits: both loops for a pair,
       sampled around the closest approach; the station's loop for a station.
