@@ -73,8 +73,14 @@ entry). Each needs its own scoping before any build.
        - [ ] A "sunlit vs in Earth's shadow" satellite state (an exact calculation).
        - [ ] "Visible from your location tonight" logic (observer in darkness, satellite sunlit).
              This is the test the deferred naked-eye visibility item above needs.
-       - [ ] Sky sun/moon extension: the Moon (position and phase) on the Sky dome alongside the
-             Sun, and possibly the Sun/Moon on the globe view.
+       - [x] Sky sun/moon extension: done 2026-10-09 as Sky planets and Moon (all seven planets,
+             the Moon with its phase, the Sun clickable); see Completed. The Sun/Moon on the
+             globe view is not done.
+       - [ ] Physical visibility for sky bodies and satellites: hide or fade what can't be seen
+             (a planet in daylight, a satellite in Earth's shadow). Today everything above the
+             horizon is drawn.
+       - [ ] Star field and constellations on the Sky dome (with labels for the brightest stars
+             and constellation lines), sharing the planets' label placement.
 4. [ ] **Satellite's-eye view (POV) and space view, as one feature** with look-direction modes:
        down at Earth, forward along the track, outward at space. The camera sits at the satellite,
        oriented from its velocity vector; zoom is field of view. Build after day/night (3) and a
@@ -131,6 +137,13 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-09 - Sky planets and Moon (`portfolio-site` `feat/sky-planets`, pending review):
+      - All seven planets and the Moon on the dome, topocentric, above the horizon only, labelled;
+        planets sized by magnitude; the Moon with its phase and lit limb toward the Sun.
+      - Planets, Moon and Sun clickable in the shared single selection, with a panel; the Your sky
+        panel lists what's up.
+      - astronomy-engine, lazy-loaded (22.7 kB gzipped chunk), no physical visibility model.
+      See `docs/sessions/2026-10-09-sky-planets.md`.
 - [x] 2026-10-08 - Playback speed from any time, and clearer day/night (`portfolio-site`
       `fix/time-speed-and-day-night`, pending review):
       - Speed buttons work from a scrubbed or paused time, not just Live; scrubbing keeps the
