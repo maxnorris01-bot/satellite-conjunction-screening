@@ -10,6 +10,29 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-09 - Sky view: all planets plus the Moon, clickable, no physical visibility model.**
+`portfolio-site` `feat/sky-planets`; details in `docs/sessions/2026-10-09-sky-planets.md`.
+- **Scope:** Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune and the Moon on the Sky dome,
+  for the observer and the shared clock, drawn only above the horizon, each labelled. Planets are
+  sized by apparent magnitude; the Moon shows its illuminated fraction with the lit limb toward
+  the Sun as the observer sees it.
+- **No physical visibility model:** a planet in daylight is still drawn, like satellites.
+- **Follow-ups (in `docs/todo.md`):** visibility modelling, a star field, constellations.
+- **Ephemeris: astronomy-engine, lazy-loaded,** chosen over a self-written low-precision
+  ephemeris. It's topocentric when given an observer (the Moon's ~1 degree parallax is handled),
+  arcsecond-accurate, and gives magnitudes and the Moon's phase. It costs a 22.7 kB gzipped chunk,
+  fetched only once Sky has an observer. A self-written one would save about 20 kB but needs a
+  lunar series good to a fraction of a degree, planetary elements, magnitude formulas and its own
+  verification.
+- **Clickable, one selection:** planets, the Moon and the Sun join satellites in the single
+  selection.
+  - **Pick priority:** inside a body's disc picks the body; otherwise the nearest satellite within
+    the usual 6 px (16 px touch); otherwise a body within that distance of its disc.
+  - A body selection dims all satellites, like any selection, and ends on switching to the Globe.
+- **Labels:** placed clear of the grid and compass labels, each other and the markers, and never
+  on the ground. On a phone only the Sun, the Moon, planets brighter than magnitude 1.5 and the
+  selected body are labelled.
+
 **2026-10-08 - Playback speed applies from any time; day/night contrast raised.** `portfolio-site`
 `fix/time-speed-and-day-night`, two commits; details in
 `docs/sessions/2026-10-08-time-speed-and-day-night.md`.
