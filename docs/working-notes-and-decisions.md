@@ -10,6 +10,32 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-08 - Playback speed applies from any time; day/night contrast raised.** `portfolio-site`
+`fix/time-speed-and-day-night`, two commits; details in
+`docs/sessions/2026-10-08-time-speed-and-day-night.md`.
+- **Clock model:** every clock carries the selected speed. `live` plays from now, `scrub` plays
+  from a picked moment and stays there (never snaps back to live; the Live button returns to the
+  present), `frozen` is paused. Previously a slider time was an `offset` advancing at 1x with the
+  speed buttons disabled, and a replay was frozen at its TCA.
+- **Chosen behaviours:**
+  - **End of the range** (about 24 h ahead): playback pauses there, speed kept; picking a speed
+    resumes. A scrubbed past time plays through the present and on, without becoming Live (there
+    is no stop at "now").
+  - **Scrubbing keeps the speed.**
+  - **Snapshot boundaries:** playback loads the next day's snapshot as it crosses midnight; the
+    selected object now stays selected (by NORAD ID) when it exists in both snapshots (it used to
+    be cleared).
+  - **Near-miss replay:** holds at the TCA while the camera flies in, then plays on at the selected
+    speed. The miss label shows the reported miss distance at the TCA and the live separation
+    once time moves.
+- **Slider arrow keys:** a different root cause (the input's value and step, not the clock), so not
+  fixed here; still listed in `docs/todo.md`.
+- **Day/night contrast:** day side x1.6 (linear), night floor 8% -> 3%, lights and terminator band
+  unchanged; the Day/night switch's off state is unchanged. Lit/night mean luminance ratio in a
+  crowded view: 1.55-1.62 -> 1.95-2.46. Points still clear 3:1 everywhere via fill or rim;
+  rings and lines over bright cloud/ice by day are a little better than before but still under
+  3:1 (the dark-outline to-do covers it).
+
 **2026-10-07 - Day/night: globe shading plus Sky twilight; eclipse, visible-tonight and sun/moon
 stay follow-ups.** `portfolio-site` `feat/day-night`, two commits; details in
 `docs/sessions/2026-10-07-day-night.md`.

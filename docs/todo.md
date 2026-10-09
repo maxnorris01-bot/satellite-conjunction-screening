@@ -115,6 +115,8 @@ entry). Each needs its own scoping before any build.
       Chromium snaps each key press back to the current minute and the thumb never gets anywhere;
       Home/End did nothing on macOS. Mouse and touch work. Likely fix: give it a step-aligned
       value, or handle the keys itself (e.g. -/+ 10 minutes, Home/End to the range ends).
+      Checked 2026-10-08: not the same root cause as the speed bug (that was the clock model;
+      this is the input's value/step), so still open; still reproduces after the speed fix.
 
 - [ ] Delete the stale `snapshots/current/{gp,satcat}-iridium-NEXT.json.gz` from the bucket (left
       over from the MVP scope; the manifest doesn't list them, see ADR 0010).
@@ -129,6 +131,13 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-08 - Playback speed from any time, and clearer day/night (`portfolio-site`
+      `fix/time-speed-and-day-night`, pending review):
+      - Speed buttons work from a scrubbed or paused time, not just Live; scrubbing keeps the
+        speed; a near-miss replay plays on from its TCA; the selection survives a snapshot change.
+      - Day side 1.6x brighter, night floor 8% -> 3%: lit/night luminance ratio 1.55-1.62 ->
+        1.95-2.46 in a crowded view.
+      See `docs/sessions/2026-10-08-time-speed-and-day-night.md`.
 - [x] 2026-10-07 - Day/night (`portfolio-site` `feat/day-night`, pending review), two commits:
       - **Globe:** shaded by the Sun at the displayed time, with a soft +3 to -12 degree twilight
         band, NASA Black Marble 2016 city lights at night, and a Day/night switch (default on).
