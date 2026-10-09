@@ -28,6 +28,11 @@
 - Every agent loop must have a step cap and a cost cap, both set in `src/app/config.py`. Both defaults there are guesses - see `evals/thresholds.yaml`'s comment - validate them against a real `make eval-fast-live` run before trusting them, and expect to raise them at least once.
 - Log every LLM/tool call through `src/app/tracing.py` so runs are inspectable.
 - Record non-obvious design decisions as a short ADR in `docs/adr/`.
+- Browser checks and screenshots run headless: headless Chromium (e.g. Playwright with
+  `headless: true` and a fresh temporary profile), no visible window, never Max's Chrome profile.
+  Save screenshots to disk and give their paths, and report anything headless couldn't check
+  (e.g. real-GPU performance under software WebGL). Open a visible browser only when Max
+  explicitly asks.
 
 ## Definition of done
 Lint clean, tests pass, `make eval-fast` (mock) passes `evals/thresholds.yaml` as a plumbing check. For anything touching output quality (prompts, agent logic, model choice), `make eval-fast-live`'s real numbers vs. `evals/thresholds.yaml` are the actual quality gate - report them, don't just cite the mock pass. README results table updated if live numbers changed.
