@@ -83,9 +83,36 @@ entry). Each needs its own scoping before any build.
              and constellation lines), sharing the planets' label placement.
 4. [ ] **Satellite's-eye view (POV) and space view, as one feature** with look-direction modes:
        down at Earth, forward along the track, outward at space. The camera sits at the satellite,
-       oriented from its velocity vector; zoom is field of view. Build after day/night (3) and a
-       star field (already listed under the Sky depth ideas above), since it benefits from both.
-       This is the deferred satellite-POV view above, merged here.
+       oriented from its velocity vector; zoom is field of view. This is the deferred
+       satellite-POV view above, merged here.
+       - [x] **First version, 2026-10-10** (`portfolio-site` `feat/satellite-pov`, pending
+             review): the camera and presets, other satellites removed, NASA GIBS day tiles
+             following the slider date, soft tile edges. See Completed and the 2026-10-10
+             working-notes entries (it became a Google Earth-style view).
+       - [ ] **Next round, decided 2026-10-10, not built** (reasons in the working notes):
+             - zoom descends toward the surface;
+             - once the user descends or pans, the camera detaches and holds over that ground spot
+               until "Return to satellite";
+             - scroll/pinch zooms toward the cursor, and double-click/double-tap zooms in with an
+               animation;
+             - smooth animated transitions;
+             - keep the current GIBS layer and make the imagery limit smooth.
+       - [ ] **Night-lights tiles** (VIIRS Black Marble from GIBS) in place of the 2K night
+             texture.
+       - [ ] **Star field** behind the Earth. Check the catalog's source, license and size with
+             Max before committing any data file. It's shared with the Sky dome star-field item
+             above.
+       - [ ] **Planets and the Moon seen from the viewpoint** (reuse `src/globe/planets.ts`), with
+             no "inspect others".
+       - [ ] **Higher-resolution close-up imagery,** e.g. Sentinel-2 cloudless (10 m, EOX, CC BY
+             4.0 for the 2016 mosaic; later years differ) or sharper GIBS layers. The current
+             daily layer stops at about 244 m per pixel. Check the license, usage terms and
+             request cost first.
+       - [ ] **Phone layout:** the legend and the Satellite panel cover much of the view on a
+             phone. Fold or collapse them there.
+       - [ ] **Tilt/rotate** the camera (roll, and an oblique look at the ground).
+       - [ ] **North-up option:** Down currently puts the along-track direction up, so north is
+             rarely up (from GEO it's to the left).
 5. [ ] **Longer conjunction screening window** (about a week), with miss distance and an explicit
        uncertainty note.
        - **Constraint:** predictions from public TLE/GP elements lose roughly a kilometer or more
@@ -137,6 +164,16 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-10 - Satellite view, first version (`portfolio-site` `feat/satellite-pov`, six
+      commits, pending review):
+      - Globe | Sky | Satellite toggle; the camera rides the selected satellite (LVLH) with
+        Down / Forward / Out presets, drag/arrow-key look and field-of-view zoom.
+      - Only the Earth and the Sun are drawn; the catalog is paused while the view is open.
+      - NASA GIBS VIIRS NOAA-20 true-colour tiles following the slider date (about 244 m per
+        pixel), with the GIBS acknowledgment; offline falls back to the 2K texture.
+      - Soft tile edges (cross-fades, feathered seams), cheaper frames, and GIBS's black no-data
+        masked so dark water stays real.
+      See `docs/sessions/2026-10-10-satellite-pov.md`.
 - [x] 2026-10-09 - Sky planets and Moon (`portfolio-site` `feat/sky-planets`, pending review):
       - All seven planets and the Moon on the dome, topocentric, above the horizon only, labelled;
         planets sized by magnitude; the Moon with its phase and lit limb toward the Sun.
