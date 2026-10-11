@@ -104,10 +104,24 @@ entry). Each needs its own scoping before any build.
              above.
        - [ ] **Planets and the Moon seen from the viewpoint** (reuse `src/globe/planets.ts`), with
              no "inspect others".
-       - [ ] **Higher-resolution close-up imagery,** e.g. Sentinel-2 cloudless (10 m, EOX, CC BY
-             4.0 for the 2016 mosaic; later years differ) or sharper GIBS layers. The current
-             daily layer stops at about 244 m per pixel. Check the license, usage terms and
-             request cost first.
+       - [x] **Higher-resolution close-up imagery.** Done 2026-10-11: EOX Sentinel-2 cloudless
+             2016 (CC BY 4.0) is the base surface at every zoom, down to ~9.6 m per pixel; GIBS
+             daily is the optional "Today's imagery" overlay. See Completed and
+             `docs/sessions/2026-10-11-eox-base-imagery.md`. Follow-ups:
+             - [ ] **EOX coastal-water seams:** blocky patches and straight diagonal lines in the
+                   sea near coasts (Sentinel-2 scene edges in EOX's 2016 mosaic, not our tiles).
+                   Options: fade EOX out over open water, or blend toward the 2K texture's ocean.
+             - [ ] **Near the poles** the geographic grid's tiles narrow, so the 140-tile budget
+                   stops at levels 11-12 (at 81 N, FOV 1 degree) instead of 13. A latitude-aware
+                   budget or level choice would fix it.
+             - [ ] **Frame rate:** about twice as many (smaller) tiles are drawn as with GIBS
+                   alone; software-GL fps at medium zoom went 12.8 -> 9.3-9.8. Check on a real
+                   GPU; merge small tiles or raise the texel target if needed.
+             - [ ] **Attribution wording:** the footnote uses the s2maps.eu wording Max asked
+                   for; EOX's current capabilities give "EOxCloudless https://cloudless.eox.at
+                   by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)",
+                   and its licence page says the older wording needn't change. Confirm which
+                   to keep.
        - [ ] **Phone layout:** the legend and the Satellite panel cover much of the view on a
              phone. Fold or collapse them there.
        - [ ] **Tilt/rotate** the camera (roll, and an oblique look at the ground).
@@ -164,6 +178,16 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-11 - EOX Sentinel-2 cloudless 2016 as the Satellite view's base imagery
+      (`portfolio-site` `feat/eox-base-imagery`, pending review):
+      - One seamless, cloud-free mosaic at every zoom, ~9.6 m per pixel at its finest level
+        (desktop level 13, phones 12); the narrowest zoom from the ISS is now the 1 degree floor
+        (it was 9.7).
+      - NASA GIBS daily is a "Today's imagery" overlay, off by default, with "Daily mosaic;
+        swath edges are visible."; credits follow what's on screen.
+      - EOX's contrasty rendering calibrated to the 2K texture so deserts don't clip under the
+        day/night gain; the shading itself is unchanged.
+      See `docs/sessions/2026-10-11-eox-base-imagery.md`.
 - [x] 2026-10-10 - Satellite view, first version (`portfolio-site` `feat/satellite-pov`, six
       commits, pending review):
       - Globe | Sky | Satellite toggle; the camera rides the selected satellite (LVLH) with

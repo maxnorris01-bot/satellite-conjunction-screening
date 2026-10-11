@@ -10,6 +10,20 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-11 - Satellite view: EOX Sentinel-2 cloudless 2016 is the base imagery; GIBS daily
+becomes an optional overlay.** `portfolio-site` `feat/eox-base-imagery`; details in
+`docs/sessions/2026-10-11-eox-base-imagery.md`.
+- **Why:** the visible seams in GIBS's daily mosaic are scan-swath edges in NASA's data, so no
+  blending of ours can remove them, and GIBS stops at ~244 m per pixel. EOX 2016 is one seamless
+  global image at ~10 m, free, CC BY 4.0 (research: `docs/research/2026-10-close-up-imagery.md`).
+- **Only the 2016 edition.** The 2018-2025 editions are CC BY-NC-SA; the code refuses them.
+- **Trade-off accepted:** the base no longer follows the slider's date or shows that day's
+  clouds. "Today's imagery" (off by default) puts GIBS back on top for that, with a note that
+  swath edges are visible.
+- **Brightness calibration, not a shading change:** EOX's deserts are ~2.4x brighter than the
+  2K texture's, so they clipped under the lit side's gain. A tone curve fitted to the 2K land
+  median and GIBS's Sahara level calibrates the EOX tiles; the day/night model is unchanged.
+
 **2026-10-10 - Satellite view (POV) becomes a Google Earth-style view of the ground.**
 `portfolio-site` `feat/satellite-pov`, six commits; details in
 `docs/sessions/2026-10-10-satellite-pov.md`.
