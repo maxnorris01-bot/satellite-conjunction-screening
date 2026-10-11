@@ -10,6 +10,50 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-10 - Satellite view (POV) becomes a Google Earth-style view of the ground.**
+`portfolio-site` `feat/satellite-pov`, six commits; details in
+`docs/sessions/2026-10-10-satellite-pov.md`.
+- **Direction change:** the first cut (commit 1) was a cockpit view that still drew the catalog
+  around the viewpoint. Max then asked for "Google Earth seen from the satellite": the point is
+  looking at the real Earth below, not at other objects.
+  - **Other satellites are removed from the Satellite view:** no dots, rings, neighbour line or
+    orbit lines. While the view is open the catalog isn't propagated; leaving it restores the Globe
+    and Sky exactly as they were. Only the Earth and the Sun are drawn.
+- **Camera (kept from commit 1):** a nadir-locked (LVLH) frame with Down / Forward / Out presets,
+  drag or arrow keys to look around, and field of view as zoom.
+- **Day imagery: NASA GIBS tiles, following the slider date.** WMTS, EPSG:4326, `250m` tile matrix
+  set (512 px tiles, levels 0-8). The imagery date is the newest complete day on or before the
+  displayed date, read from DescribeDomains; the layer's newest listed day is skipped because it's
+  still filling in. No API key; tiles send CORS `*`.
+- **Layer: `VIIRS_NOAA20_CorrectedReflectance_TrueColor`.** It has run every day since
+  2022-01-14, with 3,000 km swaths, so no equatorial gaps. SNPP has multi-day gaps (e.g.
+  2026-07-11..15), MODIS Terra is ageing, and Blue Marble is static at 500 m. The layer is JPEG
+  only and fills no-data (polar night, an unfinished day) with exact black; that's masked to show
+  the 2K texture. The pale bands seen from GEO are sun glint in real data, not gaps.
+- **Acknowledgment (in the page footnote):** "We acknowledge the use of imagery provided by
+  services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data
+  and Information System (ESDIS)."
+- **Resolution limit: about 244 m per pixel** (level 8). The narrowest zoom is computed from it and
+  the altitude: about 9.7 degrees at the ISS on desktop, 18.1 on a phone, and the 1 degree floor
+  at GEO. Close up it's soft; a daily global layer can't match Google Earth's close-up sharpness.
+- **Phone caps (viewport under 640 px):** maximum level 7, 32 tiles cached, 4 requests in flight,
+  6 requests/s, 40 tiles drawn. Desktop: 8, 96, 6, 12/s, 80.
+- **Usage:** the tile code is a lazy chunk and fetches nothing outside the Satellite view. Requests
+  are rate-limited and cancelled when no longer wanted, and the level is capped while time plays
+  fast. At 1x that's about 1.2-1.4 requests/s, far below the GIBS bulk-download threshold
+  (1,000,000 tiles a day).
+
+**2026-10-10 - Next round for the Satellite view: decided, not built.** Max's decisions for the
+next round, to be built in a later session:
+- **Zoom means descending toward the surface,** not just narrowing the field of view.
+- **Detach:** once the user descends or pans, the camera detaches from the satellite and holds over
+  that ground spot until "Return to satellite".
+- **Zoom input:** scroll/pinch zooms toward the cursor; double-click/double-tap zooms in with an
+  animation.
+- **Smooth animated transitions** between states (preset changes, detach and return, zoom steps).
+- **Imagery:** keep the current GIBS layer, and make the imagery limit smooth (no hard stop at the
+  narrowest level).
+
 **2026-10-09 - Sky view: all planets plus the Moon, clickable, no physical visibility model.**
 `portfolio-site` `feat/sky-planets`; details in `docs/sessions/2026-10-09-sky-planets.md`.
 - **Scope:** Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune and the Moon on the Sky dome,
