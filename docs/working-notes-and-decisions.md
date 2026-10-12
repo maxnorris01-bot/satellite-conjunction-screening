@@ -11,7 +11,7 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 ## Decisions
 
 **2026-10-11 - Closest zoom stops where Sentinel-2 is still sharp; sharper US imagery is a later
-option.** `portfolio-site` `262399c` (PR #28). One pixel of the finest tile level in use may cover
+option.** `portfolio-site` `262399c` (PR #28, merged to `main` via #27 as `56100cc`). One pixel of the finest tile level in use may cover
 at most 1.0 CSS pixel at the centre of the view. That gives 10.27 km camera height on desktop (EOX
 level 13) and 19.26 km on phones (level 12), up from 5.13 km and 9.63 km, which let a 10 m source
 pixel cover two screen pixels and looked soft. It counts CSS pixels so a 2x display stops at the
@@ -19,7 +19,7 @@ same height as a 1x one. Deeper zoom would need sharper imagery. A US-only USGS 
 is in the backlog (`docs/todo.md`), not built. Details: `docs/sessions/2026-10-11-descend-zoom.md`.
 
 **2026-10-11 - Satellite view: heading up by default, north up as an option.** `portfolio-site`
-`e3d3667` (PR #28). The first detach turned the view to north up, swinging it and losing the
+`e3d3667` (PR #28, merged to `main` via #27 as `56100cc`). The first detach turned the view to north up, swinging it and losing the
 satellite's point of view. Now up on screen is the direction of travel, and on detach the ground
 direction that was up is captured and kept, so from Down nothing swings. "Heading up | North up"
 switches with a 500 ms animation, and a compass shows north. Held views stay at least 0.5 degrees
@@ -48,7 +48,7 @@ button returns to Live. Space toggles it. At the end of the slider's range, wher
 already pauses itself, Play is unavailable.
 
 **2026-10-11 - Descend zoom: detach on zoom, hold over the ground; a drag while riding still looks
-around.** `portfolio-site` `07d0a75` (PR #27, squash-merged as `56100cc`). This builds the
+around.** `portfolio-site` `07d0a75` (PR #27, squash-merged to `main` as `56100cc`). This builds the
 2026-10-10 next round.
 - **Riding:** scroll/pinch zoom toward the pointer by narrowing the field of view, down to 30
   degrees.

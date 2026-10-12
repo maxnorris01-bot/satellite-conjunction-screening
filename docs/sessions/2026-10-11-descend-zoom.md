@@ -3,18 +3,20 @@
 Docs-only record in this repo of two `portfolio-site` rounds on the Satellite view. These build
 the "next round" decided on 2026-10-10.
 
-- **PR #27, descend zoom** (branch `feat/descend-zoom`). Squash-merged into `portfolio-site`
-  `main` as `56100cc` ("feat/descend zoom (#27)"); the four commits survive on the branch:
+Both rounds are merged to `portfolio-site` `main` as one squash commit, **`56100cc`** ("feat/descend
+zoom (#27)"). PR #28 was squash-merged into `feat/descend-zoom` first, and #27's squash merge then
+carried it into `main`. `git diff 262399c 56100cc -- src` is empty, so `main`'s source matches #28's
+tip. The individual commits below exist only on the now-deleted feature branches.
+
+- **PR #27, descend zoom** (branch `feat/descend-zoom`, deleted), commits:
   - `07d0a75` feat: descend zoom with an automatic hold in the satellite view
   - `8897c0c` feat: Pause / Play button for the shared clock
   - `c188ce9` feat: a clearer "Base map | Today's imagery" choice that fades up close
   - `1357cdf` fix: EOX attribution in EOX's current wording
-- **PR #28, orientation and zoom limit** (branch `feat/orientation-zoom-limit`):
+- **PR #28, orientation and zoom limit** (branch `feat/orientation-zoom-limit`, deleted), merged
+  into `feat/descend-zoom` and so into `main` via #27 (`56100cc`). Commits:
   - `e3d3667` feat: heading-up orientation in the satellite view, north up as an option
   - `262399c` feat: closest zoom stops where the base imagery is still sharp
-
-  As of this write-up (fetched 2026-10-11) these two commits are on `origin/feat/orientation-zoom-limit`
-  but not yet on `portfolio-site` `main`.
 
 ## What changed
 
@@ -64,7 +66,7 @@ https://cloudless.eox.at by EOX IT Services GmbH (Contains modified Copernicus S
 2016)". That's the wording from its WMTS capabilities and licence summary, replacing the older
 s2maps.eu text.
 
-**Orientation** (`e3d3667`).
+**Orientation** (`e3d3667`, via #28; in `main` as part of `56100cc`).
 - **Heading up is the default:** up on screen is the satellite's direction of travel. **North up**
   is an option ("Heading up | North up" in the Satellite panel; switching animates over 500 ms,
   instant under reduced motion).
@@ -75,7 +77,7 @@ s2maps.eu text.
 - **Poles:** held views stay at least 0.5 degrees (about 55 km) from a pole, so north stays
   defined.
 
-**Closest zoom rule** (`262399c`).
+**Closest zoom rule** (`262399c`, via #28; in `main` as part of `56100cc`).
 - **The rule:** one pixel of the finest tile level in use may cover at most 1.0 CSS pixel at the
   centre of the view. It counts CSS pixels, not device pixels, so a 2x display stops at the same
   height as a 1x one.

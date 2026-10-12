@@ -143,7 +143,8 @@ entry). Each needs its own scoping before any build.
        - [ ] **Phone layout:** the legend and the Satellite panel cover much of the view on a
              phone. Fold or collapse them there.
        - [ ] **Tilt/rotate** the camera (roll, and an oblique look at the ground).
-       - [x] **Orientation option:** done 2026-10-11 (`e3d3667`, PR #28). Heading up is the
+       - [x] **Orientation option:** done 2026-10-11 (`e3d3667`, PR #28; in `main` via #27,
+             `56100cc`). Heading up is the
              default, North up an option, with a compass; held views keep the screen-up ground
              direction from detach.
 5. [ ] **Longer conjunction screening window** (about a week), with miss distance and an explicit
@@ -202,10 +203,12 @@ entry). Each needs its own scoping before any build.
 
 ## Completed (most recent first)
 - [x] 2026-10-11 - Satellite view rounds in `portfolio-site`:
-      - **PR #27** (squash-merged as `56100cc`): descend zoom with a ground-held view, Pause/Play,
-        the "Base map | Today's imagery" control with its fade rule, EOX attribution wording.
-      - **PR #28** (`e3d3667`, `262399c`): heading-up orientation with north up as an option, and
-        closest zoom 10.27 km desktop / 19.26 km phone.
+      - All merged to `main` as one squash commit, `56100cc` (PR #27). PR #28 was merged into
+        `feat/descend-zoom` first, so #27 carried it into `main`.
+      - **From #27:** descend zoom with a ground-held view, Pause/Play, the "Base map | Today's
+        imagery" control with its fade rule, EOX attribution wording.
+      - **From #28** (`e3d3667`, `262399c`): heading-up orientation with north up as an option,
+        and closest zoom 10.27 km desktop / 19.26 km phone.
       - 146 tests. Real-GPU frame rate and touch still to check by hand. See
         `docs/sessions/2026-10-11-descend-zoom.md`.
 - [x] 2026-10-11 - EOX Sentinel-2 cloudless 2016 as the Satellite view's base imagery
