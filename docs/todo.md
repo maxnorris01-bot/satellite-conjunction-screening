@@ -89,14 +89,34 @@ entry). Each needs its own scoping before any build.
              review): the camera and presets, other satellites removed, NASA GIBS day tiles
              following the slider date, soft tile edges. See Completed and the 2026-10-10
              working-notes entries (it became a Google Earth-style view).
-       - [ ] **Next round, decided 2026-10-10, not built** (reasons in the working notes):
-             - zoom descends toward the surface;
-             - once the user descends or pans, the camera detaches and holds over that ground spot
-               until "Return to satellite";
-             - scroll/pinch zooms toward the cursor, and double-click/double-tap zooms in with an
-               animation;
-             - smooth animated transitions;
-             - keep the current GIBS layer and make the imagery limit smooth.
+       - [x] **Next round, decided 2026-10-10; built 2026-10-11** (`portfolio-site` PR #27,
+             `07d0a75`; see `docs/sessions/2026-10-11-descend-zoom.md`):
+             - [x] descend zoom: zoom descends toward the surface;
+             - [x] the camera detaches and holds over that ground spot until "Return to satellite"
+                   (on zooming past 30 degrees or a double-click/double-tap; a drag while riding
+                   still looks around, see the working notes);
+             - [x] zoom toward the cursor (scroll/pinch);
+             - [x] double-click/double-tap zoom, animated;
+             - [x] animated transitions (500 ms, instant under reduced motion);
+             - [x] smooth imagery limit (the base imagery is now EOX, not GIBS).
+       - [x] **Pause button** (`8897c0c`, PR #27): Pause/Play for the shared clock; Play resumes
+             the paused moment, not Live; Space toggles.
+       - [x] **Prominent Today's imagery control** (`c188ce9`, PR #27): "Base map | Today's
+             imagery" with an explanation and the imagery date; fades out between ~263 and
+             ~131 km camera height.
+       - Follow-ups from the descend and orientation rounds (2026-10-11):
+             - [ ] **Softer detach swing:** detaching from Forward or a sideways look still swings
+                   a lot.
+             - [ ] **Return restores the previous field of view:** it comes back at 30 degrees,
+                   not the starting 70.
+             - [ ] **Wheel steps on notched mice** aren't animated.
+             - [ ] **Soft imagery below about 10 km** camera height.
+             - [ ] **About 13 wheel steps from GEO to the floor:** too many.
+             - [ ] **North up while riding:** dragging to look around is off by the roll angle.
+             - [ ] **Detaching from Forward changes the compass by about 17 degrees,** because the
+                   tilt can't carry into a straight-down view.
+             - [ ] **Show the Today's imagery explanation on phones** (in the phone full-screen
+                   rework; hidden there for now).
        - [ ] **Night-lights tiles** (VIIRS Black Marble from GIBS) in place of the 2K night
              texture.
        - [ ] **Star field** behind the Earth. Check the catalog's source, license and size with
@@ -117,16 +137,16 @@ entry). Each needs its own scoping before any build.
              - [ ] **Frame rate:** about twice as many (smaller) tiles are drawn as with GIBS
                    alone; software-GL fps at medium zoom went 12.8 -> 9.3-9.8. Check on a real
                    GPU; merge small tiles or raise the texel target if needed.
-             - [ ] **Attribution wording:** the footnote uses the s2maps.eu wording Max asked
-                   for; EOX's current capabilities give "EOxCloudless https://cloudless.eox.at
-                   by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)",
-                   and its licence page says the older wording needn't change. Confirm which
-                   to keep.
+             - [x] **Attribution wording:** done 2026-10-11 (`1357cdf`, PR #27). The footnote now
+                   uses EOX's current wording, "EOxCloudless https://cloudless.eox.at by EOX IT
+                   Services GmbH (Contains modified Copernicus Sentinel data 2016)".
        - [ ] **Phone layout:** the legend and the Satellite panel cover much of the view on a
              phone. Fold or collapse them there.
        - [ ] **Tilt/rotate** the camera (roll, and an oblique look at the ground).
-       - [ ] **North-up option:** Down currently puts the along-track direction up, so north is
-             rarely up (from GEO it's to the left).
+       - [x] **Orientation option:** done 2026-10-11 (`e3d3667`, PR #28; in `main` via #27,
+             `56100cc`). Heading up is the
+             default, North up an option, with a compass; held views keep the screen-up ground
+             direction from detach.
 5. [ ] **Longer conjunction screening window** (about a week), with miss distance and an explicit
        uncertainty note.
        - **Constraint:** predictions from public TLE/GP elements lose roughly a kilometer or more
@@ -143,6 +163,10 @@ entry). Each needs its own scoping before any build.
        in the order.
        - **Explicitly not doing:** CCTV or webcam feeds (privacy, legality, reliability), or
          photoreal 3D tiles (paid API key, restrictive terms, key exposure in client code).
+8. [ ] **Sharper US close-up imagery** (backlog, added 2026-10-11): fade in free USGS National
+       Map aerial imagery (~1 m/px, public domain) over the United States at close zoom, allowing
+       deeper zoom there. The rest of the world stays at the 10 m Sentinel-2 limit. Needs a
+       licence/attribution check, a tile-service endpoint and a US-only coverage mask.
 
 ## Lower priority / opportunistic
 
@@ -178,6 +202,15 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-11 - Satellite view rounds in `portfolio-site`:
+      - All merged to `main` as one squash commit, `56100cc` (PR #27). PR #28 was merged into
+        `feat/descend-zoom` first, so #27 carried it into `main`.
+      - **From #27:** descend zoom with a ground-held view, Pause/Play, the "Base map | Today's
+        imagery" control with its fade rule, EOX attribution wording.
+      - **From #28** (`e3d3667`, `262399c`): heading-up orientation with north up as an option,
+        and closest zoom 10.27 km desktop / 19.26 km phone.
+      - 146 tests. Real-GPU frame rate and touch still to check by hand. See
+        `docs/sessions/2026-10-11-descend-zoom.md`.
 - [x] 2026-10-11 - EOX Sentinel-2 cloudless 2016 as the Satellite view's base imagery
       (`portfolio-site` `feat/eox-base-imagery`, pending review):
       - One seamless, cloud-free mosaic at every zoom, ~9.6 m per pixel at its finest level
