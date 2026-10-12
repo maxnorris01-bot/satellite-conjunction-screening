@@ -115,8 +115,8 @@ entry). Each needs its own scoping before any build.
              - [ ] **North up while riding:** dragging to look around is off by the roll angle.
              - [ ] **Detaching from Forward changes the compass by about 17 degrees,** because the
                    tilt can't carry into a straight-down view.
-             - [ ] **Show the Today's imagery explanation on phones** (in the phone full-screen
-                   rework; hidden there for now).
+             - [x] **Show the Today's imagery explanation on phones:** done 2026-10-12. It's
+                   shown in full screen (`portfolio-site` PR #29, `e0fbdf3`).
        - [ ] **Night-lights tiles** (VIIRS Black Marble from GIBS) in place of the 2K night
              texture.
        - [ ] **Star field** behind the Earth. Check the catalog's source, license and size with
@@ -140,8 +140,21 @@ entry). Each needs its own scoping before any build.
              - [x] **Attribution wording:** done 2026-10-11 (`1357cdf`, PR #27). The footnote now
                    uses EOX's current wording, "EOxCloudless https://cloudless.eox.at by EOX IT
                    Services GmbH (Contains modified Copernicus Sentinel data 2016)".
-       - [ ] **Phone layout:** the legend and the Satellite panel cover much of the view on a
-             phone. Fold or collapse them there.
+       - [x] **Phone layout rework:** done 2026-10-12 (`portfolio-site` PR #29, `e0fbdf3`). The
+             embedded phone map is clean, and details and controls live in a full-screen mode
+             (bottom sheet, folded filters). See `docs/sessions/2026-10-12-fullscreen-map.md`.
+       - [x] **Sideways scroll on phones:** done 2026-10-12 (`b0888ca`, PR #29). The table's
+             hidden "Replay" labels widened the page to ~691 px at 390 px, so browsers zoomed out.
+             The page is now exactly screen width.
+       - Follow-ups from the full-screen round (2026-10-12):
+             - [ ] **A compact Globe | Sky | Satellite toggle inside full screen.** It's missing
+                   there; switching works from the selection panel.
+             - [ ] **Confirm the bucket's CORS rule for Vercel preview addresses,** or document
+                   why previews can't load data. A preview showed "couldn't load the latest run"
+                   on the phone; the 2026-10-03 note says the rule allows only production and
+                   localhost.
+             - [ ] **Detailed real-device checks:** iPhone Safari toolbar and safe-area
+                   behaviour; Android Chrome native full screen; rotation in full screen.
        - [ ] **Tilt/rotate** the camera (roll, and an oblique look at the ground).
        - [x] **Orientation option:** done 2026-10-11 (`e3d3667`, PR #28; in `main` via #27,
              `56100cc`). Heading up is the
@@ -202,6 +215,15 @@ entry). Each needs its own scoping before any build.
       28 s). Not reproduced since; details in the working notes' open items.
 
 ## Completed (most recent first)
+- [x] 2026-10-12 - Full-screen map and the phone page-width fix (`portfolio-site` PR #29, merged
+      as `e0fbdf3`):
+      - The page is exactly screen width on phones; the table scrolls in its card.
+      - A clean embedded phone map, and a full-screen mode with a bottom sheet (side sheet in
+        landscape), folded filters and the controls. It's a CSS full-viewport mode, plus native
+        full screen where available.
+      - 153 tests (7 new). Headless at 390x844, 360x740, 844x390 and desktop. Full screen and
+        Today's imagery confirmed by hand on Max's phone. See
+        `docs/sessions/2026-10-12-fullscreen-map.md`.
 - [x] 2026-10-11 - Satellite view rounds in `portfolio-site`:
       - All merged to `main` as one squash commit, `56100cc` (PR #27). PR #28 was merged into
         `feat/descend-zoom` first, so #27 carried it into `main`.
@@ -212,7 +234,7 @@ entry). Each needs its own scoping before any build.
       - 146 tests. Real-GPU frame rate and touch still to check by hand. See
         `docs/sessions/2026-10-11-descend-zoom.md`.
 - [x] 2026-10-11 - EOX Sentinel-2 cloudless 2016 as the Satellite view's base imagery
-      (`portfolio-site` `feat/eox-base-imagery`, pending review):
+      (`portfolio-site` `feat/eox-base-imagery`, merged via PR #26 as `7033220`):
       - One seamless, cloud-free mosaic at every zoom, ~9.6 m per pixel at its finest level
         (desktop level 13, phones 12); the narrowest zoom from the ISS is now the 1 degree floor
         (it was 9.7).
