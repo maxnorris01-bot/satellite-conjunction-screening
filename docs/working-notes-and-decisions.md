@@ -10,6 +10,21 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-12 - Deep-sky backdrop researched (HiPS); a build is possible, licensing is the blocker.**
+Research only, nothing built. Full write-up: `docs/research/2026-10-deep-sky-imagery.md`.
+- **The format:** stream HiPS (HEALPix) tiles from CDS (`alasky`, CORS `*`, mirror `alaskybis`)
+  onto per-tile curved quads, with one 3 KB gzipped MIT dependency (`@hscmap/healpix`, verified
+  30/30 against astropy, including indices above 2³¹). It's about 6-35 tiles per view.
+- **Layers:** Mellinger for the wide sky (needs the author's permission), DSS2 colour for mid zoom
+  (non-profit use only), and the HST/JWST outreach HiPS (CC BY 4.0, transparent outside their
+  footprints) for the deep "Hubble Deep Field" zoom at named targets. Test tiles at the HDF showed
+  hundreds of resolved galaxies.
+- **The sky sphere needs an ICRS → TEME rotation:** 0.15-0.37° in 2026.
+- **Open before any build:**
+  - CDS's terms and limits for streaming to a public site (none published).
+  - Mellinger's permission.
+  - Whether the portfolio counts as non-profit for DSS2.
+
 **2026-10-12 - The Globe | Sky | Satellite toggle stays out of full screen, for now.**
 `portfolio-site` PR #29 (`e0fbdf3`). Full screen carries the time bar, playback, imagery and
 orientation controls, but not the view toggle. Switching views still works from the selection
