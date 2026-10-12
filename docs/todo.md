@@ -180,6 +180,20 @@ entry). Each needs its own scoping before any build.
        Map aerial imagery (~1 m/px, public domain) over the United States at close zoom, allowing
        deeper zoom there. The rest of the world stays at the 10 m Sentinel-2 limit. Needs a
        licence/attribution check, a tile-service endpoint and a US-only coverage mask.
+9. [ ] **Zoomable deep-sky backdrop (HiPS), build round** (researched 2026-10-12;
+       `docs/research/2026-10-deep-sky-imagery.md`). Before building:
+       - [ ] Ask CDS whether a public site may stream alasky tiles, and about any rate limit.
+       - [ ] Ask Axel Mellinger for permission to use the panorama on the portfolio, and the credit
+             line; otherwise use DSS2 colour plus bright-star points for the wide view.
+       - [ ] Confirm the portfolio counts as non-profit use for DSS2 (MAST copyrighted collection).
+
+       Then build:
+       - [ ] Per-tile HEALPix quads via `@hscmap/healpix`.
+       - [ ] An ICRS → TEME rotation.
+       - [ ] DSS2 colour for mid zoom.
+       - [ ] HST/JWST outreach layers at named "go to" targets (HUDF, XDF, HDF, SMACS 0723,
+             Cosmic Cliffs) with release-page credits.
+       - [ ] A phone budget (LRU about 32 tiles; deep layers only at targets).
 
 ## Lower priority / opportunistic
 
