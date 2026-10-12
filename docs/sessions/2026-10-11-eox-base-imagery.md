@@ -1,6 +1,7 @@
 # Session 2026-10-11: EOX Sentinel-2 cloudless as the Satellite view's base imagery (portfolio-site)
 
-- **Code:** `portfolio-site`, branch `feat/eox-base-imagery`, one commit, pushed, not merged:
+- **Code:** `portfolio-site`, branch `feat/eox-base-imagery`, one commit, merged via PR #26 as
+  `7033220`:
   - `e57c548` feat: EOX Sentinel-2 cloudless 2016 as the satellite view's base imagery
 - **Browser checks:** headless Chromium only (Playwright, SwiftShader WebGL), per the headless
   rule.

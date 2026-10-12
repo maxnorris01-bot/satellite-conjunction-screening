@@ -10,6 +10,39 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-12 - The Globe | Sky | Satellite toggle stays out of full screen, for now.**
+`portfolio-site` PR #29 (`e0fbdf3`). Full screen carries the time bar, playback, imagery and
+orientation controls, but not the view toggle. Switching views still works from the selection
+panel. A compact toggle inside full screen is a to-do item.
+
+**2026-10-12 - Phone page width: the hidden "Replay" labels escaped the table's scroll box.**
+`portfolio-site` `b0888ca` (PR #29, merged as `e0fbdf3`). The conjunction table already scrolled
+sideways inside its card. But its visually hidden "Replay" labels were absolutely positioned with
+no positioned ancestor inside the scroll box, so they escaped its clipping and widened the page to
+about 691 px at a 390 px viewport. Mobile browsers then zoomed the whole page out. Making the card
+the positioned ancestor clips them with the table: the page is exactly 390/360 px wide, and the
+table scrolls inside its card.
+
+**2026-10-12 - Full screen on iPhone is a CSS full-viewport mode; native full screen where it
+exists.** `portfolio-site` `dbea6df`, `3224927` (PR #29). iPhone Safari has no Fullscreen API for
+arbitrary elements, so full screen is a CSS mode everywhere: `100dvh`, safe-area padding, a
+locked page. Where the API exists (desktop, Android Chrome), native full screen is requested on
+top of it. A pure state machine (`src/globe/fullscreen.ts`) keeps the two in sync for every way
+out: the Exit button, Esc in the CSS-only mode, the browser leaving native full screen by itself,
+and Back. Entering pushes one history entry, so Back exits full screen rather than leaving the
+page.
+
+**2026-10-12 - Full screen is the phone design: a clean embedded map, details in full screen.**
+`portfolio-site` PR #29 (`e0fbdf3`). On phones (up to 640 px wide, or 500 px tall in landscape) the
+filter and info panels covered most of the map. Now:
+- **Embedded:** the map is clean, with only a compact Full screen button. Selecting a satellite
+  shows a small "Enter full screen to see details and controls" box.
+- **Full screen:** filters fold to "Colours and filters", details are a bottom sheet (a side sheet
+  in landscape), and the controls and the Today's imagery explanation are reachable.
+
+This replaces folding panels in place, and it's the "phone full-screen rework" the 2026-10-11
+entries pointed to. Details: `docs/sessions/2026-10-12-fullscreen-map.md`.
+
 **2026-10-11 - Closest zoom stops where Sentinel-2 is still sharp; sharper US imagery is a later
 option.** `portfolio-site` `262399c` (PR #28, merged to `main` via #27 as `56100cc`). One pixel of the finest tile level in use may cover
 at most 1.0 CSS pixel at the centre of the view. That gives 10.27 km camera height on desktop (EOX
