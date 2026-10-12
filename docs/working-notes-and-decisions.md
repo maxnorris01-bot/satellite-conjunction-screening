@@ -10,6 +10,59 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-11 - Closest zoom stops where Sentinel-2 is still sharp; sharper US imagery is a later
+option.** `portfolio-site` `262399c` (PR #28). One pixel of the finest tile level in use may cover
+at most 1.0 CSS pixel at the centre of the view. That gives 10.27 km camera height on desktop (EOX
+level 13) and 19.26 km on phones (level 12), up from 5.13 km and 9.63 km, which let a 10 m source
+pixel cover two screen pixels and looked soft. It counts CSS pixels so a 2x display stops at the
+same height as a 1x one. Deeper zoom would need sharper imagery. A US-only USGS layer (~1 m/px)
+is in the backlog (`docs/todo.md`), not built. Details: `docs/sessions/2026-10-11-descend-zoom.md`.
+
+**2026-10-11 - Satellite view: heading up by default, north up as an option.** `portfolio-site`
+`e3d3667` (PR #28). The first detach turned the view to north up, swinging it and losing the
+satellite's point of view. Now up on screen is the direction of travel, and on detach the ground
+direction that was up is captured and kept, so from Down nothing swings. "Heading up | North up"
+switches with a 500 ms animation, and a compass shows north. Held views stay at least 0.5 degrees
+(about 55 km) from a pole so north stays defined. Known gaps are in the to-do: about a 17 degree
+compass change when detaching from Forward, and look-around off by the roll angle when riding
+with North up.
+
+**2026-10-11 - Phones hide the Today's imagery explanation, as a temporary measure.** On a phone
+the long explanation beside "Base map | Today's imagery" takes too much of a small screen, so it's
+hidden there. That's a stopgap until the phone full-screen rework, which should bring it back
+(to-do item).
+
+**2026-10-11 - Today's imagery fades out where it's coarser than the screen.** `portfolio-site`
+`c188ce9` (PR #27). NASA GIBS daily's finest level is ~244 m/px (level 8; 7 on phones). It's fully
+shown while one of its pixels covers at most one screen pixel at the centre of the view, gone at
+two, and smooth in between. Looking straight down at 30 degrees on a 576 px tall view that's
+~263 km down to ~131 km camera height. Fully faded it's hidden and fetches nothing, and below it
+the sharper EOX base map is all that's drawn. The control became a clear two-option choice with
+an explanation, and shows the imagery date while on.
+
+**2026-10-11 - Pause/Play resumes the paused, scrubbed moment, not Live.** `portfolio-site`
+`8897c0c` (PR #27). Pause freezes the shared clock where it is, from Live, a scrub or playback.
+Play continues from that moment at the selected speed as a scrubbed time, because pausing to look
+at something and then pressing Play should carry on from there, not jump to now. Only the Live
+button returns to Live. Space toggles it. At the end of the slider's range, where playback
+already pauses itself, Play is unavailable.
+
+**2026-10-11 - Descend zoom: detach on zoom, hold over the ground; a drag while riding still looks
+around.** `portfolio-site` `07d0a75` (PR #27, squash-merged as `56100cc`). This builds the
+2026-10-10 next round.
+- **Riding:** scroll/pinch zoom toward the pointer by narrowing the field of view, down to 30
+  degrees.
+- **Detach:** zooming past that over the ground, or a double-click/double-tap, detaches the
+  camera. It then holds over that ground point, fixed to the Earth's surface, so it rotates with
+  the Earth and doesn't drift at any playback speed (0 px at 50x over 6 simulated minutes).
+- **Return:** the "Return to satellite" chip, Esc or any look preset.
+- **Transitions:** 500 ms, instant under reduced motion.
+- **Why a drag while riding doesn't detach,** unlike the 2026-10-10 plan's "descends or pans":
+  drag-to-look-around has been the riding view's gesture since the first version. Detaching on
+  drag would end the ride every time someone looked around. So only a deliberate zoom-in or
+  double-click detaches, and panning the ground exists only once the view is held, where a drag
+  pans.
+
 **2026-10-11 - Satellite view: EOX Sentinel-2 cloudless 2016 is the base imagery; GIBS daily
 becomes an optional overlay.** `portfolio-site` `feat/eox-base-imagery`; details in
 `docs/sessions/2026-10-11-eox-base-imagery.md`.
