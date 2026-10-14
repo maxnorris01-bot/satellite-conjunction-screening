@@ -12,6 +12,18 @@ the checkmark itself. Add new items as they come up; don't wait for a session's 
 foundation and the frame-time spike are both done, so Phase 1 of the visualization vision is now
 the active work.*
 
+- [ ] **Review the proposed bucket CORS change so Vercel previews can load data** (proposal in the
+      2026-10-13 working-notes entry; branch `fix/bucket-cors-previews`; nothing applied).
+      - [x] 2026-10-13: live rule read back; preview-style origins confirmed rejected (no header,
+            preflight 403); Tigris docs checked; proposal, commands and rollback written.
+      - [ ] Max: review the rule (one added origin, `https://portfolio-site-*-max-norris.vercel.app`).
+      - [ ] Max: step 0, the scratch-bucket test, because Tigris's docs don't say whether a `*`
+            inside an origin works. Don't apply to the real bucket if it over-matches.
+      - [ ] Max: step 1, apply to the real bucket; step 2, run the verification matrix.
+      - [ ] After applying: update ADR 0010's "Bucket CORS" watch item and the 2026-10-12 note.
+      - If wildcards aren't supported: pick an alternative from the entry's table (stable branch
+        alias, per-branch origins, a proxy for the small artifacts).
+
 - [ ] **Redeploy the daily-run image so `objects/current.json` gains `international_designator`**
       (after `feat/objects-international-designator` merges). Merging doesn't change the daily
       run: GitHub Actions starts a Fly Machine from an already-deployed image.
@@ -149,10 +161,10 @@ entry). Each needs its own scoping before any build.
        - Follow-ups from the full-screen round (2026-10-12):
              - [ ] **A compact Globe | Sky | Satellite toggle inside full screen.** It's missing
                    there; switching works from the selection panel.
-             - [ ] **Confirm the bucket's CORS rule for Vercel preview addresses,** or document
-                   why previews can't load data. A preview showed "couldn't load the latest run"
-                   on the phone; the 2026-10-03 note says the rule allows only production and
-                   localhost.
+             - [ ] **Bucket CORS for Vercel preview addresses:** cause confirmed 2026-10-13
+                   (the live rule lists only production and localhost, so previews get no
+                   `Access-Control-Allow-Origin`); fix proposed, awaiting review. See the Up
+                   next item below.
              - [ ] **Detailed real-device checks:** iPhone Safari toolbar and safe-area
                    behaviour; Android Chrome native full screen; rotation in full screen.
        - [ ] **Tilt/rotate** the camera (roll, and an oblique look at the ground).
