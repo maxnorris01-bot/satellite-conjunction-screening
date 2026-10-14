@@ -10,6 +10,171 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-13 - PROPOSED, NOT APPLIED: let Vercel previews read the bucket by adding one wildcard
+origin to its CORS rule.** Branch `fix/bucket-cors-previews`. Nothing on the bucket has changed.
+Needs Max's review; one open check (a scratch-bucket test) comes before the real bucket.
+
+**Problem.** Preview deployments (`portfolio-site-<hash>-max-norris.vercel.app`) show "couldn't
+load the latest run": the bucket's CORS rule lists only the production alias and localhost.
+Production works.
+
+**What was checked (2026-10-13).**
+- **Live rule,** read with `aws s3api get-bucket-cors` from a throwaway Fly Machine (the ADR 0010
+  method; no credentials printed, the Machine removed itself). It matches ADR 0010's "as built"
+  exactly: one rule `portfolio-site-read`, `GET` only, `MaxAgeSeconds` 3600, origins
+  `https://portfolio-site-max-norris.vercel.app`, `http://localhost:5173`, `http://localhost:4173`.
+- **Behaviour today** (`curl` with an `Origin` header; identical for `objects/current.json` and
+  `history/index.json`):
+
+  | Origin | `Access-Control-Allow-Origin` | Preflight (`OPTIONS`) |
+  |---|---|---|
+  | production alias | echoed | 200, `Allow-Methods: GET`, max-age 3600 |
+  | `http://localhost:5173` | echoed | not tried |
+  | preview-style `https://portfolio-site-7k2x9f-max-norris.vercel.app` | none (body still 200) | **403** |
+  | branch-style `https://portfolio-site-git-feat-x-max-norris.vercel.app` | none | not tried |
+  | `https://example.com` | none | not tried |
+- **Tigris's docs:** the CORS page documents `"AllowedOrigins": ["*"]` and the fields
+  (`AllowedOrigins`, `AllowedMethods`, `AllowedHeaders`, `MaxAgeSeconds`). It says **nothing** about
+  a `*` inside an origin. The S3-compatibility page lists Put/Get/DeleteBucketCors as supported
+  with no caveats. Amazon S3 itself allows exactly one `*` per origin string.
+- **Not verified: whether Tigris honours a wildcard inside an origin.** That's why step 0 below
+  tests on a scratch bucket first. `fly storage update` has no CORS option (checked), so the
+  throwaway-machine method stays.
+- **Vercel hostnames** (Vercel docs): commit URL `<project>-<9-char hash>-<scope>.vercel.app`;
+  branch URL `<project>-git-<branch>-<scope>.vercel.app` (stable per branch); production/CLI
+  `<project>-<scope>.vercel.app`. Labels over 63 characters are truncated, and the docs don't say
+  how, so a very long branch name may not match any pattern.
+
+**Proposed rule.** Same rule ID, one origin added (new file `bucket-cors-new.json`):
+
+```json
+{
+  "CORSRules": [
+    {
+      "ID": "portfolio-site-read",
+      "AllowedOrigins": [
+        "https://portfolio-site-max-norris.vercel.app",
+        "https://portfolio-site-*-max-norris.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:4173"
+      ],
+      "AllowedMethods": ["GET"],
+      "MaxAgeSeconds": 3600
+    }
+  ]
+}
+```
+
+- **It matches** `https://portfolio-site-` + anything + `-max-norris.vercel.app`: both commit URLs
+  and branch URLs of this project. The production alias stays its own entry.
+- **It doesn't match** other schemes (`http://` previews), other hosts, or a host that merely
+  starts with the pattern (`....vercel.app.evil.com`). Step 2's matrix tests all three.
+- **Caveat: it's a hostname pattern, not an identity check.** `*` spans hyphens, so it would also
+  match another Vercel account whose slug ends in `-max-norris` and that has a project called
+  `portfolio-site` (e.g. `portfolio-site-abc123xyz-evil-max-norris.vercel.app`).
+  - The impact is small: the bucket is already world-readable (anyone can `curl` it), the rule
+    allows `GET` only, and no credentials are sent. CORS only decides which sites' scripts may
+    read the data in a visitor's browser. It isn't a confidentiality control here.
+  - Tigris egress is free, so there's no bandwidth cost either.
+- **Watch item (ADR 0010):** plain `GET` responses still carry no `Vary: Origin` and are served
+  with `Cache-Control: public, max-age=300`. More allowed origins make a shared cache serving one
+  origin's header to another slightly more possible. Browsers key their caches by site, so it
+  hasn't mattered.
+
+**Alternatives, if wildcards aren't honoured or the pattern is too loose:**
+
+| Option | Works for | Cost / trade-off |
+|---|---|---|
+| **Exact stable branch alias** (e.g. `https://portfolio-site-git-preview-max-norris.vercel.app` for a long-lived `preview` branch) | the one branch | No wildcard needed. Each review means pushing to that branch; other PR previews still fail. |
+| **Add each branch alias by hand** | named branches | Same command per branch (it replaces the whole config); manual toil, but the exact origin is as narrow as it gets. |
+| **Proxy the small artifacts through the Vercel function** (`objects/current.json` 1.39 MB gzipped, dated `objects/<date>.json.gz`, `history/index.json`) | every deployment, no CORS | A `portfolio-site` change, more function traffic, and it reverses ADR 0010's direct-fetch choice for the objects files (the 78 MB report is already served through `/summary`). Under the ~4.5 MB response cap only if passed through gzipped. |
+| **Vercel Preview Deployment Suffix** (previews on your own domain, e.g. `*.preview.example.com`) | every preview | Docs say Pro/Enterprise only and it needs a custom domain; neither confirmed for this account. |
+| **`"AllowedOrigins": ["*"]`** | every site | One line, but it's exactly "every website". The data is public regardless. |
+
+**Steps (all run by Max; none run by me).**
+
+*0. Test the wildcard on a scratch bucket first.* The real app's secrets and bucket are untouched.
+
+```bash
+export PATH="$HOME/.fly/bin:$PATH"
+# the apply helper: runs `put-bucket-cors` + a read-back in a throwaway Machine of <app>
+cors_put () {   # usage: cors_put <fly-app> <cors.json>
+  local app=$1 b64
+  b64=$(base64 < "$2" | tr -d '\n')
+  fly machine run --detach --rm --restart no --vm-memory 512 -a "$app" --entrypoint sh -- amazon/aws-cli \
+    -c "echo CORS_APPLY_START; echo $b64 | base64 -d > /tmp/c.json && aws s3api put-bucket-cors --bucket \"\$BUCKET_NAME\" --cors-configuration file:///tmp/c.json && echo PUT_OK && aws s3api get-bucket-cors --bucket \"\$BUCKET_NAME\" --output json; echo CORS_APPLY_END"
+  sleep 20   # --detach returns at once; read the result from the app's logs
+  fly logs -a "$app" --no-tail | sed 's/\x1b\[[0-9;]*m//g' | awk '/CORS_APPLY_START/{f=1;next} /CORS_APPLY_END/{f=0} f' | sed -E 's/^[^ ]+ app\[[0-9a-f]+\] [a-z]+ \[info\]//'
+}
+# save the proposed rule above as /tmp/bucket-cors-new.json, then:
+S=cors-scratch-$(date +%s)                 # bucket names are global
+fly apps create $S
+fly storage create -a $S -n $S --public    # bucket + S3 secrets on the SCRATCH app only
+cors_put $S /tmp/bucket-cors-new.json      # expect: PUT_OK and the new rule echoed back
+fly machine run --detach --rm --restart no -a $S --entrypoint sh -- amazon/aws-cli \
+  -c 'echo hi > /tmp/t.txt; aws s3 cp /tmp/t.txt "s3://$BUCKET_NAME/t.txt"'
+# run step 2's matrix with B=https://$S.fly.storage.tigris.dev and key t.txt, then clean up:
+fly storage destroy $S -y && fly apps destroy $S -y
+```
+
+  Read the result: **PUT rejected** means wildcards aren't supported, so use an alternative. **PUT
+  accepted but a preview-style origin still gets no header** means the `*` was stored literally,
+  same conclusion. **`https://example.com` or a `.evil.com` suffix gets a header** means the
+  wildcard over-matches: do **not** apply it to the real bucket.
+
+*1. Apply to the real bucket* (this replaces the whole CORS config; only after step 0 passes):
+
+```bash
+cors_put satellite-conjunction-screening /tmp/bucket-cors-new.json
+```
+
+*2. Verify.* Expected results:
+
+```bash
+B=https://satellite-conjunction-screening.fly.storage.tigris.dev
+for o in https://portfolio-site-max-norris.vercel.app \
+         https://portfolio-site-7k2x9f-max-norris.vercel.app \
+         https://portfolio-site-git-feat-x-max-norris.vercel.app \
+         http://localhost:5173 \
+         http://portfolio-site-7k2x9f-max-norris.vercel.app \
+         https://portfolio-site-7k2x9f-max-norris.vercel.app.evil.com \
+         https://portfolio-site-max-norris.vercel.app.evil.com \
+         https://portfolio-site-7k2x9f-evil.vercel.app \
+         https://example.com; do
+  printf "%-66s " "$o"
+  curl -sS -o /dev/null -D - -H "Origin: $o" "$B/history/index.json" | tr -d '\r' \
+    | grep -i '^access-control-allow-origin' || echo "(none)"
+done
+curl -sS -o /dev/null -D - -X OPTIONS -H "Origin: https://portfolio-site-7k2x9f-max-norris.vercel.app" \
+  -H "Access-Control-Request-Method: GET" "$B/history/index.json" | head -1   # expect 200
+```
+
+  Rows 1-4 (production, commit-style, branch-style, localhost) should echo their origin. Rows 5-9
+  (`http://` preview, two `.evil.com` suffixes, a different suffix, `example.com`) should print
+  `(none)`. Then load a preview on the phone: the globe and the page should load data.
+
+*Rollback.* Restore the rule that was live on 2026-10-13 (save as `/tmp/bucket-cors-previous.json`)
+with the same helper:
+
+```json
+{"CORSRules": [{"ID": "portfolio-site-read", "AllowedOrigins": ["https://portfolio-site-max-norris.vercel.app", "http://localhost:5173", "http://localhost:4173"], "AllowedMethods": ["GET"], "MaxAgeSeconds": 3600}]}
+```
+
+```bash
+cors_put satellite-conjunction-screening /tmp/bucket-cors-previous.json
+```
+
+  `aws s3api delete-bucket-cors` would instead remove the config entirely, which also stops
+  production and localhost from loading data. Use the restore, not the delete.
+
+**How the helper was checked without touching the bucket (2026-10-13):** a throwaway Machine ran
+the same decode step (the image has `base64`; the 347-byte JSON arrived intact), and a local run
+with shimmed `fly` and `aws` showed the `put-bucket-cors` / `get-bucket-cors` calls well-formed.
+It was not run against any bucket.
+
+**After applying,** update ADR 0010's "Bucket CORS" section (its watch item says previews aren't
+allowed) and the 2026-10-12 note about previews.
+
 **2026-10-12 - Deep-sky backdrop researched (HiPS); a build is possible, licensing is the blocker.**
 Research only, nothing built. Full write-up: `docs/research/2026-10-deep-sky-imagery.md`.
 - **The format:** stream HiPS (HEALPix) tiles from CDS (`alasky`, CORS `*`, mirror `alaskybis`)
