@@ -206,6 +206,20 @@ entry). Each needs its own scoping before any build.
        - [ ] HST/JWST outreach layers at named "go to" targets (HUDF, XDF, HDF, SMACS 0723,
              Cosmic Cliffs) with release-page credits.
        - [ ] A phone budget (LRU about 32 tiles; deep layers only at targets).
+10. [ ] **Streamed star catalogue (Gaia), build round** (researched 2026-10-14;
+        `docs/research/2026-10-streamed-star-catalogue.md`). Before building:
+        - [ ] Ask CDS whether a public site may call its TAP, Sesame and HiPS endpoints, and at
+              what rate.
+        - [ ] Test the point budget on a real phone (the 0.3M figure is an assumption).
+        - [ ] Decide the Hipparcos/Gaia handoff (by magnitude or by position match).
+
+        Then build, in order:
+        - [ ] A one-off extraction of Gaia DR3 to G<13 (7.4 M stars, about 59 MB packed) into
+              progressive HEALPix tiles in the existing 8 B/star layout, plus details files.
+        - [ ] Streaming, a per-view magnitude budget by field of view, and selection.
+        - [ ] The glow layer from CDS's Gaia colour flux map (order 7, about 74 KB).
+        - [ ] The SIMBAD info card (`ident` lookup by Gaia DR3 ID, `basic` table only).
+        - [ ] Extend to G<16 (78 M, 624 MB) and add narrow-field live cone queries.
 
 ## Lower priority / opportunistic
 

@@ -10,6 +10,23 @@ README, a design tradeoff in an ADR), point to it here rather than duplicating i
 
 ## Decisions
 
+**2026-10-14 - Streamed star catalogue researched; own compact Gaia subset recommended over live
+CDS tiles. Nothing built.** Full write-up: `docs/research/2026-10-streamed-star-catalogue.md`.
+- **CDS's Gaia catalogue tiles are the wrong path at scale:** every row carries all 225 columns, so
+  about 500 B per star (1M stars is about 500 MB and thousands of requests), generated on demand
+  at about 1.1 s per tile.
+- **Own subset instead:** the existing 8 B/star layout. Real Gaia counts: 7.4 M stars at G<13
+  (59 MB), 78 M at G<16 (624 MB, about $0.01 a month on Tigris), 305 M at G<18.
+- **The per-view budget is the limit:** measured on the M5 GPU, 1M points draw in 4.2 ms and 10M
+  in 47 ms. The phone budget (0.3M) is an assumption.
+- **Narrow fields can use a live cone query** to VizieR TAP (CORS `*`, 2-3 s, about 31 B/row).
+- **The Milky Way from real stars:** CDS's Gaia colour flux map binned to order 7 is about 74 KB
+  (the current image is 450 KB). Hipparcos stays: Gaia lacks most of the brightest stars.
+- **Licence:** Gaia is CC BY-NC 3.0 IGO (re-verified on ESA's page), "Credit: ESA, Gaia DPAC", which
+  fits the confirmed non-commercial use. Tycho-2 and 2MASS state no licence.
+- **Open:** CDS's terms and limits for streaming to a public site (none published), a real phone
+  GPU test, and the Hipparcos/Gaia handoff.
+
 **2026-10-13 - PROPOSED, NOT APPLIED: let Vercel previews read the bucket by adding one wildcard
 origin to its CORS rule.** Branch `fix/bucket-cors-previews`. Nothing on the bucket has changed.
 Needs Max's review; one open check (a scratch-bucket test) comes before the real bucket.
