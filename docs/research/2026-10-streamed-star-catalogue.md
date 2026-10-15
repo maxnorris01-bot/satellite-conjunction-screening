@@ -155,8 +155,12 @@ assumes about 10x average density; the measured ratio was 19x between two level-
   about 3-5 MB.
 
 **Preprocessing versus reading live.**
-- **Extraction.** The Gaia archive's `source_id // 2^35` is the nested level-12 HEALPix index
-  (**verified on 110 of 110** real sources), so partitioning by sky cell is a `source_id` range.
+- **Extraction.** The Gaia archive's `source_id // 2^35` is the nested level-12 HEALPix index of
+  the position the source had when its ID was assigned, so partitioning by sky cell is a
+  `source_id` range. *(Correction, 2026-10-14: this round first reported "110 of 110" sampled
+  sources matching their position's cell. On 392,349 stars the final position's cell differs from
+  the ID's cell for 0.44% at level 12 and for 1 star at level 3. An ID range still returns every
+  star exactly once; tiles must be assigned from the final position.)*
   - TAP's output limit is 3,000,000 rows. Single sync queries ran at **0.8-2 k rows/s**
     (2,381 rows in 3.0 s; 46,151 rows in 22.7 s).
   - G<13 (7.4 M rows) would be about 1-2.5 h sequentially. G<16 (78 M) about 11-27 h

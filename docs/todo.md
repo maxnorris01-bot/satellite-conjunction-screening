@@ -36,6 +36,13 @@ the active work.*
       3. Check that `objects/current.json` has `"international_designator": "1998-067A"` for
          NORAD 25544. Commands are in `docs/sessions/2026-10-06-objects-international-designator.md`.
 
+- [ ] **Upload the Gaia G<13 star data** (built and verified on branch `feat/gaia-star-data`;
+      nothing uploaded). Plan, headers, CORS note and rollback are in
+      `docs/sessions/2026-10-14-gaia-star-data.md`.
+      - [ ] Max: merge the branch; dry-run `upload.py plan`; run the upload to `stars/v1/`.
+      - [ ] Viewer build round in `portfolio-site`: stream tiles by view, BP-RP colour mapping, glow
+            backdrop, attribution, G/V limiting-magnitude choice. Needs the CORS change for previews.
+
 ## Later
 
 - [ ] `GET /api/satellite/history` (ADR 0010, lower priority). Blocked on this repo first: the daily
@@ -546,3 +553,6 @@ entry). Each needs its own scoping before any build.
       encounters flagged under 5 km in 24 h (18 moderate, 442 low), plus 39 co-located pairs.
       Pipeline takes about 23-28 s, of which propagation is about 1.6-2.4 s. See
       `docs/sessions/2026-09-27-session-1-pipeline-spike.md`.
+- [ ] **Gaia G<16 data round** (about 78 million stars). Two routes: live paging through the archive
+      in cells (estimated 11 to 27 hours at the polite rate used for G<13) or the bulk download of
+      the Gaia source files (about 0.75 TB, filtered locally). Needs a second, finer tile order.
