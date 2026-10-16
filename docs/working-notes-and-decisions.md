@@ -1806,6 +1806,19 @@ the portfolio.
 suggested `thresholds.yaml`, but `evals/thresholds.yaml` already means "eval pass/fail gates" in
 this template, and two different files with the same name invite confusion.
 
+### 2026-10-14 - Gaia G<13 star data built (data half), upload pending
+
+- **Decided.** Gaia DR3 G < 13 from the ESA archive, HEALPix order-3 tiles (768), column layout,
+  details (source ID, parallax) in a separate lazy file, glow atlas built by us from faint-source flux.
+  Reasoning in `docs/star-data-format.md` and the 2026-10-14 session doc.
+- **Handover rule.** Position cross-match to `hipparcos.bin` at epoch 2026.0 (3 arcsec, colour-aware
+  magnitude guard), not a magnitude cut: Gaia lacks the brightest stars, and a fixed 2.0 mag guard
+  drew Proxima twice (V - G grows with BP-RP). Companions (Sirius B, Rigel B, Polaris B) stay.
+- **Tiling.** Fetch by source-ID range (each star once), tile by decoded final position (an ID cell
+  is not the position cell for 0.44% of stars at level 12).
+- **Sizes.** 7,251,917 stars; tiles 45.9 MB gz, details 56.3 MB gz, glow 40 KB; 72.8 min to extract.
+- **Open.** Upload not run (Max). Viewer round in portfolio-site. G < 16 later (see todo).
+
 ## Open items / parking lot
 
 - **First live `high` at the default scope: 2026-10-01 (resolved as an open item).** Run
