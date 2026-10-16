@@ -139,7 +139,9 @@ versioned path, so a new build is a new `v2/` prefix rather than an overwrite.
 
 An all-sky colour map for the unresolved light of the Milky Way, built from Gaia flux sums (not
 from CDS's flux map). HEALPix **nested order 7** (196,608 pixels, about 0.46 degrees), ICRS.
-Pixel `i` is at column `i % 512`, row `i // 512` of a 512 x 384 JPEG. The method (channel balance
+Pixel `i` is at column `i % 512`, row `i // 512` of a 512 x 384 JPEG (quality 92, **4:4:4, no
+chroma subsampling**: in this layout vertical neighbours are unrelated sky positions, so
+subsampled chroma would bleed colour between them). The method (channel balance
 and the asinh stretch) is in `scripts/star_data/glow.py` and `glow.json`. Draw it additively behind
 the stars and fade it down as the field narrows and stars resolve. Its credit is the same as the
 tiles'.
@@ -170,8 +172,8 @@ tiles'.
 | Tiles (768 files) | 58.0 MB | 45.9 MB (6.3 bytes/star) |
 | Details (768 files) | 87.0 MB | 56.3 MB (7.8 bytes/star) |
 | Manifest | 313 KB | 102 KB |
-| Glow atlas | | 40.5 KB |
+| Glow atlas | | 74.7 KB (JPEG q92, 4:4:4) |
 
 Tile files: min 14 KB, median 37 KB, p90 137 KB, max 335 KB gzipped; 469 under 50 KB, 23 over 200 KB.
-Stars per tile: min 2,125, median 5,908, max 52,834. In total 1,538 files (768 + 768 + manifest + glow
-JPEG + glow JSON), about 102 MB.
+Stars per tile: min 2,125, median 5,908, max 52,834. In total 1,539 files (768 + 768 + manifest + glow
+JPEG + glow JSON), about 102.5 MB.

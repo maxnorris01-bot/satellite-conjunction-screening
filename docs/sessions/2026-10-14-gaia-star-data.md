@@ -133,3 +133,15 @@ fly machine destroy <ID> --force -a satellite-conjunction-screening
 ## Next command
 
 `git diff main --stat`, then, when happy, the upload plan above (step 0 first).
+
+## Correction, 2026-10-16: glow atlas encoding
+
+- **Defect.** `glow-o7.jpg` was saved at JPEG quality 85 with the default 4:2:0 chroma subsampling.
+  The atlas is a HEALPix order-7 layout, so vertical neighbours in the image are unrelated sky
+  positions; subsampling averaged colour across them and showed as blocky colour patches.
+- **Fix.** `glow.py` now saves with `quality=92, subsampling=0` (4:4:4), and `glow.json` records it.
+  The atlas grew from 40,542 B to 74,682 B (sha256 `327f593e...c5557`). Total upload: 1,539 files,
+  102.6 MB. Measured on the stretched atlas against its lossless version, the 99th-percentile
+  chroma error fell from 32.9 to 8.3 levels (Cb/Cr, my metric).
+- **No upload had happened before the fix**, so the path stays `stars/v1/`. The numbers above for
+  the glow size (40.5 KB) and file count (1,538) are superseded.

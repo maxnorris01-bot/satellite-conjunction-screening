@@ -197,7 +197,7 @@ def cmd_build(args: argparse.Namespace) -> int:
     img, params = stretch(z["flux"], z["n"])
     atlas = img.reshape(ATLAS_H, ATLAS_W, 3)
     jpg = io.BytesIO()
-    Image.fromarray(atlas).save(jpg, "JPEG", quality=args.quality, optimize=True)
+    Image.fromarray(atlas).save(jpg, "JPEG", quality=args.quality, subsampling=0, optimize=True)
     png = io.BytesIO()
     Image.fromarray(atlas).save(png, "PNG", optimize=True)
     (out / "glow-o7.jpg").write_bytes(jpg.getvalue())
@@ -210,7 +210,7 @@ def cmd_build(args: argparse.Namespace) -> int:
             "width": ATLAS_W,
             "height": ATLAS_H,
             "layout": f"pixel i at column i % {ATLAS_W}, row i // {ATLAS_W}",
-            "format": f"JPEG 8-bit RGB, quality {args.quality}",
+            "format": f"JPEG 8-bit RGB, quality {args.quality}, 4:4:4 (no chroma subsampling)",
             "bytes": len(jpg.getvalue()),
             "sha256": hashlib.sha256(jpg.getvalue()).hexdigest(),
             "png_bytes_for_comparison": len(png.getvalue()),
@@ -256,7 +256,7 @@ def main(argv: list[str] | None = None) -> int:
     b = sub.add_parser("build")
     b.add_argument("--work", required=True)
     b.add_argument("--out", required=True)
-    b.add_argument("--quality", type=int, default=85)
+    b.add_argument("--quality", type=int, default=92)
     args = p.parse_args(argv)
     return cmd_query(args) if args.cmd == "query" else cmd_build(args)
 
