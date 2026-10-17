@@ -589,9 +589,9 @@ Small items, in no priority order. Details in `docs/sessions/2026-10-16-space-vi
       - Next step is a research round on Horizons licensing and rate limits, data size and imagery
         availability.
 
-## v1.1 polish and backlog (added 2026-10-17)
+## v1.1 polish and backlog
 
-Found while closing out v1 (see `docs/sessions/2026-10-17-v1-close-out.md`). Some repeat the space
+Added 2026-10-17, found while closing out v1 (see `docs/sessions/2026-10-17-v1-close-out.md`). Some repeat the space
 view backlog above; this is the single list to work from. Done since the last round: sky dimming
 (final values shipped), glow softening and the `?debug=1` Sky tuning panel, the page layout round,
 the map overlay panel with the camera view offset, the 90 degree field-of-view cap, header
