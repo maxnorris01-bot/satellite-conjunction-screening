@@ -113,16 +113,16 @@ against the Earth's disc, through a smoothstep from 5% to 60%) and whether the p
 satellite is sunlit (blended through twilight), eased over 400 ms (1 s under reduced motion).
 
 - **Defaults as merged** (`SKY_DIM_DEFAULT` in `skydim.ts`): glow x0.20 and stars x0.45 sunlit;
-  glow x0.50 and stars x0.75 on the night side. **These may be retuned**; Max has not confirmed final
-  values. Only brightness changes: which stars load, draw or can be picked is unchanged, and the Sun,
+  glow x0.50 and stars x0.75 on the night side. **These were retuned**: the final shipped values are in
+  [`2026-10-17-v1-close-out.md`](2026-10-17-v1-close-out.md). Only brightness changes: which stars load, draw or can be picked is unchanged, and the Sun,
   Moon, planets, constellations, the Earth and the selection are not dimmed.
 - **Debug hook.** `__globe.skyDim` holds the four values and is read every frame, so they can be
   retuned from the console; `?debug=1` exposes `__globe` on the live site and adds a "sky dim" line.
 
 ## Measured and recorded, not reproduced here
 
-Software-GL frame times with the star count drawn, as reported by Max (not reproducible from either
-repo's files): 50 ms with no Gaia stars, 67 ms at 117k, 100 ms at 341k, 167 ms at 817k, 217 ms at
+Software-GL frame times with the star count drawn, as reported by the viewer session (not by Max, and
+not reproducible from either repo's files): 50 ms with no Gaia stars, 67 ms at 117k, 100 ms at 341k, 167 ms at 817k, 217 ms at
 1.06M. Software GL is not a real GPU. The real-GPU frame rate with about a million stars is
 unverified (see the working notes).
 

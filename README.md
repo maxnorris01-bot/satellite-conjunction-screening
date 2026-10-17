@@ -9,6 +9,115 @@ It fetches CelesTrak element sets, propagates every object with SGP4, finds ever
 within 5 km, refines each pass's time and miss distance, and writes a JSON report. The core pipeline
 makes no LLM or other paid API calls.
 
+## What I built and how
+
+**Live:** [Satellite Point-of-View Tool](https://portfolio-site-max-norris.vercel.app/satellite-conjunction-screening)
+(the page route keeps its original name, `/satellite-conjunction-screening`). **Viewer code:**
+[maxnorris01-bot/portfolio-site](https://github.com/maxnorris01-bot/portfolio-site) (`src/globe/`).
+**This repo** is the data side: the screening pipeline, the daily run and the star-data build.
+The tool was first a conjunction screener; v1.0.0 is that screener plus a viewer that lets you ride
+along with any tracked satellite. Release notes: [`docs/releases/v1.0.0.md`](docs/releases/v1.0.0.md).
+
+### The problem
+
+Thousands of tracked objects share low Earth orbit, and their positions are public but hard to
+picture. I wanted to answer two questions from public data alone: which pairs of objects will pass
+close to each other in the next 24 hours, and what does the sky look like from where a given
+satellite is?
+
+### The data pipeline (this repo, Python)
+
+- **Data in.** Public orbital elements and catalogue records from [CelesTrak](https://celestrak.org/)
+  (about 19,000 objects at the full-catalog default scope).
+- **Propagation.** Every object is propagated with SGP4 (the `sgp4` library's vectorized C++
+  propagator) at 60-second steps over 24 hours.
+- **Screening.** At each step a `scipy` `cKDTree` radius search keeps nearby pairs; each candidate is
+  refined to a time and miss distance of closest approach with SGP4 itself. Checked against a
+  brute-force 1 s oracle in `make eval-fast` (12/12 cases, recall 1.0; see [Results](#results)).
+- **Risk tiers are a stated heuristic, not a collision probability.** Public TLE data carries no
+  covariance, so a real probability of collision can't be computed. The tiers come from a documented
+  threshold table ([ADR 0004](docs/adr/adr-0004-risk-heuristic-not-probability-of-collision.md)), and
+  every report says so in its `limitations` field.
+- **Daily run.** A GitHub Actions workflow starts a Fly.io Machine once a day; the Machine screens
+  the catalog and publishes the outputs to a public Tigris bucket. The workflow fails if the Machine
+  fails or the bucket's `history/index.json` wasn't rewritten ([Daily run](#daily-run)).
+- **Verification.** Oracle-checked evals and a frozen-snapshot regression test for the screening; a
+  `scripts/star_data/verify.py` check for the star data (below).
+- **Zero LLM calls.** The core pipeline makes no LLM or paid API calls. It costs $0 per run.
+
+### The viewer (sibling repo `portfolio-site`, TypeScript and three.js)
+
+- **Globe.** Every tracked object, propagated in the browser from the bucket's `objects/current.json`,
+  with a time slider over the retained days, near-miss replay from the conjunction table, and a Sky
+  view of what is above any place on Earth.
+- **The view from a satellite.** Pick a satellite and ride along, either heading-up or north-up, with
+  the Earth below, the Sun, Moon and planets at their true direction from the satellite, a descend
+  zoom toward the surface, and pause and replay on the time controls.
+- **Earth imagery.** EOX Sentinel-2 cloudless 2016 as the base and NASA GIBS tiles, with bundled
+  NASA textures as the first paint. The night side uses NASA Black Marble city lights.
+- **Real stars.** The Hipparcos catalogue (118,217 stars) plus Gaia DR3 stars brighter than G=13
+  (7,251,917, after dropping the ones Hipparcos already covers), cut into 768 HEALPix tiles that
+  `scripts/star_data/` builds and the viewer streams from the bucket as the view needs them. Click a
+  star for an info card (names from the IAU list, distance, colour, temperature where the data
+  supports an estimate and labels it as one); constellation figures, names and IAU boundaries are
+  optional layers.
+- **A glow built from starlight.** The soft Milky Way band is made from the faint Gaia sources that
+  aren't drawn as points, binned into a small atlas image, so it matches the real sky (the bulge,
+  the dust lanes, the Magellanic Clouds) instead of being a pasted picture.
+
+### Engineering decisions and trade-offs
+
+- **Non-commercial data licences, kept honest.** Hipparcos and Gaia are CC BY-NC 3.0 IGO. The site
+  is a non-commercial portfolio, shows the credit lines (and a non-commercial note) whenever that
+  data is on screen, and the decision is recorded so the data can be swapped if that ever changes
+  ([working notes](docs/working-notes-and-decisions.md), 2026-10-16 entry).
+- **Versioned, immutable data paths.** Star data lives under `stars/v1/` with a one-year immutable
+  cache header. A corrected build goes to `v2/`; nothing is overwritten in place
+  ([format spec](docs/star-data-format.md)).
+- **Verification scripts.** The star-data build ships a verifier (`scripts/star_data/verify.py`),
+  and the viewer has unit tests for the HEALPix maths, tile decoding, picking and the sky geometry.
+- **Fallbacks.** Hipparcos loads first, so if the Gaia tiles or manifest can't be fetched the sky is
+  Hipparcos only and the panel says so. Bundled Earth textures paint first while imagery tiles load.
+- **Performance budgets.** At most 1.5 million streamed stars per view on desktop and 300,000 on a
+  phone, tiles fetched only when enough of their stars are bright enough to show, and a frame-time
+  guard that cuts the budget when frames run long.
+- **A debug tuning panel.** `?debug=1` adds a Sky tuning panel of sliders; the shipped defaults
+  were tuned by hand with it ([session note](docs/sessions/2026-10-17-v1-close-out.md)).
+- **Field-of-view cap.** The view's angle is capped at 90 degrees across so wide maps don't stretch
+  at the edges.
+
+### Honest limitations
+
+- **Risk tiers are a heuristic.** They are not a probability of collision, and maneuvers are
+  invisible to the pipeline, so the Starlink-heavy `high` results very likely reflect station-keeping the data can't see
+  ([the scale test](#what-the-2299-high-results-are-and-arent)).
+- **TLE accuracy.** SGP4 position error for fresh LEO elements is about 1 km and grows with element
+  age, which is as large as the screening thresholds.
+- **Base imagery is from 2016** (EOX Sentinel-2 cloudless 2016). Recent construction, coastlines and
+  cloud-free patches don't match today.
+- **Gaia is a G<13 subset.** Fainter stars appear only as unresolved glow.
+- **Frame rate was verified in software GL only.** Real-GPU and phone frame rates with about a
+  million stars are unmeasured.
+- **Preview deployments** on Vercel can't load the bucket data (CORS), so only the production site
+  shows the stars and objects.
+
+### What I'd do next
+
+The v1.1 polish and backlog list is in [`docs/todo.md`](docs/todo.md#v11-polish-and-backlog): small
+camera and layout fixes, an Open Graph preview, a real-GPU and phone frame-rate check, a possible
+Gaia G<16 round, a deep-sky layer, and spacecraft beyond Earth.
+
+### Screenshots
+
+Screenshots would go in [`docs/images/`](docs/images/). Five would show the tool best (none are
+checked in yet):
+
+1. The Globe view with the conjunction table beside it and a near-miss replay running.
+2. The Satellite view riding the ISS, heading-up, Earth below with the limb glow.
+3. The Satellite view looking out at the Milky Way with stars, constellations and a star info card.
+4. A close-up descend zoom over land, showing the Sentinel-2 imagery.
+5. The overlay controls panel open on a laptop-width window, or the page on a phone.
+
 ## Project boundary
 
 **What it is.** A batch screener over public GP/TLE data. For a chosen scope (CelesTrak named
