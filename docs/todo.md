@@ -36,12 +36,11 @@ the active work.*
       3. Check that `objects/current.json` has `"international_designator": "1998-067A"` for
          NORAD 25544. Commands are in `docs/sessions/2026-10-06-objects-international-designator.md`.
 
-- [ ] **Upload the Gaia G<13 star data** (built and verified on branch `feat/gaia-star-data`;
-      nothing uploaded). Plan, headers, CORS note and rollback are in
-      `docs/sessions/2026-10-14-gaia-star-data.md`.
-      - [ ] Max: merge the branch; dry-run `upload.py plan`; run the upload to `stars/v1/`.
-      - [ ] Viewer build round in `portfolio-site`: stream tiles by view, BP-RP colour mapping, glow
-            backdrop, attribution, G/V limiting-magnitude choice. Needs the CORS change for previews.
+- [x] **Upload the Gaia G<13 star data** 2026-10-16: uploaded to `stars/v1/` (1,539 files, after
+      the glow atlas 4:4:4 fix, PR #64). The viewer round shipped in `portfolio-site` PRs #30 to #34
+      (stars, selection, constellations, streamed Gaia stars, glow, sky dimming); see
+      `docs/sessions/2026-10-16-space-view-round.md`. Still open: the CORS change for previews
+      (first item above) and the real-GPU frame-rate check with ~1M stars.
 
 ## Later
 
@@ -556,3 +555,35 @@ entry). Each needs its own scoping before any build.
 - [ ] **Gaia G<16 data round** (about 78 million stars). Two routes: live paging through the archive
       in cells (estimated 11 to 27 hours at the polite rate used for G<13) or the bulk download of
       the Gaia source files (about 0.75 TB, filtered locally). Needs a second, finer tile order.
+
+## Backlog: space view (added 2026-10-16)
+
+Small items, in no priority order. Details in `docs/sessions/2026-10-16-space-view-round.md`.
+
+- [ ] **Deep-sky layer using HST/JWST named targets.** Follow-on to the Gaia stars; see
+      `docs/research/2026-10-deep-sky-imagery.md`.
+- [ ] **Moon pops off at the horizon without a fade.** Needs a fade.
+- [ ] **Night lights blocky below about 80 km.** Seen when low; the streamed Black Marble tiles
+      are about 490 m per pixel at their finest level.
+- [ ] **Compact view toggle in full screen.** A way to shrink the controls.
+- [ ] **Softer detach swing.** Make the camera swing when leaving the riding view gentler.
+- [ ] **Return restores the previous FOV.** Return should put the field of view back as it was.
+- [ ] **Slider arrow-key bug.** Arrow keys on the slider don't behave correctly.
+- [ ] **Drag direction off in North-up while riding.** Drag direction is wrong in that mode.
+- [ ] **Possible G<16 Gaia round.** About 78 million stars: 11 to 27 hours of extraction, or the 0.75 TB
+      bulk download filtered locally (see the G<16 item above).
+- [ ] **US USGS aerial imagery (about 1 m).** Sharper low-orbit views over the US than Sentinel-2.
+- [ ] **Spacecraft view beyond Earth.** *Not started, decided later.* The tool has outgrown the
+      conjunction premise and could extend to non-Earth spacecraft: Mars and Venus orbiters,
+      Sun-centred craft such as Parker Solar Probe and SOHO, JWST at L2, the Voyagers.
+      - Trajectory data would come from NASA JPL Horizons or SPICE kernels, fetched by this repo's
+        pipeline and published to the bucket; the viewer interpolates position tables (no TLE or
+        SGP4 for deep space).
+      - The viewer needs a central-body globe per view (public-domain Mars and Moon mosaics, at a
+        lower resolution than Sentinel-2; Venus's surface is radar-only).
+      - Craft like Voyager have no "down", so they would use free look with the Sun as a star.
+      - Cheapest first step: JWST, SOHO, Parker and the Voyagers, which need no new globe.
+      - The page and tool name could change; conjunction screening stays as the data-pipeline
+        feature.
+      - Next step is a research round on Horizons licensing and rate limits, data size and imagery
+        availability.

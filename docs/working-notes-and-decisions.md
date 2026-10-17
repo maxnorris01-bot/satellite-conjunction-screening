@@ -1819,6 +1819,35 @@ this template, and two different files with the same name invite confusion.
 - **Sizes.** 7,251,917 stars; tiles 45.9 MB gz, details 56.3 MB gz, glow 40 KB; 72.8 min to extract.
 - **Open.** Upload not run (Max). Viewer round in portfolio-site. G < 16 later (see todo).
 
+### 2026-10-16 - Space view round: licences, star cut, glow, bucket versioning
+
+Written up in [`docs/sessions/2026-10-16-space-view-round.md`](sessions/2026-10-16-space-view-round.md).
+
+- **Data licences (non-commercial).** Hipparcos (credit "ESA") and Gaia DR3 (credit "ESA, Gaia DPAC")
+  are both CC BY-NC 3.0 IGO. The site is strictly non-commercial (a personal portfolio: no revenue,
+  no ads, no paid features), shows the credit and a non-commercial note while the data is on screen,
+  and the choice was recorded in `portfolio-site`'s `public/data/stars/ATTRIBUTION.md` (2026-10-12).
+  **If the site ever becomes commercial the data must be replaced**: ESA asks for authorisation
+  before commercial use (data.licences@esa.int), and the public-domain fallback is the Yale Bright
+  Star Catalogue (about 9,100 stars), which the app can read in the same format with no code change.
+  Other sources: IAU names (names are not copyrighted, IAU products CC Attribution), d3-celestial
+  (BSD-3), astronomy-engine's Delporte table (MIT). Stellarium's sky culture was rejected
+  (CC BY-SA, no version, AGPL repository).
+- **Gaia cut and handover.** G < 13 (7.37M archive rows, 7,251,917 in the tiles), minus Gaia sources
+  that are Hipparcos stars, by position cross-match at epoch 2026.0 (3 arcsec, a colour-aware
+  magnitude guard), not a magnitude cut, because Gaia lacks the brightest stars. The G < 13 build is about 100 MB
+  and took about 73 minutes to extract; the rule and its evidence are in
+  `docs/star-data-format.md` and the 2026-10-14 entry above.
+- **Why the glow uses sources fainter than G = 13.** The tiles already draw every brighter star as a
+  point, so the glow carries only the unresolved remainder. A first version summing all sources was
+  speckled by single bright stars; the faint-only layer is smooth, matches the dust lanes, bulge and
+  Magellanic Clouds by eye, and adds nothing the points already show.
+- **Bucket path versioning.** `stars/v1/` is immutable (served with a one-year `immutable` cache
+  header). A corrected build is `stars/v2/`, never an overwrite of v1 in place: the old URLs stay
+  cached in browsers and a half-written overwrite would mix versions. The glow atlas 4:2:0 fix could
+  keep `v1/` only because nothing had been uploaded yet; it was uploaded on 2026-10-16 (1,539
+  files), so from now on any fix is a `v2/`. Rollback is deleting the prefix.
+
 ## Open items / parking lot
 
 - **First live `high` at the default scope: 2026-10-01 (resolved as an open item).** Run
@@ -1843,6 +1872,18 @@ this template, and two different files with the same name invite confusion.
 
 - **Synthetic scenarios cover one shell only.** All nine are circular orbits at 780 km. Eccentric
   orbits, mixed-altitude crossings and GEO aren't exercised. See ADR 0008's consequences.
+
+- **Vercel preview origins are blocked by the bucket's CORS rule** (checked 2026-10-16: a request
+  with a `*.vercel.app` preview origin gets no CORS header; `localhost:5173` does). The wildcard
+  proposal is merged as docs (2026-10-13 entry above, PR #61); step 0, the scratch-bucket test of
+  whether Tigris honours a `*` inside an origin, has not been done, and nothing is applied.
+  Previews therefore can't load `stars/v1/` or `objects/`.
+- **Real-GPU frame rate with about a million stars is unverified.** Only software GL has been
+  measured (as reported, not reproducible from the repos): 50 ms with no Gaia stars, 67 ms at 117k,
+  100 ms at 341k, 167 ms at 817k, 217 ms at 1.06M. The per-view budget (1.5M desktop, 300k phone)
+  and the frame-time guard were set without a real-GPU number.
+- **Gaia is a G < 13 subset.** Stars fainter than that appear only as unresolved glow. A G < 16
+  round is in `docs/todo.md`.
 
 ## See also
 
