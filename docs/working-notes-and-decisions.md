@@ -1848,6 +1848,37 @@ Written up in [`docs/sessions/2026-10-16-space-view-round.md`](sessions/2026-10-
   keep `v1/` only because nothing had been uploaded yet; it was uploaded on 2026-10-16 (1,539
   files), so from now on any fix is a `v2/`. Rollback is deleting the prefix.
 
+### 2026-10-17 - v1 close-out: overlay panel, field-of-view cap, rename, licences, what v1 means
+
+Written up in [`docs/sessions/2026-10-17-v1-close-out.md`](sessions/2026-10-17-v1-close-out.md).
+
+- **Overlay panel with a camera view offset, not a side column.** #38 put the controls in a column
+  beside the map; #39 replaced it with one translucent panel over a full-width map, and the engine
+  shifts the projection centre into the free area (`setViewOffset`). *Why:* the column cost a
+  quarter of the width on a laptop and made the map narrow exactly when the field of view was
+  widest; the overlay gives the map the whole window while the Earth and the compass stay out from
+  behind the panel. *Trade-off:* the panel hides part of the map (labels show through it, pointer
+  maths needs the shifted centre), and the trackball pivot is still the canvas centre (v1.1 list).
+- **90 degree field-of-view cap on the larger of the horizontal and vertical angles.** *Why:* the
+  camera angle is vertical, so a wide map is far wider across (100 degrees vertical on 16:9 is
+  about 130; Max saw about 119 across) and the edges stretch. Capping the larger angle limits that;
+  zooming in is unchanged; a debug slider (45 to 140) can override it.
+- **Rename to Satellite Point-of-View Tool; route, repo and bucket unchanged.** *Why:* the tool had
+  outgrown the conjunction premise, but renaming the route, repo or bucket would break existing
+  links and cached data paths for no reader benefit. An alias route (a friendlier URL as a
+  redirect) is deferred; the nav label shortens to "Satellite POV Tool" below 400 px.
+- **Non-commercial licences remain.** Hipparcos and Gaia stay CC BY-NC 3.0 IGO and the site stays a
+  non-commercial portfolio, with credits on screen (unchanged from 2026-10-16). If it ever becomes
+  commercial the star data must be replaced.
+- **What "v1" means.** v1.0.0 is a usable, credited, documented tool on the production site, not a
+  finished product: the daily screening and its published data, the globe and sky views, the
+  satellite view with real stars and the tuned sky, and the README and licence notes. It does not
+  mean real-GPU performance is verified, the imagery is current, or the risk tiers are a
+  probability. What is known and not done is in `docs/todo.md`'s "v1.1 polish and backlog".
+- **Sky defaults are Max's hand-tuned values** (glow 0.20 / 0.60 / 1.35, no blur; Earth-in-view
+  dimming 1.00 sunlit and 0.19 night; stars x1.10, size x1.00, wide-field offset +3.5). The tuning
+  panel stays behind `?debug=1`.
+
 ## Open items / parking lot
 
 - **First live `high` at the default scope: 2026-10-01 (resolved as an open item).** Run
@@ -1878,12 +1909,19 @@ Written up in [`docs/sessions/2026-10-16-space-view-round.md`](sessions/2026-10-
   proposal is merged as docs (2026-10-13 entry above, PR #61); step 0, the scratch-bucket test of
   whether Tigris honours a `*` inside an origin, has not been done, and nothing is applied.
   Previews therefore can't load `stars/v1/` or `objects/`.
+  Still open at v1 (2026-10-17).
 - **Real-GPU frame rate with about a million stars is unverified.** Only software GL has been
-  measured (as reported, not reproducible from the repos): 50 ms with no Gaia stars, 67 ms at 117k,
+  measured (reported by the viewer session, not by Max, and not reproducible from the repos): 50 ms with no Gaia stars, 67 ms at 117k,
   100 ms at 341k, 167 ms at 817k, 217 ms at 1.06M. The per-view budget (1.5M desktop, 300k phone)
   and the frame-time guard were set without a real-GPU number.
 - **Gaia is a G < 13 subset.** Stars fainter than that appear only as unresolved glow. A G < 16
   round is in `docs/todo.md`.
+- **v1.1 backlog (2026-10-17).** The polish items found while closing out v1 (camera, layout, link
+  previews, performance checks, data rounds, spacecraft beyond Earth) are in `docs/todo.md` under
+  "v1.1 polish and backlog".
+- **The live site's public address is unconfirmed.** The README links
+  `https://portfolio-site-max-norris.vercel.app/satellite-conjunction-screening`, but an
+  unauthenticated request from the v1 close-out session was redirected to a Vercel sign-in.
 
 ## See also
 

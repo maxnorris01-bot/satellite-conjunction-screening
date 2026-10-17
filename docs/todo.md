@@ -565,7 +565,8 @@ Small items, in no priority order. Details in `docs/sessions/2026-10-16-space-vi
 - [ ] **Moon pops off at the horizon without a fade.** Needs a fade.
 - [ ] **Night lights blocky below about 80 km.** Seen when low; the streamed Black Marble tiles
       are about 490 m per pixel at their finest level.
-- [ ] **Compact view toggle in full screen.** A way to shrink the controls.
+- [x] **Compact view toggle in full screen.** A way to shrink the controls. Done 2026-10-17 (viewer
+      PR #38: Compact button / C key, in and out of full screen).
 - [ ] **Softer detach swing.** Make the camera swing when leaving the riding view gentler.
 - [ ] **Return restores the previous FOV.** Return should put the field of view back as it was.
 - [ ] **Slider arrow-key bug.** Arrow keys on the slider don't behave correctly.
@@ -587,3 +588,33 @@ Small items, in no priority order. Details in `docs/sessions/2026-10-16-space-vi
         feature.
       - Next step is a research round on Horizons licensing and rate limits, data size and imagery
         availability.
+
+## v1.1 polish and backlog (added 2026-10-17)
+
+Found while closing out v1 (see `docs/sessions/2026-10-17-v1-close-out.md`). Some repeat the space
+view backlog above; this is the single list to work from. Done since the last round: sky dimming
+(final values shipped), glow softening and the `?debug=1` Sky tuning panel, the page layout round,
+the map overlay panel with the camera view offset, the 90 degree field-of-view cap, header
+alignment, and the rename.
+
+- [ ] **Softer detach swing.** The camera swing when leaving the riding view is abrupt.
+- [ ] **Return to satellite restores the previous field of view.**
+- [ ] **Slider arrow-key bug.** Arrow keys on a slider don't behave correctly.
+- [ ] **Drag direction off in North-up while riding.**
+- [ ] **Moon pops off at the horizon without a fade.**
+- [ ] **Night lights blocky below about 80 km.** Black Marble tiles top out near 490 m per pixel.
+- [ ] **Labels behind the translucent panel show through.**
+- [ ] **Trackball pivot is at the canvas centre, not the free-area centre.**
+- [ ] **320 px width scrolls sideways** (speed buttons and the table).
+- [ ] **No Open Graph tags for link previews.**
+- [ ] **Home, Resume and 404 headers keep the narrower width** while the tool page uses the wide one.
+- [ ] **Optional friendlier URL as a redirect** (the route stays `/satellite-conjunction-screening`).
+- [ ] **Real-GPU frame rate and a phone check with about 1M stars.** Only software GL is measured.
+- [ ] **Vercel preview origins blocked by bucket CORS.** Proposal #61 exists; step 0, the
+      scratch-bucket test of `*` in an origin, is not done.
+- [ ] **Possible Gaia G<16 data round** (about 78M stars; see the research note).
+- [ ] **Deep-sky layer on HST/JWST named targets** (`docs/research/2026-10-deep-sky-imagery.md`).
+- [ ] **US USGS aerial imagery (about 1 m)** for sharper low-orbit views over the US.
+- [ ] **Spacecraft beyond Earth.** Horizons or SPICE trajectory data, a central-body globe per view,
+      free-look craft such as the Voyagers. Cheapest first step: JWST, SOHO, Parker and the Voyagers.
+      Details in the space view backlog entry above.
